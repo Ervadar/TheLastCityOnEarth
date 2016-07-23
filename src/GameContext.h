@@ -9,7 +9,7 @@
 /*
 Class for OpenGL options and GLFW options/context handling
 */
-class OpenGLControl
+class GameContext
 {
 private:
 	GLFWwindow * window;
@@ -23,7 +23,7 @@ private:
 public:
 	bool pause;
 
-	OpenGLControl(): window(NULL), windowTitle("The last city on Earth"), FPSCount(0), isFullScreen(false) { }
+	GameContext(): window(NULL), windowTitle("The last city on Earth"), FPSCount(0), isFullScreen(false) { }
 
 	static void reshapeCallback(GLFWwindow* window, int width, int height);
 

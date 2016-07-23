@@ -1,4 +1,4 @@
-#include "OpenGLControl.h"
+#include "GameContext.h"
 
 #include <iostream>
 #include "TestScreen.h"
@@ -7,12 +7,12 @@
 #define INITIAL_WIDTH 800
 #define INITIAL_HEIGHT 600
 
-void OpenGLControl::reshapeCallback(GLFWwindow* window, int width, int height)
+void GameContext::reshapeCallback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
 }
 
-int OpenGLControl::init()
+int GameContext::init()
 {
 	pause = false;
 	if (!glfwInit())
@@ -57,7 +57,7 @@ int OpenGLControl::init()
 	return 1;
 }
 
-int OpenGLControl::run()
+int GameContext::run()
 {
 	do
 	{
@@ -74,8 +74,6 @@ int OpenGLControl::run()
 			screen->render();
 
 			++FPSCount;
-			std::string s = std::to_string(FPSCount);
-			s = "FPS: " + s;
 
 			if (currentTime - fpsLastTime >= 1)
 			{
@@ -96,9 +94,9 @@ int OpenGLControl::run()
 	delete screen;
 
 	return 0;
-}
+}    
 
-void OpenGLControl::setScreen(Screen * screen)
+void GameContext::setScreen(Screen * screen)
 {
 	if (this->screen)
 	{
@@ -109,7 +107,7 @@ void OpenGLControl::setScreen(Screen * screen)
 	this->screen->init();
 }
 
-void OpenGLControl::setWindowParameters()
+void GameContext::setWindowParameters()
 {
 	glfwWindowHint(GLFW_SAMPLES, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -121,7 +119,7 @@ void OpenGLControl::setWindowParameters()
 	// Enable depth test
 	glEnable(GL_DEPTH_TEST);
 	glClearDepth(1.0);
-	// Accept fragment if it closer to the camera than the former one
+	// Accept fragment if it's closer to the camera than the former one
 	glDepthFunc(GL_LESS);
 	glEnable(GL_CULL_FACE);
 	// Disable cursor

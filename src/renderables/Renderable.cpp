@@ -6,15 +6,6 @@
 #include <FreeImage.h>
 #include "Sphere.h"
 
-Renderable::Renderable()
-{
-	
-}
-
-Renderable::~Renderable()
-{
-}
-
 Renderable::Renderable(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY)
 {
 	this->loadModel(modelPath);
@@ -32,27 +23,14 @@ Renderable::Renderable(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 s
 void Renderable::init(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 scaleVector)
 {
 	this->loadModel(modelPath);
-	this->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	this->translateVector = translateVector;
-	this->scaleVector = scaleVector;
-	this->rotateAngleX = 0.0f;
-	this->rotateAngleY = 0.0f;
-	this->rotateAxisX = glm::vec3(1.0f, 0.0f, 0.0f);
-	this->rotateAxisY = glm::vec3(0.0f, 1.0f, 0.0f);
+	this->init(scaleVector, 0.0f, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), translateVector);
 	this->stableModelMatrix = glm::scale(glm::mat4(1.0f), scaleVector);
-	this->castingShadow = true;
 }
 
 void Renderable::init(glm::vec3 position)
 {
 	this->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-	this->translateVector = position;
-	this->scaleVector = glm::vec3(1.0f);
-	this->rotateAngleX = 0.0f;
-	this->rotateAngleY = 0.0f;
-	this->rotateAxisX = glm::vec3(1.0f, 0.0f, 0.0f);
-	this->rotateAxisY = glm::vec3(0.0f, 1.0f, 0.0f);
-	this->castingShadow = true;
+	this->init(glm::vec3(1.0f), 0.0f, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), position);
 }
 
 void Renderable::init(glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY, glm::vec3 translateVector)

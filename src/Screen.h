@@ -1,10 +1,6 @@
 #ifndef _SCREEN_H_
 #define _SCREEN_H_
 
-#include "Camera.h"
-#include "Shaders.h"
-#include "Renderable.h"
-
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>

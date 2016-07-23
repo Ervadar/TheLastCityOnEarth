@@ -66,7 +66,6 @@ private:
 	Text text;
 	Text forceShieldHPtext;
 	Text gameFinishedTexts[4];
-
 	
 	ShadowMapper shadowMapper;
 	LightManager lightManager;
@@ -110,8 +109,6 @@ public:
 
 	GameScreen(GLFWwindow * w): Screen(w) { }
 	~GameScreen();
-
-	void placePointLightOnScene(PointLight * pointLight);
 
 	void render(Renderable * object, Camera & camera, ShaderProgram & shaderProgram, matrixUniformFunction matrixUniformFunction);
 	void renderObjects(Camera & camera, ShaderProgram & shaderProgram, matrixUniformFunction matrixUniformFunction);

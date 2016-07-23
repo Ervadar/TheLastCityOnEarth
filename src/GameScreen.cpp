@@ -199,22 +199,6 @@ void GameScreen::init()
 
 	// Init sound system
 	// soundSystem.camera = &camera;
-
-	// DEBUG TARGET SPHERES
-	//for (BoundingSphere destinationSphere : enemyShipDestinationSpheres)
-	//{
-	//	Sphere* sphere = new Sphere(
-	//		glm::vec4(1.0f, 1.0f, 1.0f, 0.1f),
-	//		destinationSphere.position,
-	//		destinationSphere.radius,
-	//		0.0f,
-	//		0.0f,
-	//		"hdfield.jpg"
-	//		);
-	//	sphere->castingShadow = false;
-	//	sphere->init(this);
-	//	staticObjects.push_back(sphere);
-	//}
 }
 
 void GameScreen::release()
