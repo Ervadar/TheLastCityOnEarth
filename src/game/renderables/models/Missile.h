@@ -12,10 +12,8 @@ public:
 	static const GLuint OWNER_CANNON = 1;
 
 	GLuint owner;
-
 	GLint strength;
 
-	GLfloat radius;
 	PointLight * pointLight;
 
 	Missile();

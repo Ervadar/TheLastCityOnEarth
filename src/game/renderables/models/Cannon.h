@@ -32,18 +32,25 @@ public:
 
 	float movingAngle;
 
+	float minHorizontalAngle = 0.0f;
+	float maxHorizontalAngle = 360.0f;
+	float minVerticalAngle = -8.0f;
+	float maxVerticalAngle = 90.0f;
+
 	float movingBarrelPos;
 	float initialMovingBarrelPos;
 	float shootingSpeed;
 	float loadingSpeed;
 
 	Cannon();
-	virtual ~Cannon();
+	virtual ~Cannon() {};
 
 	void init(Screen * screen);
 	void render(ShaderProgram & shaderProgram);
 	void update(float deltaTime);
 	void destroy();
+
+	void updateRotation(GLfloat rotateAngleX, GLfloat rotateAngleY);
 };
 
 #endif

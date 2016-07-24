@@ -1,5 +1,4 @@
 #include "ForceShield.h"
-#include "VBOindexer.h"
 
 #include <glm/gtc/constants.hpp>
 
@@ -15,7 +14,6 @@ ForceShield::~ForceShield()
 {
 	destroy();
 }
-
 
 void ForceShield::init(Screen * screen)
 {

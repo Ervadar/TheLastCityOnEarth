@@ -109,7 +109,7 @@ void EnemyShip::calculateCircularMovement(std::vector<BoundingSphere>& enemyShip
 	BoundingSphere targetSphere = enemyShipDestinationSpheres[randomShipDestinationSphere(rng)];
 	std::uniform_real_distribution<GLfloat> randomCircularMovementRadius(0.0f, targetSphere.radius);
 	movementCircleRadius = randomCircularMovementRadius(rng);
-	std::uniform_real_distribution<GLfloat> randomTargetCircleCenterOffset(movementCircleRadius + this->radius - targetSphere.radius, targetSphere.radius - movementCircleRadius - this->radius);
+	std::uniform_real_distribution<GLfloat> randomTargetCircleCenterOffset(-movementCircleRadius, movementCircleRadius);
 	movementCircleCenter = targetSphere.position + glm::vec3(
 		randomTargetCircleCenterOffset(rng), randomTargetCircleCenterOffset(rng), randomTargetCircleCenterOffset(rng)
 		);

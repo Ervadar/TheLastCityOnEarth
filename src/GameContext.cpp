@@ -1,7 +1,6 @@
 #include "GameContext.h"
 
 #include <iostream>
-#include "TestScreen.h"
 #include "GameScreen.h"
 
 #define INITIAL_WIDTH 800
@@ -30,7 +29,7 @@ int GameContext::init()
 	GLFWmonitor * monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode * desktop = glfwGetVideoMode(monitor);
 
-	window = glfwCreateWindow(desktop->width, desktop->height, windowTitle, monitor, NULL);
+	window = glfwCreateWindow(desktop->width, desktop->height, windowTitle, NULL, NULL);
 
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 
@@ -71,6 +70,7 @@ int GameContext::run()
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			screen->update(deltaTime);
+
 			screen->render();
 
 			++FPSCount;

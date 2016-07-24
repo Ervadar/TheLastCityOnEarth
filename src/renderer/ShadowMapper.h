@@ -29,8 +29,8 @@ public:
 	const GLuint SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
 
 public:
-	ShadowMapper();
-	~ShadowMapper();
+	ShadowMapper() {};
+	~ShadowMapper() {};
 
 	void init(GLsizei shadowWidth, GLsizei shadowHeight);
 };

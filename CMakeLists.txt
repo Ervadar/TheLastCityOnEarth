@@ -8,12 +8,14 @@ set(TARGET_NAME TheLastCityOnEarth)
 
 ### Source information
 include_directories(${CMAKE_SOURCE_DIR}/src)
-include_directories(${CMAKE_SOURCE_DIR}/src/renderables)
-include_directories(${CMAKE_SOURCE_DIR}/src/renderables/models)
-include_directories(${CMAKE_SOURCE_DIR}/src/renderables/primitives)
+include_directories(${CMAKE_SOURCE_DIR}/src/game)
+include_directories(${CMAKE_SOURCE_DIR}/src/game/renderables)
+include_directories(${CMAKE_SOURCE_DIR}/src/game/renderables/models)
+include_directories(${CMAKE_SOURCE_DIR}/src/game/renderables/primitives)
+include_directories(${CMAKE_SOURCE_DIR}/src/renderer)
+include_directories(${CMAKE_SOURCE_DIR}/src/screens)
 file(GLOB_RECURSE SOURCE src/*.cpp)
 file(GLOB_RECURSE HEADERS src/*.h)
-# file(GLOB_RECURSE SHADERS res/shaders/*.vert res/shaders/*.frag)
 
 ### Libraries and headers
 set(LIB_DIR "${CMAKE_SOURCE_DIR}/lib")
@@ -85,11 +87,13 @@ file(GLOB DLLS ${CMAKE_SOURCE_DIR}/dll/*.dll)
 add_custom_target(CopyDlls)
 foreach(DLL ${DLLS})
   add_custom_command(TARGET CopyDlls POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${DLL} ${CMAKE_BINARY_DIR}/Release/)
+  add_custom_command(TARGET CopyDlls POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${DLL} ${CMAKE_BINARY_DIR}/Debug/)
 endforeach()
 add_dependencies(${TARGET_NAME} CopyDlls)
 
 ### Copying resources target
 add_custom_target(CopyResources)
+add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/Debug/data)
 add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/data)
 add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/Release/data)
 add_dependencies(${TARGET_NAME} CopyResources)

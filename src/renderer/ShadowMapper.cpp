@@ -1,15 +1,5 @@
 #include "ShadowMapper.h"
 
-
-ShadowMapper::ShadowMapper()
-{
-}
-
-
-ShadowMapper::~ShadowMapper()
-{
-}
-
 void ShadowMapper::init(GLsizei shadowWidth, GLsizei shadowHeight)
 {
 	this->shadowWidth = shadowWidth;

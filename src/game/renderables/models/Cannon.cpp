@@ -12,19 +12,13 @@ Cannon::Cannon()
 	initialMovingBarrelPos = 0.0f;
 	movingBarrelPos = initialMovingBarrelPos;
 
-	bulletSpeed = 1000.0f;
+	bulletSpeed = 2000.0f;
 
 	bulletSpawnOffset = 175.0f;
 
 	shootingSpeed = 125.0f;
 	loadingSpeed = 40.0f;
 	cannonStatus = STATUS_READY;
-
-}
-
-
-Cannon::~Cannon()
-{
 }
 
 void Cannon::init(Screen * screen)
@@ -114,31 +108,6 @@ void Cannon::update(float deltaTime)
 		}
 	}
 
-	// Cannon controls
-	if (glfwGetKey(screen->window, GLFW_KEY_KP_4) == GLFW_PRESS)
-	{
-		rotateAngleY += deltaTime*cannonSpeed;
-		if (rotateAngleY > 360.0f) rotateAngleY = 0.0f;
-	}
-
-	if (glfwGetKey(screen->window, GLFW_KEY_KP_6) == GLFW_PRESS)
-	{
-		rotateAngleY -= deltaTime*cannonSpeed;
-		if (rotateAngleY < 0.0f) rotateAngleY = 360.0f;
-	}
-
-	if (glfwGetKey(screen->window, GLFW_KEY_KP_8) == GLFW_PRESS)
-	{
-		rotateAngleX += deltaTime*cannonSpeed;
-		if (rotateAngleX > 197.0f) rotateAngleX = 197.0f;
-	}
-
-	if (glfwGetKey(screen->window, GLFW_KEY_KP_5) == GLFW_PRESS)
-	{
-		rotateAngleX -= deltaTime*cannonSpeed;
-		if (rotateAngleX < -8.0f) rotateAngleX = -8.0f;
-	}
-
 	// Rotating cannon and its parts
 	for (Renderable * cannonPart : subObjects)
 	{
@@ -160,4 +129,16 @@ void Cannon::destroy()
 		cannonPart->destroy();
 		delete cannonPart;
 	}
+}
+
+void Cannon::updateRotation(GLfloat rotateAngleX, GLfloat rotateAngleY)
+{
+	static float i = 0.1f;
+	this->rotateAngleX = rotateAngleX;
+	if (this->rotateAngleX > 90.0f) this->rotateAngleX = 90.0f;
+	if (this->rotateAngleX < -8.0f) this->rotateAngleX = -8.0f;
+
+	this->rotateAngleY = rotateAngleY;
+	if (this->rotateAngleY > 360.0f) this->rotateAngleY = 0.0f;
+	if (this->rotateAngleY < 0.0f) this->rotateAngleY = 360.0f;
 }
