@@ -43,7 +43,7 @@ private:
 	// Texts
 	Text text;
 	Text forceShieldHPtext;
-	Text gameFinishedTexts[4];
+	Text gameFinishedText;
 
 	// Helper booleans
 	GLboolean showingInstructions;

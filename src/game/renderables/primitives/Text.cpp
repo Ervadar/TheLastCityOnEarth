@@ -28,6 +28,7 @@ void Text::init(Screen * screen)
 void Text::setTextValue(std::string textValue)
 {
 	this->textValue = textValue;
+	calculateTextSize();
 }
 
 void Text::render(int posX, int posY, int size)
@@ -109,4 +110,24 @@ void Text::update(float deltaTime)
 
 void Text::destroy()
 {
+}
+
+void Text::calculateTextSize()
+{
+	unsigned int textLength = textValue.length();
+	unsigned int lineCharacterNo = 0;
+	int lineNo = 1;
+	for (unsigned int i = 0; i < textLength; ++i)
+	{
+		char character = textValue[i];
+		if (character == 47)
+		{
+			if (lineCharacterNo > textWidthInChars) textWidthInChars = lineCharacterNo;
+			lineCharacterNo = 0;
+			++lineNo;
+			continue;
+		}
+		++lineCharacterNo;
+	}
+	numberOfLines = lineNo;
 }

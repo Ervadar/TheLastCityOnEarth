@@ -44,7 +44,7 @@ void GameScreen::init()
 	renderer->init(windowWidth, windowHeight);
 
 	text.init(this);
-	for (int i = 0; i < 4; ++i) gameFinishedTexts[i].init(this);
+	gameFinishedText.init(this);
 	forceShieldHPtext.init(this);
 
 	crosshairs.init(this, "crosshairs.tga");
@@ -76,10 +76,13 @@ void GameScreen::render()
 	// GAME FINISHED TEXT
 	if (world->gameFinished)
 	{
-		for (int i = 0; i < 4; ++i)
-		{
-			gameFinishedTexts[i].render((int)(windowWidth / 2 - (gameFinishedTexts[i].textValue.length()*0.5f) * 32), windowHeight / 2 - i * 32, 32);
-		}
+		std::string text = "The shield has been breached./";
+		text += "Humanity is hopeless now.//";
+		text += "You lasted for " + std::to_string(world->timePassed) + " seconds./";
+		text += "Press R to restart.";
+		gameFinishedText.setTextValue(text);
+		gameFinishedText.render((int)(windowWidth / 2 - (gameFinishedText.textWidthInChars*0.5f) * 32),
+			((int)(windowHeight / 2 - (gameFinishedText.numberOfLines*0.5f))), 32);
 	}
 
 	// CROSSHAIRS
@@ -127,14 +130,7 @@ void GameScreen::update(GLfloat deltaTime)
 	forceShieldHPtext.setTextValue("Shield HP: " + std::to_string(world->forceShield->healthPoints));
 
 	// Checking if game is paused or finished - don't update if yes
-	if (world->gameFinished)
-	{
-		gameFinishedTexts[0].setTextValue("The shield has been breached.");
-		gameFinishedTexts[1].setTextValue("Humanity is hopeless now.");
-		gameFinishedTexts[2].setTextValue("You lasted for " + std::to_string(world->timePassed) + " seconds.");
-		gameFinishedTexts[3].setTextValue("Press R to restart.");
-		return;
-	}
+	if (world->gameFinished) return;
 	if (world->gamePaused) return;
 
 	checkGameplayInputs(deltaTime);

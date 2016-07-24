@@ -22,6 +22,9 @@ public:
 	int posY;
 	int size;
 
+	unsigned int numberOfLines = 0;
+	unsigned int textWidthInChars = 0;
+
 	Text();
 	virtual ~Text();
 
@@ -31,6 +34,8 @@ public:
 	void render(int posX, int posY, int size);
 	void update(float deltaTime);
 	void destroy();
+
+	void calculateTextSize();
 };
 
 #endif
