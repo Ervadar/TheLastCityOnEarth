@@ -24,6 +24,7 @@
 
 #include "ShadowMapper.h"
 #include "Lighting.h"
+#include "SoundSystem.h"
 
 #include <map>
 
@@ -32,9 +33,6 @@ Main game class
 */
 class GameScreen : public Screen
 {
-protected:
-	// SoundSystem soundSystem;
-
 private:
 	std::unique_ptr<World> world;
 	std::unique_ptr<WorldRenderer> renderer;

@@ -11,6 +11,7 @@
 #include "EnemyShip.h"
 #include "Missile.h"
 #include "Explosion.h"
+#include "SoundSystem.h"
 #include <vector>
 
 #include <glm/glm.hpp>

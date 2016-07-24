@@ -50,8 +50,9 @@ void GameScreen::init()
 	crosshairs.init(this, "crosshairs.tga");
 
 	textShaderProgram.loadShaderProgram("text.vert", "text.frag");
+
 	// Init sound system
-	// soundSystem.camera = &camera;
+	SoundSystem::getInstance().setPlayerCamera(&camera);
 }
 
 void GameScreen::release()
@@ -110,10 +111,10 @@ void GameScreen::update(GLfloat deltaTime)
 	if (showingInstructions)
 	{
 		instructions += "/Don't let the last city/on earth lose its shield!//";
-		instructions += "Q - shoot cannon/";
+		instructions += "Mouse - move cannon/";
+		instructions += "LMB - shoot cannon/";
 		instructions += "C - toggle view/";
 		instructions += "Arrow keys - move directional light/";
-		instructions += "Numpad - move cannon/";
 		instructions += "P - pause/";
 		instructions += "ESC - exit/";
 		instructions += "F3 - debug info/";
@@ -230,7 +231,7 @@ void GameScreen::checkGameplayInputs(GLfloat deltaTime)
 	}
 
 	// Cannon shooting
-	if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
 		if (world->cannon->cannonStatus == world->cannon->STATUS_READY)
 		{

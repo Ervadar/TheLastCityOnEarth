@@ -82,8 +82,6 @@ public:
 
 	Texture texture;
 	std::string texName;
-	
-	// SoundSystem * soundSystem;
 
 public:
 	Renderable(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY);

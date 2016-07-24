@@ -24,41 +24,6 @@ EnemyShip::EnemyShip(glm::vec3 position, std::vector<Missile*>* missilePool)
 	boundingBoxes.push_back(AABB(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(80.0f, 50.0f, 80.0f)));
 	// Flat bounding box
 	boundingBoxes.push_back(AABB(glm::vec3(0.0f), glm::vec3(2 * radius, 18.0f, 2 * radius)));
-
-	// DEBUG BOUNDING SPHERE
-	//debugSphere = new Sphere(
-	//	glm::vec4(1.0f, 1.0f, 1.0f, 0.5f),
-	//	getBoundingSphere().position,
-	//	getBoundingSphere().radius,
-	//	0.0f,
-	//	0.0f,
-	//	"hdfield.jpg"
-	//	);
-	//debugSphere->castingShadow = false;
-	//debugSphere->init(NULL);
-
-	// DEBUG BOUNDING CUBES
-	//for (AABB boundingBox : boundingBoxes)
-	//{
-	//	Cube* cube = new Cube(
-	//		glm::vec4(1.0f, 1.0f, 1.0f, 0.5f),
-	//		translateVector + boundingBox.positionOffset,
-	//		boundingBox.scale,
-	//		0.0f,
-	//		0.0f,
-	//		glm::vec3(1.0f, 0.0f, 0.0f),
-	//		glm::vec3(0.0f, 1.0f, 0.0f),
-	//		"hdfield.jpg",
-	//		"hdfield.jpg",
-	//		5.0f,
-	//		5.0f
-	//		);
-	//	cube->positionOffset = boundingBox.positionOffset;
-	//	cube->castingShadow = false;
-	//	cube->init(NULL);
-	//	debugBoundingBoxes.push_back(cube);
-	//}
-
 }
 
 
@@ -161,8 +126,7 @@ void EnemyShip::shootMissile()
 		glm::vec3(0.5f, 0.5f, 0.5f)
 		);
 	missile->init(translateVector + loadingMissileOffset, pointLight, shootingSpeed, glm::normalize(shootingTargetPosition - translateVector + loadingMissileOffset));
-	// soundSystem->playSound(soundSystem->enemyShipShoot,
-	// 	{ translateVector.x, translateVector.y, translateVector.z });
+	SoundSystem::getInstance().playSound("data/sounds/enemyShipShoot.wav", translateVector);
 }
 
 Missile* EnemyShip::getMissileFromPool()

@@ -77,7 +77,6 @@ void World::init()
 		std::unique_ptr<EnemyShip> enemyShip(new EnemyShip(enemyShipSpawnPoint, &enemyShipMissiles));
 		enemyShip->lightManager = &lightManager;
 		enemyShip->shootingTargetPosition = forceShield->translateVector;
-		// enemyShip->soundSystem = &soundSystem;
 		enemyShips.push_back(std::move(enemyShip));
 	}
 	forceShield->init(nullptr);
@@ -252,8 +251,7 @@ void World::checkMissileEnemyShipCollisions(std::vector<Missile*>& missiles)
 					enemyShip->destroy();
 				}
 				spawnExplosion(missile->translateVector);
-				// soundSystem.playSound(soundSystem.enemyShipHit,
-				// { missile->translateVector.x, missile->translateVector.y, missile->translateVector.z });
+				SoundSystem::getInstance().playSound("data/sounds/enemyShipHit.wav", missile->translateVector);
 				missile->destroy();
 				break;
 			}
@@ -269,8 +267,7 @@ void World::checkMissileForceShieldCollisions(std::vector<Missile*>& missiles)
 		{
 			spawnExplosion(missile->translateVector);
 			forceShield->reduceHealthPoints(missile->strength);
-			// soundSystem.playSound(soundSystem.shieldHit,
-			// 	{ missile->translateVector.x, missile->translateVector.y, missile->translateVector.z });
+			SoundSystem::getInstance().playSound("data/sounds/shieldHit.wav", missile->translateVector);
 			missile->destroy();
 		}
 	}
@@ -374,6 +371,7 @@ void World::shootCannonMissile()
 		pointLight->lightManager = &lightManager;
 		cannonMissiles[i]->inUse = true;
 		cannon->cannonStatus = cannon->STATUS_SHOOTING;
+		SoundSystem::getInstance().playSound("data/sounds/cannonShoot.wav", cannon->translateVector);
 		// soundSystem.playSound(soundSystem.cannonShootSound,
 		// { cannon->translateVector.x, cannon->translateVector.y, cannon->translateVector.z }
 		// );

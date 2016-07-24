@@ -14,6 +14,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/game/renderables/models)
 include_directories(${CMAKE_SOURCE_DIR}/src/game/renderables/primitives)
 include_directories(${CMAKE_SOURCE_DIR}/src/renderer)
 include_directories(${CMAKE_SOURCE_DIR}/src/screens)
+include_directories(${CMAKE_SOURCE_DIR}/src/sound)
 file(GLOB_RECURSE SOURCE src/*.cpp)
 file(GLOB_RECURSE HEADERS src/*.h)
 
@@ -76,6 +77,18 @@ if(FREEIMAGE_HEADERS_DIR AND FREEIMAGE_LIB)
 	include_directories( ${FREEIMAGE_HEADERS_DIR} )
 else()
 	message(SEND_ERROR "FreeImage was not found.")
+endif()
+
+# FreeImage
+set(DEFAULT_IRRKLANG_DIR "irrKlang-1.5.0")
+find_path(IRRKLANG_HEADERS_DIR irrKlang.h ${LIB_DIR}/${DEFAULT_IRRKLANG_DIR}/include)
+message(STATUS "${LIB_DIR}/${DEFAULT_IRRKLANG_DIR}/include")
+find_library(IRRKLANG_LIB irrKlang ${LIB_DIR}/${DEFAULT_IRRKLANG_DIR})
+if(IRRKLANG_HEADERS_DIR AND IRRKLANG_LIB)
+	set(LIBS ${LIBS} ${IRRKLANG_LIB})
+	include_directories( ${IRRKLANG_HEADERS_DIR} )
+else()
+	message(SEND_ERROR "irrKlang was not found.")
 endif()
 
 # Link

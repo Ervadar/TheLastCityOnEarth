@@ -5,6 +5,7 @@
 #include "Sphere.h"
 #include "Cube.h"
 #include "Missile.h"
+#include "SoundSystem.h"
 
 class EnemyShip : public Renderable
 {
