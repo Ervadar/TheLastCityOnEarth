@@ -3,6 +3,7 @@
 SoundSystem::SoundSystem()
 {
 	engine = createIrrKlangDevice();
+	engine->setDefault3DSoundMinDistance(10.0f);
 }
 
 void SoundSystem::setPlayerCamera(Camera* camera)

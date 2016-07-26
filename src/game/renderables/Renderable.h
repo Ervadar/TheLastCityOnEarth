@@ -36,7 +36,6 @@ struct AABB
 	glm::vec3 getC2(glm::vec3 objectPosition) { return objectPosition + scale / 2.0f; }
 };
 
-
 /*
 Class representing renderable objects.
 Class can be either inherited to create own type of renderable
