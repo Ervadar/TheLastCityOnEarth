@@ -9,7 +9,7 @@ public:
 	Cylinder(glm::vec3 translateVector, glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY, std::string texName);
 	virtual ~Cylinder();
 
-	void init(Screen * screen);
+	void init();
 	void render(ShaderProgram & shaderProgram);
 	void update(float deltaTime);
 	void destroy();

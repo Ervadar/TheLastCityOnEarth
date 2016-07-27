@@ -16,10 +16,8 @@ Sphere::~Sphere()
 {
 }
 
-void Sphere::init(Screen * screen)
+void Sphere::init()
 {
-	this->screen = screen;
-
 	GLfloat M_PI = glm::pi<GLfloat>();
 	GLfloat M_PI_2 = glm::half_pi<GLfloat>();
 

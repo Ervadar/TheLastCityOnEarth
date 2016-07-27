@@ -63,12 +63,12 @@ void World::init()
 	forceShield->castingShadow = false;
 
 	// Initializing objects
-	skybox.init(nullptr);
-	terrain.init(nullptr);
-	cannon->init(nullptr);
+	skybox.init();
+	terrain.init();
+	cannon->init();
 	for (Renderable * object : staticObjects)
 	{
-		object->init(nullptr);
+		object->init();
 	}
 	enemyShipSpawnPoint = glm::vec3(0.0f, 4500.0f, 0.0f);
 
@@ -79,7 +79,7 @@ void World::init()
 		enemyShip->shootingTargetPosition = forceShield->translateVector;
 		enemyShips.push_back(std::move(enemyShip));
 	}
-	forceShield->init(nullptr);
+	forceShield->init();
 
 	// Initiaiting enemy ship destination spheres (esds)
 	glm::vec3 forceShieldPosition = forceShield->translateVector;
@@ -108,7 +108,7 @@ void World::init()
 	for (GLuint i = 0; i < EXPLOSION_POOL_SIZE; ++i)
 	{
 		explosions.push_back(Explosion());
-		explosions[i].init(nullptr);
+		explosions[i].init();
 	}
 	// Init cannon missile pool
 	for (GLuint i = 0; i < CANNON_MISSILES_POOL_SIZE; ++i)
@@ -136,7 +136,7 @@ void World::init()
 
 	this->enemyShipSpawnTime = maxEnemyShipSpawnTime;
 
-	lightManager.init(nullptr);
+	lightManager.init();
 }
 
 void World::update(GLfloat deltaTime)

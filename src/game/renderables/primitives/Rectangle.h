@@ -9,8 +9,8 @@ public:
 	Rectangle();
 	~Rectangle();
 
-	void init(Screen*) {};
-	void init(Screen* screen, std::string textureName);
+	void init() {};
+	void init(std::string textureName);
 	void render();
 	void render(float posX, float posY, float width, float height);
 	void update(float deltaTime);

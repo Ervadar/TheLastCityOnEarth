@@ -1,22 +1,12 @@
 #include "Lighting.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "PointLight.h"
 
-LightManager::LightManager()
-{
-}
-
-
-LightManager::~LightManager()
-{
-}
-
-void LightManager::init(Screen * screen)
+void LightManager::init()
 {
 	for (GLuint i = 0; i < POINT_LIGHT_POOL_SIZE; ++i)
 	{
-		pointLights.push_back(PointLight(screen));
+		pointLights.push_back(PointLight());
 	}
 }
 

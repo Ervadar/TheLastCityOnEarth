@@ -1,7 +1,6 @@
 #include "Terrain.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Screen.h"
 #include <iostream>
 #include <FreeImage.h>
 
@@ -10,20 +9,13 @@
 ShaderProgram Terrain::terrain;
 Shader Terrain::terrainShaders[NUMTERRAINSHADERS];
 
-Terrain::Terrain()
-{
-
-}
-
 Terrain::~Terrain()
 {
 	destroy();
 }
 
-void Terrain::init(Screen * screen)
+void Terrain::init()
 {
-	
-	this->screen = screen;
 	this->translateVector = glm::vec3(0.0f);
 	this->rotateAngleX = 0.0f;
 	this->rotateAngleY = 0.0f;
@@ -71,15 +63,15 @@ void Terrain::destroy()
 
 bool Terrain::loadTerrainShaderProgram()
 {
-	bool bOK = true;
-	bOK &= terrainShaders[0].loadShader("data/shaders/terrain.vert", GL_VERTEX_SHADER);
-	bOK &= terrainShaders[1].loadShader("data/shaders/terrain.frag", GL_FRAGMENT_SHADER);
+	bool isOK = true;
+	isOK &= terrainShaders[0].loadShader("data/shaders/terrain.vert", GL_VERTEX_SHADER);
+	isOK &= terrainShaders[1].loadShader("data/shaders/terrain.frag", GL_FRAGMENT_SHADER);
 
 	terrain.createProgram();
 	for(int i = 0; i < NUMTERRAINSHADERS; ++i) terrain.addShaderToProgram(&terrainShaders[i]);
 	terrain.linkProgram();
 
-	return bOK;
+	return isOK;
 	
 }
 
@@ -141,7 +133,6 @@ bool Terrain::loadHeightMapFromImage(std::string imagePath)
 
 	float textureU = float(cols)*0.1f;
 	float textureV = float(rows)*0.1f;
-	static float maxNumber = 0.0f;
 	for(int i = 0; i < rows; ++i)
 	{
 		for(int j = 0; j < cols; ++j)

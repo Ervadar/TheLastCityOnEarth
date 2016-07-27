@@ -3,7 +3,6 @@
 
 #include "Renderable.h"
 #include "PointLight.h"
-#include "Shaders.h"
 
 class Missile : public Renderable
 {

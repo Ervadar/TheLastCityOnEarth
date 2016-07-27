@@ -10,7 +10,7 @@ Rectangle::~Rectangle()
 {
 }
 
-void Rectangle::init(Screen * screen, std::string textureName)
+void Rectangle::init(std::string textureName)
 {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &vertexVBO);

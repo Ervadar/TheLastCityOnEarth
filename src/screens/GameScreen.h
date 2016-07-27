@@ -8,24 +8,9 @@
 
 #include "World.h"
 #include "WorldRenderer.h"
-
 #include "Screen.h"
-#include "Renderable.h"
-#include "Terrain.h"
-#include "Cube.h"
-#include "Cannon.h"
-#include "ForceShield.h"
-#include "Skybox.h"
 #include "Text.h"
-#include "EnemyShip.h"
-#include "Missile.h"
-#include "Explosion.h"
 #include "Rectangle.h"
-
-#include "ShadowMapper.h"
-#include "Lighting.h"
-#include "SoundSystem.h"
-
 #include <map>
 
 /*

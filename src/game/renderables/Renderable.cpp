@@ -1,7 +1,6 @@
 #include "Renderable.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Screen.h"
 #include <iostream>
 #include <FreeImage.h>
 #include "Sphere.h"

@@ -4,7 +4,6 @@
 #include "Renderable.h"
 #include "Sphere.h"
 #include "Cylinder.h"
-#include "Cube.h"
 
 class Cannon : public Renderable
 {
@@ -45,7 +44,7 @@ public:
 	Cannon();
 	virtual ~Cannon() {};
 
-	void init(Screen * screen);
+	void init();
 	void render(ShaderProgram & shaderProgram);
 	void update(float deltaTime);
 	void destroy();

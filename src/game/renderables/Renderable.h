@@ -6,14 +6,11 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <vector>
-#include "Screen.h"
 #include "Texture.h"
 #include "Mesh.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-
-class Screen;
 
 struct BoundingSphere
 {
@@ -44,8 +41,6 @@ or instantiated to load model from file (consisting of multiple meshes), ussing 
 class Renderable
 {
 protected:
-	Screen * screen;
-
 	GLuint VAO;
 	GLuint vertexVBO;
 	GLuint uvVBO;
@@ -93,7 +88,7 @@ public:
 	void init(glm::vec3 position);
 	void init(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 scaleVector);
 	void init(glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY, glm::vec3 translateVector);
-	virtual void init(Screen * screen){};
+	virtual void init(){};
 	virtual void render(ShaderProgram & shaderProgram);
 	virtual void update(GLfloat deltaTime){};
 	virtual void destroy(){};

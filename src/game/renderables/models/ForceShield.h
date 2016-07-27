@@ -2,9 +2,6 @@
 #define _FORCESHIELD_H_
 
 #include "Renderable.h"
-#include "Shaders.h"
-#include "Texture.h"
-#include "Screen.h"
 
 class ForceShield : public Renderable
 {
@@ -19,7 +16,7 @@ public:
 	ForceShield();
 	virtual ~ForceShield();
 
-	void init(Screen * screen);
+	void init();
 	void render(ShaderProgram & shaderProgram);
 	void update(float deltaTime);
 	void destroy();

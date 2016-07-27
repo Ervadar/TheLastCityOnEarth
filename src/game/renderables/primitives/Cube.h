@@ -2,8 +2,6 @@
 #define _CUBE_H_
 
 #include "Renderable.h"
-#include "Shaders.h"
-#include "Screen.h"
 
 #include <GLFW/glfw3.h>
 
@@ -22,7 +20,7 @@ public:
 	Cube(glm::vec4 color, glm::vec3 translateVector, glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY, std::string texName, std::string topTexName, float texRepeatX, float texRepeatY);
 	virtual ~Cube();
 
-	void init(Screen * screen);
+	void init();
 	void render(ShaderProgram & shaderProgram);
 	void update(float deltaTime);
 	void destroy();

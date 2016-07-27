@@ -2,7 +2,6 @@
 #define _WORLD_H_
 
 #include "Renderable.h"
-#include "Camera.h"
 #include "Terrain.h"
 #include "Cube.h"
 #include "Cannon.h"
@@ -11,7 +10,8 @@
 #include "EnemyShip.h"
 #include "Missile.h"
 #include "Explosion.h"
-#include "SoundSystem.h"
+
+#include <memory>
 #include <vector>
 
 #include <glm/glm.hpp>

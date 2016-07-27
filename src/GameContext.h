@@ -13,7 +13,7 @@ class GameContext
 {
 private:
 	GLFWwindow * window;
-	Screen * screen = nullptr;
+	Screen * screen;
 
 	char * windowTitle;
 
@@ -23,7 +23,7 @@ private:
 public:
 	bool pause;
 
-	GameContext(): window(NULL), windowTitle("The last city on Earth"), FPSCount(0), isFullScreen(false) { }
+	GameContext(): window(nullptr), screen(nullptr), windowTitle("The last city on Earth"), FPSCount(0), isFullScreen(false) { }
 
 	static void reshapeCallback(GLFWwindow* window, int width, int height);
 

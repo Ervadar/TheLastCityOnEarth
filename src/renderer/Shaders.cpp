@@ -3,9 +3,6 @@
 #include <string>
 #include <vector>
 
-/****************************
-	Shader class functions
-****************************/
 Shader::Shader()
 {
 	loaded = false;

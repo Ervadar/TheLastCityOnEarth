@@ -22,10 +22,8 @@ Cube::~Cube()
 	destroy();
 }
 
-void Cube::init(Screen * screen)
+void Cube::init()
 {
-	this->screen = screen;
-
 	glm::vec3 cubeVertices[] = 
 	{
 		// Front face

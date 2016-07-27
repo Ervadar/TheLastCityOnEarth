@@ -4,9 +4,7 @@
 #define NUMTERRAINSHADERS 2
 
 #include "Renderable.h"
-#include "Shaders.h"
 #include "Texture.h"
-#include "Screen.h"
 #include "VertexBufferObject.h"
 
 #include <GLFW/glfw3.h>
@@ -45,10 +43,10 @@ public:
 
 	static ShaderProgram * getShaderProgram(); 
 
-	Terrain();
+	Terrain() {};
 	virtual ~Terrain();
 
-	void init(Screen * screen);
+	void init();
 	void render(ShaderProgram & shaderProgram);
 	void update(float deltaTime);
 	void destroy();

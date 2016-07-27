@@ -19,9 +19,9 @@ Explosion::~Explosion()
 {
 }
 
-void Explosion::init(Screen* screen)
+void Explosion::init()
 {
-	this->Sphere::init(screen);
+	this->Sphere::init();
 	this->maxRadius = 10.0f * radius;
 	this->radiusGrowthSpeed = (maxRadius - radius) * 1.5f;
 }

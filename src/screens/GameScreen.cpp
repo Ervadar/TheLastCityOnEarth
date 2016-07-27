@@ -43,11 +43,11 @@ void GameScreen::init()
 	renderer = std::move(std::unique_ptr<WorldRenderer>(new WorldRenderer(world.get(), camera)));
 	renderer->init(windowWidth, windowHeight);
 
-	text.init(this);
-	gameFinishedText.init(this);
-	forceShieldHPtext.init(this);
+	text.init();
+	gameFinishedText.init();
+	forceShieldHPtext.init();
 
-	crosshairs.init(this, "crosshairs.tga");
+	crosshairs.init("crosshairs.tga");
 
 	textShaderProgram.loadShaderProgram("text.vert", "text.frag");
 

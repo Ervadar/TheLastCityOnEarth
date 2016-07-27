@@ -8,7 +8,6 @@
 #include <vector>
 
 #include "Shaders.h"
-#include "Renderable.h"
 
 /*
 Class wrapping shadow map

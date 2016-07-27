@@ -18,11 +18,11 @@ public:
 	glm::vec3 diffuse;
 	glm::vec3 specular;
 
-	PointLight(Screen * screen);
+	PointLight();
 	PointLight(glm::vec3 position, float constant, float linear, float quadratic, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
 	~PointLight();
 
-	void init(Screen * screen);
+	void init();
 	void init(glm::vec3 position, float constant, float linear, float quadratic, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
 	void render(ShaderProgram & shaderProgram);
 	void update(float deltaTime);

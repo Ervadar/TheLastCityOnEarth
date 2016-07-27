@@ -19,7 +19,7 @@ public:
 	Explosion(glm::vec4 color, glm::vec3 position, GLfloat radius, std::string textureName);
 	~Explosion();
 
-	void init(Screen * screen);
+	void init();
 	void update(GLfloat deltaTime);
 	void destroy();
 };

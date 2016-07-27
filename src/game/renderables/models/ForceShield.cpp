@@ -15,9 +15,8 @@ ForceShield::~ForceShield()
 	destroy();
 }
 
-void ForceShield::init(Screen * screen)
+void ForceShield::init()
 {
-	this->screen = screen;
 	this->maxHealthPoints = 2000;
 	this->healthPoints = maxHealthPoints;
 	this->healthPerSecond = 1;
@@ -173,6 +172,7 @@ void ForceShield::update(float deltaTime)
 
 	rotateAngleY -= deltaTime*2.0f;
 
+	// Increasing shield health over time
 	if (timePassed > 1.0f)
 	{
 		timePassed = 0.0f;

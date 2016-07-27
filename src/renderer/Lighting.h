@@ -17,10 +17,10 @@ public:
 	static const GLuint POINT_LIGHT_POOL_SIZE = 70;
 	std::vector<PointLight> pointLights;	// Point light pool
 
-	LightManager();
-	~LightManager();
+	LightManager() {};
+	~LightManager() {};
 
-	void init(Screen * screen);
+	void init();
 
 	PointLight* createPointLight(glm::vec3 position, float constant, float linear, float quadratic, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
 

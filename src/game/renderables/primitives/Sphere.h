@@ -12,7 +12,7 @@ public:
 	Sphere(glm::vec4 color, glm::vec3 translateVector, GLfloat radius, GLfloat rotateAngleX, GLfloat rotateAngleY, std::string texName);
 	virtual ~Sphere();
 
-	void init(Screen * screen);
+	void init();
 	void render(ShaderProgram & shaderProgram);
 	void update(float deltaTime);
 	void destroy();

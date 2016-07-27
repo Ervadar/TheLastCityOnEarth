@@ -16,10 +16,8 @@ Cylinder::~Cylinder()
 	destroy();
 }
 
-void Cylinder::init(Screen * screen)
+void Cylinder::init()
 {
-	this->screen = screen;
-
 	GLfloat M_PI = glm::pi<GLfloat>();
 	GLfloat M_PI_2 = glm::half_pi<GLfloat>();
 

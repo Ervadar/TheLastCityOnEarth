@@ -3,7 +3,6 @@
 
 #include "World.h"
 #include "Camera.h"
-#include "Screen.h"
 #include "ShadowMapper.h"
 #include <vector>
 

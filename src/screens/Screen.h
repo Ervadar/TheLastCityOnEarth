@@ -9,8 +9,6 @@
 #include <functional>
 #include <memory>
 
-class Renderable;
-
 /*
 Base class for different screens (for example. Menu Screen, Game Screen)
 */

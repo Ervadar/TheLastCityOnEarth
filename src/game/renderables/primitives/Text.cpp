@@ -3,21 +3,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
-#include "Screen.h"
-
-Text::Text()
-{
-}
-
 Text::~Text()
 {
 	destroy();
 }
 
-void Text::init(Screen * screen)
+void Text::init()
 {
-	this->screen = screen;
-
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &vertexVBO);
 	glGenBuffers(1, &uvVBO);

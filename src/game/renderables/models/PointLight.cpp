@@ -3,11 +3,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 
-PointLight::PointLight(Screen * screen)
+PointLight::PointLight()
 {
 	this->Renderable::init(glm::vec3(8.0f, 8.f, 8.0f), 0.0f, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f));
 	this->inUse = false;
-	this->init(screen);
+	this->init();
 }
 
 PointLight::~PointLight()
@@ -26,10 +26,8 @@ PointLight::PointLight(glm::vec3 position, float constant, float linear, float q
 	this->inUse = false;
 }
 
-void PointLight::init(Screen * screen)
+void PointLight::init()
 {
-	this->screen = screen;
-
 	GLfloat M_PI = glm::pi<GLfloat>();
 	GLfloat M_PI_2 = glm::half_pi<GLfloat>();
 

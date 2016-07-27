@@ -21,9 +21,8 @@ Cannon::Cannon()
 	cannonStatus = STATUS_READY;
 }
 
-void Cannon::init(Screen * screen)
+void Cannon::init()
 {
-	this->screen = screen;
 	/* KONSTRUKCJA DZIA£A */
 	Renderable::init(glm::vec3(1.0f), 0.0f, 17.0f, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(700.0f, 300.0f, 1300.0f));
 
@@ -65,14 +64,14 @@ void Cannon::init(Screen * screen)
 		);
 	subObjects.push_back(movingBarrel);
 
-	cannonSphere->init(screen);
+	cannonSphere->init();
 	// Wychylenie pocz¹tkowe cannona
 	// cannonSphere->stableModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)) * cannonSphere->stableModelMatrix;
 
-	barrel->init(screen);
+	barrel->init();
 	barrel->stableModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -120.0f)) * barrel->stableModelMatrix;
 
-	movingBarrel->init(screen);
+	movingBarrel->init();
 	movingBarrel->stableModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -113.0f)) * movingBarrel->stableModelMatrix;
 }
 
@@ -133,7 +132,6 @@ void Cannon::destroy()
 
 void Cannon::updateRotation(GLfloat rotateAngleX, GLfloat rotateAngleY)
 {
-	static float i = 0.1f;
 	this->rotateAngleX = rotateAngleX;
 	if (this->rotateAngleX > 90.0f) this->rotateAngleX = 90.0f;
 	if (this->rotateAngleX < -8.0f) this->rotateAngleX = -8.0f;

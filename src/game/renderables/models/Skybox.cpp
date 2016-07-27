@@ -3,8 +3,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
-#include "Screen.h"
-
 Skybox::Skybox()
 {
 }
@@ -14,10 +12,8 @@ Skybox::~Skybox()
 	destroy();
 }
 
-void Skybox::init(Screen * screen)
+void Skybox::init()
 {
-	this->screen = screen;
-
 	this->rotateAngleX = 0.0f;
 	this->rotateAngleY = 0.0f;
 	this->rotateAxisX = glm::vec3(1.0f, 0.0f, 0.0f);
