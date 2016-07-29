@@ -66,9 +66,9 @@ void WorldRenderer::update(GLfloat deltaTime)
 
 void WorldRenderer::renderObjectsCastingShadows(Camera & camera, ShaderProgram & shaderProgram, matrixUniformFunction matrixUniformFunction)
 {
-	for (Renderable * object : world->staticObjects)
+	for (auto& object : world->staticObjects)
 	{
-		if (object->castingShadow) render(object, camera, shaderProgram, matrixUniformFunction);
+		if (object->castingShadow) render(object.get(), camera, shaderProgram, matrixUniformFunction);
 	}
 	for (auto& enemyShip : world->enemyShips)
 	{
@@ -80,9 +80,9 @@ void WorldRenderer::renderObjectsCastingShadows(Camera & camera, ShaderProgram &
 
 void WorldRenderer::renderObjects(Camera & camera, ShaderProgram & shaderProgram, matrixUniformFunction matrixUniformFunction)
 {
-	for (Renderable * object : world->staticObjects)
+	for (auto& object : world->staticObjects)
 	{
-		render(object, camera, shaderProgram, matrixUniformFunction);
+		render(object.get(), camera, shaderProgram, matrixUniformFunction);
 	}
 	for (auto& enemyShip : world->enemyShips)
 	{
@@ -112,7 +112,7 @@ void WorldRenderer::renderObjects(Camera & camera, ShaderProgram & shaderProgram
 
 void WorldRenderer::renderPointLights(Camera & camera, ShaderProgram & shaderProgram, matrixUniformFunction matrixUniformFunction)
 {
-	for (PointLight pointLight : world->lightManager.pointLights)
+	for (PointLight& pointLight : world->lightManager.pointLights)
 	{
 		if (pointLight.inUse) render(&pointLight, camera, shaderProgram, matrixUniformFunction);
 	}

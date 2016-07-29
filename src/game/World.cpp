@@ -25,7 +25,7 @@ void World::init()
 	for (int i = 0; i < 5; ++i)
 		for (int j = 0; j < 5; ++j)
 		{
-			staticObjects.push_back(new Cube(
+			staticObjects.push_back(std::move(std::unique_ptr<Cube>(new Cube(
 				glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 				glm::vec3(basePosX - i*width * 2, 150.0f, basePosZ - j*length * 2),
 				glm::vec3(width, height + (float)std::pow(-1, (i*j) % 2) * i*30.0f - (float)::pow(-1, (j*j) % 2)*j*30.0f, length),
@@ -38,12 +38,12 @@ void World::init()
 				//"darkmetal" + std::to_string((j+i+i*j)%2+1) + ".jpg",
 				5.0f,
 				5.0f
-				));
+				))));
 		}
 
 	// Cannon base
 	int i = 0, j = 0;
-	staticObjects.push_back(new Cube(
+	staticObjects.push_back(std::move(std::unique_ptr<Cube>(new Cube(
 		glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 		glm::vec3(700.0f, 110.0f, 1300.0f),
 		glm::vec3(200.0f, 300.0f, 200.0f),
@@ -56,7 +56,7 @@ void World::init()
 		//"darkmetal" + std::to_string((j+i+i*j)%2+1) + ".jpg",
 		5.0f,
 		5.0f
-		));
+		))));
 
 	// City force shield
 	forceShield = std::move(std::unique_ptr<ForceShield>(new ForceShield()));
@@ -66,7 +66,7 @@ void World::init()
 	skybox.init();
 	terrain.init();
 	cannon->init();
-	for (Renderable * object : staticObjects)
+	for (auto& object : staticObjects)
 	{
 		object->init();
 	}
@@ -148,7 +148,7 @@ void World::update(GLfloat deltaTime)
 		glm::rotate(glm::mat4(1.0f), sunRotateAngleY, glm::vec3(0.0f, 1.0f, 0.0f)) *
 		glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 
-	for (Renderable * object : staticObjects)
+	for (auto& object : staticObjects)
 	{
 		object->update(deltaTime);
 	}
@@ -202,16 +202,10 @@ void World::update(GLfloat deltaTime)
 
 void World::release()
 {
-	for (auto it = staticObjects.begin(); it != staticObjects.end(); ++it)
-	{
-		(*it)->destroy();
-		delete *it;
-	}
 	staticObjects.clear();
 }
 
 // COLLISIONS
-
 void World::checkCollisions()
 {
 	checkMissileBoundaryCollisions(cannonMissiles);

@@ -4,11 +4,6 @@
 
 #include <iostream>
 
-GameScreen::~GameScreen()
-{
-	release();
-}
-
 void GameScreen::init()
 {
 	glfwGetWindowSize(window, &windowWidth, &windowHeight);
@@ -57,8 +52,8 @@ void GameScreen::init()
 
 void GameScreen::release()
 {
-	world.release();
-	renderer.release();
+	world->release();
+	renderer->release();
 }
 
 void GameScreen::render()

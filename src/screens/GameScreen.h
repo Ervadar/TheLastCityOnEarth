@@ -48,7 +48,7 @@ private:
 public:
 
 	GameScreen(GLFWwindow * w): Screen(w) { }
-	~GameScreen();
+	~GameScreen() { };
 
 	void init();
 	void render();

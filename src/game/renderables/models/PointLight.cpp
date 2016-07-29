@@ -10,10 +10,6 @@ PointLight::PointLight()
 	this->init();
 }
 
-PointLight::~PointLight()
-{
-}
-
 PointLight::PointLight(glm::vec3 position, float constant, float linear, float quadratic, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular)
 {
 	Renderable::init(glm::vec3(8.0f, 8.f, 8.0f), 0.0f, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), position);

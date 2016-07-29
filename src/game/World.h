@@ -46,7 +46,7 @@ public:
 	std::vector<Explosion> explosions;
 
 	// Objects
-	std::vector<Renderable*> staticObjects;
+	std::vector<std::unique_ptr<Renderable>> staticObjects;
 
 	std::unique_ptr<ForceShield> forceShield;
 	std::unique_ptr<Cannon> cannon;
