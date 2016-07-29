@@ -29,7 +29,7 @@ int GameContext::init()
 	GLFWmonitor * monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode * desktop = glfwGetVideoMode(monitor);
 
-	window = glfwCreateWindow(desktop->width, desktop->height, windowTitle, NULL, NULL);
+	window = glfwCreateWindow(desktop->width, desktop->height, windowTitle, nullptr, nullptr);
 
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 

@@ -56,7 +56,7 @@ void main()
 	for(int i = 0; i < pointLightsNumber; i++)
 		lighting += CalculatePointLight(pointLights[i], texture(material.texture_diffuse1, texCoord).rgb, normal, fragPositionCameraspace, eyeDirectionCameraspace);
 		
-	// Output color (DISTANCE UNIMPLEMENTED)
+	// Output color
 	float shadow = CalculateShadow(fragPositionLightSpace, normal, sunLight.directionCameraspace);
 	outputColor = color * vec4(
 				  lighting[0] +

@@ -28,7 +28,7 @@ bool Shader::loadShader(std::string file, int type)
 	shaderId = glCreateShader(type);
 
 	// Passes source code of the shader for compilation to GPU
-	glShaderSource(shaderId, (int)lines.size(), program, NULL);
+	glShaderSource(shaderId, (int)lines.size(), program, nullptr);
 
 	// Compiles the shader's source code
 	glCompileShader(shaderId);

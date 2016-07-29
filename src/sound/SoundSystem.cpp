@@ -4,6 +4,15 @@ SoundSystem::SoundSystem()
 {
 	engine = createIrrKlangDevice();
 	engine->setDefault3DSoundMinDistance(10.0f);
+	preloadAllSounds();
+}
+
+void SoundSystem::preloadAllSounds()
+{
+	engine->addSoundSourceFromFile("data/sounds/cannonShoot.wav", irrklang::ESM_AUTO_DETECT, true);
+	engine->addSoundSourceFromFile("data/sounds/enemyShipHit.wav", irrklang::ESM_AUTO_DETECT, true);
+	engine->addSoundSourceFromFile("data/sounds/enemyShipShoot.wav", irrklang::ESM_AUTO_DETECT, true);
+	engine->addSoundSourceFromFile("data/sounds/shieldHit.wav", irrklang::ESM_AUTO_DETECT, true);
 }
 
 void SoundSystem::setPlayerCamera(Camera* camera)

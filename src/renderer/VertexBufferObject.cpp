@@ -42,7 +42,7 @@ void VertexBufferObject::addData(void* a_data, GLuint dataSize)
 
 void* VertexBufferObject::getDataPointer()
 {
-	if(dataUploaded) return NULL;
+	if(dataUploaded) return nullptr;
 	return (void*)data[0];
 }
 

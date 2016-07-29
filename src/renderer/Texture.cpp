@@ -34,7 +34,7 @@ bool Texture::loadTexture2D(std::string path, bool generateMipMaps)
 	unsigned int tp = FreeImage_GetTransparencyCount(dib);
 
 	// If somehow it failed, return failure
-	if(dataPointer == NULL || width == 0 || height == 0)
+	if(dataPointer == nullptr || width == 0 || height == 0)
 		return false;
 
 	// Generate an OpenGL texture ID for this texture

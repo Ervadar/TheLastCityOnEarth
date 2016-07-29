@@ -7,16 +7,36 @@ set(TheLastCityOnEarth_VERSION_MINOR 0)
 set(TARGET_NAME TheLastCityOnEarth)
 
 ### Source information
-include_directories(${CMAKE_SOURCE_DIR}/src)
-include_directories(${CMAKE_SOURCE_DIR}/src/game)
-include_directories(${CMAKE_SOURCE_DIR}/src/game/renderables)
-include_directories(${CMAKE_SOURCE_DIR}/src/game/renderables/models)
-include_directories(${CMAKE_SOURCE_DIR}/src/game/renderables/primitives)
-include_directories(${CMAKE_SOURCE_DIR}/src/renderer)
-include_directories(${CMAKE_SOURCE_DIR}/src/screens)
-include_directories(${CMAKE_SOURCE_DIR}/src/sound)
-file(GLOB_RECURSE SOURCE src/*.cpp)
-file(GLOB_RECURSE HEADERS src/*.h)
+set(ROOT_SRC_DIR ${CMAKE_SOURCE_DIR}/src)
+set(GAME_DIR ${CMAKE_SOURCE_DIR}/src/game)
+set(RENDERABLES_DIR ${CMAKE_SOURCE_DIR}/src/game/renderables)
+set(MODELS_DIR ${CMAKE_SOURCE_DIR}/src/game/renderables/models)
+set(PRIMITIVES_DIR ${CMAKE_SOURCE_DIR}/src/game/renderables/primitives)
+set(RENDERER_DIR ${CMAKE_SOURCE_DIR}/src/renderer)
+set(SCREENS_DIR ${CMAKE_SOURCE_DIR}/src/screens)
+set(SOUND_DIR ${CMAKE_SOURCE_DIR}/src/sound)
+
+set(ALL_SRCS)
+function(add_directory path)
+	include_directories(${path})
+	file(GLOB DIR_SRCS ${path}/*.cpp ${path}/*.h)
+	get_filename_component(LAST_SRC_DIR "${path}" NAME)
+	source_group(${LAST_SRC_DIR} FILES ${DIR_SRCS})
+	set(ALL_SRCS ${ALL_SRCS} ${DIR_SRCS} PARENT_SCOPE)
+endfunction(add_directory)
+
+add_directory(${ROOT_SRC_DIR})
+add_directory(${GAME_DIR})
+add_directory(${RENDERABLES_DIR})
+add_directory(${MODELS_DIR})
+add_directory(${PRIMITIVES_DIR})
+add_directory(${RENDERER_DIR})
+add_directory(${SCREENS_DIR})
+add_directory(${SOUND_DIR})
+
+# Shaders
+file(GLOB SHADER_FILES ${CMAKE_SOURCE_DIR}/res/shaders/*.vert ${CMAKE_SOURCE_DIR}/res/shaders/*.frag)
+source_group("shaders" FILES ${SHADER_FILES})
 
 ### Libraries and headers
 set(LIB_DIR "${CMAKE_SOURCE_DIR}/lib")
@@ -91,14 +111,14 @@ else()
 	message(SEND_ERROR "irrKlang was not found.")
 endif()
 
-# Link
-add_executable(${TARGET_NAME} ${SOURCE} ${HEADERS})
+### Link
+add_executable(${TARGET_NAME} ${ALL_SRCS} ${SHADER_FILES})
 target_link_libraries(${TARGET_NAME} ${LIBS})
 
 ### Copying DLL target
 file(GLOB DLLS ${CMAKE_SOURCE_DIR}/dll/*.dll)
 add_custom_target(CopyDlls)
-foreach(DLL ${DLLS})
+foreach(DLL ${DLLS})	
   add_custom_command(TARGET CopyDlls POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${DLL} ${CMAKE_BINARY_DIR}/Release/)
   add_custom_command(TARGET CopyDlls POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${DLL} ${CMAKE_BINARY_DIR}/Debug/)
 endforeach()
@@ -110,3 +130,8 @@ add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E c
 add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/data)
 add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/Release/data)
 add_dependencies(${TARGET_NAME} CopyResources)
+
+### Copying shaders target
+add_custom_target(CopyShaders ALL DEPENDS ${SHADER_FILES})
+add_custom_command(TARGET CopyShaders COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/res/shaders" "${CMAKE_BINARY_DIR}/Release/data/shaders")
+add_custom_command(TARGET CopyShaders COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/res/shaders" "${CMAKE_BINARY_DIR}/data/shaders")

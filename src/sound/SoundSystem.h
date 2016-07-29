@@ -25,6 +25,7 @@ public:
 	SoundSystem(SoundSystem const&) = delete;
 	void operator=(SoundSystem const&) = delete;
 
+	void preloadAllSounds();
 	void setPlayerCamera(Camera* camera);
 
 	void playSound(std::string soundFileName, glm::vec3 soundPosition);

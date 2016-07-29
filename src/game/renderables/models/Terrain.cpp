@@ -118,7 +118,7 @@ bool Terrain::loadHeightMapFromImage(std::string imagePath)
 	for (int i = 0; i < rows; ++i) terrainHeightValues[i].resize(cols);
 
 	// We also require our image to be either 24-bit (classic RGB) or 8-bit (luminance)
-	if(bDataPointer == NULL || rows == 0 || cols == 0 || (FreeImage_GetBPP(dib) != 24 && FreeImage_GetBPP(dib) != 16 && FreeImage_GetBPP(dib) != 8))
+	if(bDataPointer == nullptr || rows == 0 || cols == 0 || (FreeImage_GetBPP(dib) != 24 && FreeImage_GetBPP(dib) != 16 && FreeImage_GetBPP(dib) != 8))
 		return false;
 
 	// How much to increase data pointer to get to next pixel data
