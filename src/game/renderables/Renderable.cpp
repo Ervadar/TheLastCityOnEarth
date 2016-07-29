@@ -171,6 +171,14 @@ void Renderable::render(ShaderProgram & shaderProgram)
 	}
 }
 
+void Renderable::destroy()
+{
+	for (Renderable * subObject : subObjects)
+	{
+		subObject->destroy();
+	}
+}
+
 BoundingSphere Renderable::getBoundingSphere()
 {
 	return BoundingSphere(translateVector, radius);

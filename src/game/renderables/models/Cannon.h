@@ -12,9 +12,9 @@ public:
 	const int STATUS_SHOOTING = 1;
 	const int STATUS_LOADING = 2;
 
-	Sphere * cannonSphere;
-	Cylinder * barrel;
-	Cylinder * movingBarrel;
+	std::unique_ptr<Sphere> cannonSphere;
+	std::unique_ptr<Cylinder> barrel;
+	std::unique_ptr<Cylinder> movingBarrel;
 
 	glm::vec3 cannonInitialDirectionVector;
 	glm::vec3 cannonDirectionVector;
@@ -47,7 +47,6 @@ public:
 	void init();
 	void render(ShaderProgram & shaderProgram);
 	void update(float deltaTime);
-	void destroy();
 
 	void updateRotation(GLfloat rotateAngleX, GLfloat rotateAngleY);
 };

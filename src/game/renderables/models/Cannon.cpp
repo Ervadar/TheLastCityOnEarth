@@ -29,18 +29,18 @@ void Cannon::init()
 	cannonInitialDirectionVector = glm::vec3(0.0f, 0.0f, -1.0f);
 
 	// Kula podstawy
-	cannonSphere = new Sphere(
+	cannonSphere = std::move(std::unique_ptr<Sphere>(new Sphere(
 		glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
 		translateVector,
 		90.0f,
 		rotateAngleX,
 		rotateAngleY,
 		"hdfield.jpg"
-		);
-	subObjects.push_back(cannonSphere);
+		)));
+	subObjects.push_back(cannonSphere.get());
 
 	// Lufa
-	barrel = new Cylinder(
+	barrel = std::move(std::unique_ptr<Cylinder>(new Cylinder(
 		translateVector,
 		glm::vec3(3.0f, 3.f, 6.0f),
 		rotateAngleX,
@@ -48,12 +48,12 @@ void Cannon::init()
 		glm::vec3(1.0f, 0.0f, 0.0f),
 		glm::vec3(0.0f, 1.0f, 0.0f),
 		"hdfield.jpg"
-		);
-	subObjects.push_back(barrel);
+		)));
+	subObjects.push_back(barrel.get());
 
 
 	// Lufa ruchoma
-	movingBarrel = new Cylinder(
+	movingBarrel = std::move(std::unique_ptr<Cylinder>(new Cylinder(
 		translateVector,
 		glm::vec3(5.0f, 5.f, 5.0f),
 		rotateAngleX,
@@ -61,11 +61,11 @@ void Cannon::init()
 		glm::vec3(1.0f, 0.0f, 0.0f),
 		glm::vec3(0.0f, 1.0f, 0.0f),
 		"hdfield.jpg"
-		);
-	subObjects.push_back(movingBarrel);
+		)));
+	subObjects.push_back(movingBarrel.get());
 
 	cannonSphere->init();
-	// Wychylenie pocz¹tkowe cannona
+	// Wychylenie pocz¹tkowe dzia³a
 	// cannonSphere->stableModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f)) * cannonSphere->stableModelMatrix;
 
 	barrel->init();
@@ -118,16 +118,6 @@ void Cannon::update(float deltaTime)
 	
 	// Updating moving barrel position
 	movingBarrel->translateVector = translateVector + movingBarrelPos * cannonDirectionVector;
-
-}
-
-void Cannon::destroy()
-{
-	for (Renderable * cannonPart : subObjects)
-	{
-		cannonPart->destroy();
-		delete cannonPart;
-	}
 }
 
 void Cannon::updateRotation(GLfloat rotateAngleX, GLfloat rotateAngleY)

@@ -11,6 +11,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <memory>
 
 struct BoundingSphere
 {
@@ -91,7 +92,7 @@ public:
 	virtual void init(){};
 	virtual void render(ShaderProgram & shaderProgram);
 	virtual void update(GLfloat deltaTime){};
-	virtual void destroy(){};
+	virtual void destroy();
 
 	bool loadShaders(std::string vertexShaderName, std::string fragmentShaderName);
 	bool hasSubObjects();
