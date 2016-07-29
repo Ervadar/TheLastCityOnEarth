@@ -1,8 +1,9 @@
 #include "Missile.h"
 
 
-Missile::Missile()
+Missile::Missile(GLuint owner)
 {
+	this->owner = owner;
 	this->inUse = false;
 }
 

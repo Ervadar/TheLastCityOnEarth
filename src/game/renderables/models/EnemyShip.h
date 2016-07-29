@@ -44,20 +44,20 @@ public:
 	GLfloat timeBetweenShoots;
 	GLfloat shootingSpeed;
 
-	std::vector<Missile*>* missilePool;
+	std::vector<std::unique_ptr<Missile>>* missilePool;
 
 	glm::vec3 loadingMissileOffset;
 
 	LightManager * lightManager;
 
-	EnemyShip(glm::vec3 position, std::vector<Missile*>* missilePool);
+	EnemyShip(glm::vec3 position, std::vector<std::unique_ptr<Missile>>* missilePool);
 	~EnemyShip();
 
 	void update(float deltaTime);
 	void destroy();
 
 	void calculateCircularMovement(std::vector<BoundingSphere>& enemyShipDestinationSpheres);
-	void startMovingToPosition();
+
 	glm::vec3 getMovementCirclePosition(GLfloat timePassed);
 
 	void reduceHealthPoints(GLint reducedHealthPoints);

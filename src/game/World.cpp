@@ -113,18 +113,12 @@ void World::init()
 	// Init cannon missile pool
 	for (GLuint i = 0; i < CANNON_MISSILES_POOL_SIZE; ++i)
 	{
-		Missile* missile = new Missile();
-		cannonMissiles.push_back(missile);
-		missile->owner = Missile::OWNER_CANNON;
-		missile->inUse = false;
+		cannonMissiles.push_back(std::move(std::unique_ptr<Missile>(new Missile(Missile::OWNER_CANNON))));
 	}
 	// Init enemy ship missile pool
 	for (GLuint i = 0; i < ENEMY_SHIP_MISSILES_POOL_SIZE; ++i)
 	{
-		Missile* missile = new Missile();
-		enemyShipMissiles.push_back(missile);
-		missile->owner = Missile::OWNER_ENEMY_SHIP;
-		missile->inUse = false;
+		enemyShipMissiles.push_back(std::move(std::unique_ptr<Missile>(new Missile(Missile::OWNER_ENEMY_SHIP))));
 	}
 
 	// Game info
@@ -215,7 +209,7 @@ void World::checkCollisions()
 	checkMissileForceShieldCollisions(enemyShipMissiles);
 }
 
-void World::checkMissileBoundaryCollisions(std::vector<Missile*>& missiles)
+void World::checkMissileBoundaryCollisions(std::vector<std::unique_ptr<Missile>>& missiles)
 {
 	for (auto& missile : missiles)
 	{
@@ -227,7 +221,7 @@ void World::checkMissileBoundaryCollisions(std::vector<Missile*>& missiles)
 		}
 	}
 }
-void World::checkMissileEnemyShipCollisions(std::vector<Missile*>& missiles)
+void World::checkMissileEnemyShipCollisions(std::vector<std::unique_ptr<Missile>>& missiles)
 {
 	for (auto& missile : missiles)
 	{
@@ -235,7 +229,7 @@ void World::checkMissileEnemyShipCollisions(std::vector<Missile*>& missiles)
 		for (auto& enemyShip : enemyShips)
 		{
 			if (!enemyShip->inUse) continue;
-			if (missileCollidesWithObject(missile, enemyShip.get()))
+			if (missileCollidesWithObject(missile.get(), enemyShip.get()))
 			{
 				GLfloat hitDistanceFromCenter = glm::distance(missile->translateVector, enemyShip->translateVector);
 				GLint missileStrength = missile->strength;
@@ -252,12 +246,12 @@ void World::checkMissileEnemyShipCollisions(std::vector<Missile*>& missiles)
 		}
 	}
 }
-void World::checkMissileForceShieldCollisions(std::vector<Missile*>& missiles)
+void World::checkMissileForceShieldCollisions(std::vector<std::unique_ptr<Missile>>& missiles)
 {
 	for (auto& missile : missiles)
 	{
 		if (!missile->inUse) continue;
-		if (missileCollidesWithObject(missile, forceShield.get()))
+		if (missileCollidesWithObject(missile.get(), forceShield.get()))
 		{
 			spawnExplosion(missile->translateVector);
 			forceShield->reduceHealthPoints(missile->strength);
@@ -266,7 +260,7 @@ void World::checkMissileForceShieldCollisions(std::vector<Missile*>& missiles)
 		}
 	}
 }
-void World::checkMissileTerrainCollisions(std::vector<Missile*>& missiles)
+void World::checkMissileTerrainCollisions(std::vector<std::unique_ptr<Missile>>& missiles)
 {
 	for (auto& missile : missiles)
 	{

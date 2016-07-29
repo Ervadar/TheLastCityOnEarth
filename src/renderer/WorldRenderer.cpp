@@ -93,11 +93,11 @@ void WorldRenderer::renderObjects(Camera & camera, ShaderProgram & shaderProgram
 	}
 	for (auto& cannonMissile : world->cannonMissiles)
 	{
-		if (cannonMissile->inUse) render(cannonMissile, camera, shaderProgram, matrixUniformFunction);
+		if (cannonMissile->inUse) render(cannonMissile.get(), camera, shaderProgram, matrixUniformFunction);
 	}
 	for (auto& enemyShipMissile : world->enemyShipMissiles)
 	{
-		if (enemyShipMissile->inUse) render(enemyShipMissile, camera, shaderProgram, matrixUniformFunction);
+		if (enemyShipMissile->inUse) render(enemyShipMissile.get(), camera, shaderProgram, matrixUniformFunction);
 	}
 	render(world->cannon.get(), camera, shaderProgram, matrixUniformFunction);
 	for (GLuint i = 0; i < world->EXPLOSION_POOL_SIZE; ++i)

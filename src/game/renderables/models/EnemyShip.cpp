@@ -3,7 +3,7 @@
 
 extern std::mt19937 rng;
 
-EnemyShip::EnemyShip(glm::vec3 position, std::vector<Missile*>* missilePool)
+EnemyShip::EnemyShip(glm::vec3 position, std::vector<std::unique_ptr<Missile>>* missilePool)
 {
 	init("data/models/enemyship.obj", position, glm::vec3(50.0f));
 	this->spawnPoint = position;
@@ -130,12 +130,12 @@ void EnemyShip::shootMissile()
 
 Missile* EnemyShip::getMissileFromPool()
 {
-	for (Missile* missile : *missilePool)
+	for (auto& missile : *missilePool)
 	{
 		if (!missile->inUse)
 		{
 			missile->inUse = true;
-			return missile;
+			return missile.get();
 		}
 	}
 	return nullptr;

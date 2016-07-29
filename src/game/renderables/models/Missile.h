@@ -15,7 +15,7 @@ public:
 
 	PointLight * pointLight;
 
-	Missile();
+	Missile(GLuint owner);
 	~Missile();
 
 	void init(glm::vec3 position, PointLight* pointLight, GLfloat speed, glm::vec3 directionVector);

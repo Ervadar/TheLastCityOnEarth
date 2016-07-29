@@ -37,10 +37,10 @@ public:
 	std::vector<std::unique_ptr<EnemyShip>> enemyShips;
 
 	static const GLuint CANNON_MISSILES_POOL_SIZE = 15;
-	std::vector<Missile*> cannonMissiles;
+	std::vector<std::unique_ptr<Missile>> cannonMissiles;
 
 	static const GLuint ENEMY_SHIP_MISSILES_POOL_SIZE = 40;
-	std::vector<Missile*> enemyShipMissiles;
+	std::vector<std::unique_ptr<Missile>> enemyShipMissiles;
 
 	static const GLuint EXPLOSION_POOL_SIZE = 45;
 	std::vector<Explosion> explosions;
@@ -83,10 +83,10 @@ public:
 	// Collisions
 	void checkCollisions();
 
-	void checkMissileBoundaryCollisions(std::vector<Missile*>& missiles);
-	void checkMissileEnemyShipCollisions(std::vector<Missile*>& missiles);
-	void checkMissileForceShieldCollisions(std::vector<Missile*>& missiles);
-	void checkMissileTerrainCollisions(std::vector<Missile*>& missiles);
+	void checkMissileBoundaryCollisions(std::vector<std::unique_ptr<Missile>>& missiles);
+	void checkMissileEnemyShipCollisions(std::vector<std::unique_ptr<Missile>>& missiles);
+	void checkMissileForceShieldCollisions(std::vector<std::unique_ptr<Missile>>& missiles);
+	void checkMissileTerrainCollisions(std::vector<std::unique_ptr<Missile>>& missiles);
 
 	bool missileCollidesWithObject(Missile* missile, Renderable* object);
 
