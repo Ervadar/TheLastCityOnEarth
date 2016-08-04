@@ -5,6 +5,8 @@
 #include <FreeImage.h>
 #include "Sphere.h"
 
+std::vector<Texture> Renderable::loadedTextures;
+
 Renderable::Renderable(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY)
 {
 	this->loadModel(modelPath);
@@ -155,10 +157,26 @@ std::vector<Texture> Renderable::loadMaterialTextures(aiMaterial* material, aiTe
 	{
 		aiString str;
 		material->GetTexture(type, i, &str);
-		Texture texture;
-		texture.loadTexture2D("data/models/" + std::string(str.C_Str()), true);
-		texture.type = typeName;
-		textures.push_back(texture);
+		std::string texturePath = "data/models/" + std::string(str.C_Str());
+		GLboolean textureAlreadyLoaded = false;
+		for (GLuint i = 0; i < loadedTextures.size(); ++i)
+		{
+			if (loadedTextures[i].path == texturePath)
+			{
+				textures.push_back(loadedTextures[i]);
+				textureAlreadyLoaded = true;
+				break;
+			}
+		}
+		if (!textureAlreadyLoaded)
+		{
+			Texture texture;
+			texture.loadTexture2D(texturePath, true);
+			texture.type = typeName;
+			texture.path = texturePath;
+			textures.push_back(texture);
+			loadedTextures.push_back(texture);
+		}
 	}
 	return textures;
 }

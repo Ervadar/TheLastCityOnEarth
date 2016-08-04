@@ -125,11 +125,10 @@ endforeach()
 add_dependencies(${TARGET_NAME} CopyDlls)
 
 ### Copying resources target
-add_custom_target(CopyResources)
+add_custom_target(CopyResources ALL DEPENDS ${CMAKE_BINARY_DIR}/unexisting_file.h)
 add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/Debug/data)
 add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/data)
 add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/Release/data)
-add_dependencies(${TARGET_NAME} CopyResources)
 
 ### Copying shaders target
 add_custom_target(CopyShaders ALL DEPENDS ${SHADER_FILES})

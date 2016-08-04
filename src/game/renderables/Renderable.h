@@ -52,6 +52,7 @@ protected:
 
 private:
 	std::vector<Mesh> meshes;
+	static std::vector<Texture> loadedTextures;
 	std::string directory;
 
 public:
@@ -83,7 +84,7 @@ public:
 	Renderable(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY);
 	Renderable(glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY, glm::vec3 translateVector);
 	Renderable() {};
-	virtual ~Renderable() { printf("DELETING RENDERABLE");  };
+	virtual ~Renderable() {   };
 
 public:
 	void init(glm::vec3 position);
