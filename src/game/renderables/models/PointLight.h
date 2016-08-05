@@ -24,7 +24,7 @@ public:
 
 	void init();
 	void init(glm::vec3 position, float constant, float linear, float quadratic, glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular);
-	void render(ShaderProgram & shaderProgram);
+	void customRender(ShaderProgram & shaderProgram);
 	void update(float deltaTime);
 	void destroy();
 };

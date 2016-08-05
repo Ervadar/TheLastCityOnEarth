@@ -45,7 +45,6 @@ public:
 	virtual ~Cannon() {};
 
 	void init();
-	void render(ShaderProgram & shaderProgram);
 	void update(float deltaTime);
 
 	void updateRotation(GLfloat rotateAngleX, GLfloat rotateAngleY);

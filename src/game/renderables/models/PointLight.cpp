@@ -103,7 +103,7 @@ void PointLight::init(glm::vec3 position, float constant, float linear, float qu
 	this->specular = specular;
 }
 
-void PointLight::render(ShaderProgram & shaderProgram)
+void PointLight::customRender(ShaderProgram & shaderProgram)
 {
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementVBO);

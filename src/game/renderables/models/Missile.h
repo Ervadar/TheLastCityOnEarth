@@ -20,7 +20,7 @@ public:
 
 	void init(glm::vec3 position, PointLight* pointLight, GLfloat speed, glm::vec3 directionVector);
 	void update(float deltaTime);
-	void render(ShaderProgram & shaderProgram);
+	void customRender(ShaderProgram & shaderProgram);
 	void destroy();
 };
 

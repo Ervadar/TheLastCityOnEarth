@@ -13,7 +13,7 @@ public:
 	virtual ~Sphere();
 
 	void init();
-	virtual void render(ShaderProgram & shaderProgram);
+	virtual void customRender(ShaderProgram & shaderProgram);
 	void update(float deltaTime);
 	void destroy();
 };

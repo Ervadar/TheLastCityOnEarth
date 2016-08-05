@@ -183,7 +183,7 @@ std::vector<Texture> Renderable::loadMaterialTextures(aiMaterial* material, aiTe
 
 bool Renderable::isTransparent() const
 {
-	bool opacity = this->color.a;
+	float opacity = this->color.a;
 	if (opacity == 1.0f) return false;
 	return true;
 }
@@ -195,10 +195,15 @@ void Renderable::render(ShaderProgram & shaderProgram)
 		glEnable(GL_BLEND);
 		glDepthMask(0);
 	}
+
+	// Option1: rendering meshes
 	for (GLuint i = 0; i < this->meshes.size(); ++i)
 	{
 		this->meshes[i].render(shaderProgram);
 	}
+	// Option2: custom rendering (customRender must be overriden)
+	customRender(shaderProgram);
+
 	if (isTransparent())
 	{
 		glDisable(GL_BLEND);

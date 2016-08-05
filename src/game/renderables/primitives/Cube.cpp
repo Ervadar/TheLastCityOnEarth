@@ -96,7 +96,7 @@ void Cube::init()
 	stableModelMatrix = glm::scale(glm::mat4(1.0f), scaleVector);
 }
 
-void Cube::render(ShaderProgram & shaderProgram)
+void Cube::customRender(ShaderProgram & shaderProgram)
 {
 	glBindVertexArray(VAO);
 

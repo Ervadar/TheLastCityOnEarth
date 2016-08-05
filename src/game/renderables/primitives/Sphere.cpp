@@ -114,7 +114,7 @@ void Sphere::init()
 	stableModelMatrix = glm::scale(glm::mat4(1.0f), scaleVector);
 }
 
-void Sphere::render(ShaderProgram & shaderProgram)
+void Sphere::customRender(ShaderProgram & shaderProgram)
 {
 	if (isTransparent())
 	{

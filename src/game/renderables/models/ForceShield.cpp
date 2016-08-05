@@ -147,22 +147,16 @@ void ForceShield::init()
 	texture.setSamplerParameter(GL_TEXTURE_MAX_ANISOTROPY_EXT, 4);
 }
 
-void ForceShield::render(ShaderProgram & shaderProgram)
+void ForceShield::customRender(ShaderProgram & shaderProgram)
 {
 	texture.bindTexture();
-	
-	glEnable(GL_BLEND); 
-	glDepthMask(0);
-
+	printf("Rendering force shield\n");
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementVBO);
 	glDrawElements(GL_TRIANGLES, indicesSize, GL_UNSIGNED_SHORT, 0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, innerElementVBO);
 	glDrawElements(GL_TRIANGLES, indicesSize, GL_UNSIGNED_SHORT, 0);
-	
-	glDisable(GL_BLEND); 
-	glDepthMask(1); 
 }
 
 void ForceShield::update(float deltaTime)

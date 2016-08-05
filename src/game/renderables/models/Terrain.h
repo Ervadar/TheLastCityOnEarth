@@ -47,7 +47,7 @@ public:
 	virtual ~Terrain();
 
 	void init();
-	void render(ShaderProgram & shaderProgram);
+	void customRender(ShaderProgram & shaderProgram);
 	void update(float deltaTime);
 	void destroy();
 

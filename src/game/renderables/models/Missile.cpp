@@ -29,7 +29,7 @@ void Missile::update(float deltaTime)
 	pointLight->translateVector = translateVector;
 }
 
-void Missile::render(ShaderProgram & shaderProgram)
+void Missile::customRender(ShaderProgram & shaderProgram)
 {
 
 }

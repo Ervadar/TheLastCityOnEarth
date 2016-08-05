@@ -14,7 +14,7 @@ public:
 	virtual ~Skybox();
 
 	void init();
-	void render(ShaderProgram & shaderProgram);
+	void customRender(ShaderProgram & shaderProgram);
 	void update(float deltaTime);
 	void destroy();
 };

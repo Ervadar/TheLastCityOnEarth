@@ -75,10 +75,6 @@ void Cannon::init()
 	movingBarrel->stableModelMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -113.0f)) * movingBarrel->stableModelMatrix;
 }
 
-void Cannon::render(ShaderProgram & shaderProgram)
-{
-}
-
 void Cannon::update(float deltaTime)
 {
 	// Cannon X axis and direction update

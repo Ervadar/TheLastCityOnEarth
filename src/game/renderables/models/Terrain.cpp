@@ -41,7 +41,7 @@ void Terrain::init()
 
 }
 
-void Terrain::render(ShaderProgram & shaderProgram)
+void Terrain::customRender(ShaderProgram & shaderProgram)
 {
 	glBindVertexArray(VAO);
 	glEnable(GL_PRIMITIVE_RESTART);

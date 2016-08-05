@@ -164,7 +164,7 @@ void Cylinder::init()
 	stableModelMatrix = glm::scale(glm::mat4(1.0f), scaleVector);
 }
 
-void Cylinder::render(ShaderProgram & shaderProgram)
+void Cylinder::customRender(ShaderProgram & shaderProgram)
 {
 	glBindVertexArray(VAO);
 
