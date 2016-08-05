@@ -190,9 +190,19 @@ bool Renderable::isTransparent() const
 
 void Renderable::render(ShaderProgram & shaderProgram)
 {
+	if (isTransparent())
+	{
+		glEnable(GL_BLEND);
+		glDepthMask(0);
+	}
 	for (GLuint i = 0; i < this->meshes.size(); ++i)
 	{
 		this->meshes[i].render(shaderProgram);
+	}
+	if (isTransparent())
+	{
+		glDisable(GL_BLEND);
+		glDepthMask(1);
 	}
 }
 

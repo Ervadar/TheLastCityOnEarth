@@ -84,7 +84,7 @@ public:
 	Renderable(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY);
 	Renderable(glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY, glm::vec3 translateVector);
 	Renderable() {};
-	virtual ~Renderable() {   };
+	virtual ~Renderable() {};
 
 public:
 	void init(glm::vec3 position);
@@ -92,7 +92,7 @@ public:
 	void init(glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY, glm::vec3 translateVector);
 	virtual void init(){};
 	virtual void render(ShaderProgram & shaderProgram);
-
+	virtual void customRender(ShaderProgram & shaderProgram) {};
 	virtual void update(GLfloat deltaTime){};
 	virtual void destroy();
 

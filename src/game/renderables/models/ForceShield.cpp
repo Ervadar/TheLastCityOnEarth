@@ -152,7 +152,7 @@ void ForceShield::render(ShaderProgram & shaderProgram)
 	texture.bindTexture();
 	
 	glEnable(GL_BLEND); 
-	glDepthMask(0); // Disable writing to depth buffer
+	glDepthMask(0);
 
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementVBO);
@@ -162,7 +162,7 @@ void ForceShield::render(ShaderProgram & shaderProgram)
 	glDrawElements(GL_TRIANGLES, indicesSize, GL_UNSIGNED_SHORT, 0);
 	
 	glDisable(GL_BLEND); 
-	glDepthMask(1); // Re-enable writing to depth buffer
+	glDepthMask(1); 
 }
 
 void ForceShield::update(float deltaTime)
