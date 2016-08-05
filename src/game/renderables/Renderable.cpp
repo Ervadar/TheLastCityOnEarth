@@ -181,6 +181,13 @@ std::vector<Texture> Renderable::loadMaterialTextures(aiMaterial* material, aiTe
 	return textures;
 }
 
+bool Renderable::isTransparent() const
+{
+	bool opacity = this->color.a;
+	if (opacity == 1.0f) return false;
+	return true;
+}
+
 void Renderable::render(ShaderProgram & shaderProgram)
 {
 	for (GLuint i = 0; i < this->meshes.size(); ++i)

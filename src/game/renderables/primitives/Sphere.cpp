@@ -116,19 +116,20 @@ void Sphere::init()
 
 void Sphere::render(ShaderProgram & shaderProgram)
 {
-	texture.bindTexture();
-	if(color.a != 1.0f)
+	if (isTransparent())
 	{
-		glEnable(GL_BLEND); 
+		glEnable(GL_BLEND);
 		glDepthMask(0); // Disable writing to depth buffer
 	}
+
+	texture.bindTexture();
 
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementVBO);
 
 	glDrawElements(GL_TRIANGLES, indicesSize, GL_UNSIGNED_SHORT, 0);
 
-	if(color.a != 1.0f)
+	if(isTransparent())
 	{
 		glDisable(GL_BLEND); 
 		glDepthMask(1); // Re-enable writing to depth buffer

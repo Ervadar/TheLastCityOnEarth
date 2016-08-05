@@ -4,8 +4,7 @@
 #include "Sphere.h"
 #include "PointLight.h"
 
-class Explosion :
-	public Sphere
+class Explosion : public Sphere
 {
 public:
 	GLuint healthPoints;

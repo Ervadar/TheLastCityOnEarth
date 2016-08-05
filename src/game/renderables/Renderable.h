@@ -92,13 +92,14 @@ public:
 	void init(glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY, glm::vec3 translateVector);
 	virtual void init(){};
 	virtual void render(ShaderProgram & shaderProgram);
+
 	virtual void update(GLfloat deltaTime){};
 	virtual void destroy();
 
 	bool loadShaders(std::string vertexShaderName, std::string fragmentShaderName);
 	bool hasSubObjects();
 	void calculateMatricesAndUniforms(Camera & camera, ShaderProgram & shaderProgram);
-
+	bool isTransparent() const;
 	BoundingSphere getBoundingSphere();
 	std::vector<AABB> & getBoundingBoxes();
 
