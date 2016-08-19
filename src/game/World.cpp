@@ -375,7 +375,7 @@ void World::reset()
 	for (auto& cannonMissile : cannonMissiles) cannonMissile->inUse = false;
 	for (auto& enemyShipMissile : enemyShipMissiles) enemyShipMissile->inUse = false;
 	for (GLuint i = 0; i < explosions.size(); ++i) explosions[i]->inUse = false;
-	for (GLuint i = 0; i < lightManager.pointLights.size(); ++i) lightManager.pointLights[i].inUse = false;
+	for (GLuint i = 0; i < lightManager.pointLights.size(); ++i) lightManager.pointLights[i]->inUse = false;
 	timePassed = 0.0f;
 	enemyShipSpawnTime = maxEnemyShipSpawnTime;
 }

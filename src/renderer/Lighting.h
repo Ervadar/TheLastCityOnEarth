@@ -15,7 +15,7 @@ class LightManager
 {
 public:
 	static const GLuint POINT_LIGHT_POOL_SIZE = 70;
-	std::vector<PointLight> pointLights;	// Point light pool
+	std::vector<std::unique_ptr<PointLight>> pointLights;	// Point light pool
 
 	LightManager() {};
 	~LightManager() {};

@@ -150,7 +150,7 @@ void ForceShield::init()
 void ForceShield::customRender(ShaderProgram & shaderProgram)
 {
 	texture.bindTexture();
-	printf("Rendering force shield\n");
+
 	glBindVertexArray(VAO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementVBO);
 	glDrawElements(GL_TRIANGLES, indicesSize, GL_UNSIGNED_SHORT, 0);

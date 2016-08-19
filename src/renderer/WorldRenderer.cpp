@@ -112,9 +112,9 @@ void WorldRenderer::renderObjects(Camera & camera, ShaderProgram & shaderProgram
 
 void WorldRenderer::renderPointLights(Camera & camera, ShaderProgram & shaderProgram, matrixUniformFunction matrixUniformFunction)
 {
-	for (PointLight& pointLight : world->lightManager.pointLights)
+	for (auto& pointLight : world->lightManager.pointLights)
 	{
-		if (pointLight.inUse) render(&pointLight, camera, shaderProgram, matrixUniformFunction);
+		if (pointLight->inUse) render(pointLight.get(), camera, shaderProgram, matrixUniformFunction);
 	}
 }
 
@@ -154,14 +154,14 @@ void WorldRenderer::setMainShaderMatricesAndUniforms(Renderable * renderable, Ca
 	int pointLightsNumber = 0;
 	for (GLuint i = 0; i < world->lightManager.POINT_LIGHT_POOL_SIZE; ++i)
 	{
-		if (!world->lightManager.pointLights[i].inUse) continue;
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].position", glm::vec3(camera.getViewMatrix() * glm::vec4(world->lightManager.pointLights[i].translateVector, 1.0f)));
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].constant", world->lightManager.pointLights[i].constant);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].linear", world->lightManager.pointLights[i].linear);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].quadratic", world->lightManager.pointLights[i].quadratic);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].ambient", world->lightManager.pointLights[i].ambient);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].diffuse", world->lightManager.pointLights[i].diffuse);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].specular", world->lightManager.pointLights[i].specular);
+		if (!world->lightManager.pointLights[i]->inUse) continue;
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].position", glm::vec3(camera.getViewMatrix() * glm::vec4(world->lightManager.pointLights[i]->translateVector, 1.0f)));
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].constant", world->lightManager.pointLights[i]->constant);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].linear", world->lightManager.pointLights[i]->linear);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].quadratic", world->lightManager.pointLights[i]->quadratic);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].ambient", world->lightManager.pointLights[i]->ambient);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].diffuse", world->lightManager.pointLights[i]->diffuse);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].specular", world->lightManager.pointLights[i]->specular);
 		++pointLightsNumber;
 	}
 	shaderProgram.setUniform("pointLightsNumber", pointLightsNumber);
@@ -226,14 +226,14 @@ void WorldRenderer::setTerrainShaderMatricesAndUniforms(Renderable * renderable,
 	int pointLightsNumber = 0;
 	for (GLuint i = 0; i < world->lightManager.POINT_LIGHT_POOL_SIZE; ++i)
 	{
-		if (!world->lightManager.pointLights[i].inUse) continue;
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].position", glm::vec3(camera.getViewMatrix() * glm::vec4(world->lightManager.pointLights[i].translateVector, 1.0f)));
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].constant", world->lightManager.pointLights[i].constant);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].linear", world->lightManager.pointLights[i].linear);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].quadratic", world->lightManager.pointLights[i].quadratic);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].ambient", world->lightManager.pointLights[i].ambient);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].diffuse", world->lightManager.pointLights[i].diffuse);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].specular", world->lightManager.pointLights[i].specular);
+		if (!world->lightManager.pointLights[i]->inUse) continue;
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].position", glm::vec3(camera.getViewMatrix() * glm::vec4(world->lightManager.pointLights[i]->translateVector, 1.0f)));
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].constant", world->lightManager.pointLights[i]->constant);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].linear", world->lightManager.pointLights[i]->linear);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].quadratic", world->lightManager.pointLights[i]->quadratic);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].ambient", world->lightManager.pointLights[i]->ambient);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].diffuse", world->lightManager.pointLights[i]->diffuse);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].specular", world->lightManager.pointLights[i]->specular);
 		++pointLightsNumber;
 	}
 	shaderProgram.setUniform("pointLightsNumber", pointLightsNumber);
