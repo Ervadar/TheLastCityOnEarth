@@ -43,7 +43,7 @@ public:
 	std::vector<std::unique_ptr<Missile>> enemyShipMissiles;
 
 	static const GLuint EXPLOSION_POOL_SIZE = 45;
-	std::vector<Explosion> explosions;
+	std::vector<std::unique_ptr<Explosion>> explosions;
 
 	// Objects
 	std::vector<std::unique_ptr<Renderable>> staticObjects;

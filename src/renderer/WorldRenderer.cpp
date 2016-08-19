@@ -102,9 +102,9 @@ void WorldRenderer::renderObjects(Camera & camera, ShaderProgram & shaderProgram
 	render(world->cannon.get(), camera, shaderProgram, matrixUniformFunction);
 	for (GLuint i = 0; i < world->EXPLOSION_POOL_SIZE; ++i)
 	{
-		if (world->explosions[i].inUse)
+		if (world->explosions[i]->inUse)
 		{
-			render(&(world->explosions[i]), camera, shaderProgram, matrixUniformFunction);
+			render(world->explosions[i].get(), camera, shaderProgram, matrixUniformFunction);
 		}
 	}
 	render(world->forceShield.get(), camera, shaderProgram, matrixUniformFunction);

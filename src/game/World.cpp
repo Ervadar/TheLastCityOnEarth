@@ -107,8 +107,8 @@ void World::init()
 	// Init explosion pool
 	for (GLuint i = 0; i < EXPLOSION_POOL_SIZE; ++i)
 	{
-		explosions.push_back(Explosion());
-		explosions[i].init();
+		explosions.push_back(std::move(std::unique_ptr<Explosion>(new Explosion())));
+		explosions[i]->init();
 	}
 	// Init cannon missile pool
 	for (GLuint i = 0; i < CANNON_MISSILES_POOL_SIZE; ++i)
@@ -170,7 +170,7 @@ void World::update(GLfloat deltaTime)
 	// Updating explosions
 	for (GLuint i = 0; i < EXPLOSION_POOL_SIZE; ++i)
 	{
-		if (explosions[i].inUse) explosions[i].update(deltaTime);
+		if (explosions[i]->inUse) explosions[i]->update(deltaTime);
 	}
 
 	// Spawning enemy ships
@@ -326,11 +326,11 @@ void World::spawnExplosion(glm::vec3 position)
 {
 	for (GLuint i = 0; i < EXPLOSION_POOL_SIZE; ++i)
 	{
-		if (!explosions[i].inUse)
+		if (!explosions[i]->inUse)
 		{
-			explosions[i].translateVector = position;
-			explosions[i].inUse = true;
-			explosions[i].pointLight = lightManager.createPointLight(
+			explosions[i]->translateVector = position;
+			explosions[i]->inUse = true;
+			explosions[i]->pointLight = lightManager.createPointLight(
 				position,
 				0.1f, 0.0014f, 0.000007f,
 				glm::vec3(1.0f, 153.0f / 255.0f, 0.0f),
@@ -374,7 +374,7 @@ void World::reset()
 	for (auto& enemyShip : enemyShips) enemyShip->destroy();
 	for (auto& cannonMissile : cannonMissiles) cannonMissile->inUse = false;
 	for (auto& enemyShipMissile : enemyShipMissiles) enemyShipMissile->inUse = false;
-	for (GLuint i = 0; i < explosions.size(); ++i) explosions[i].inUse = false;
+	for (GLuint i = 0; i < explosions.size(); ++i) explosions[i]->inUse = false;
 	for (GLuint i = 0; i < lightManager.pointLights.size(); ++i) lightManager.pointLights[i].inUse = false;
 	timePassed = 0.0f;
 	enemyShipSpawnTime = maxEnemyShipSpawnTime;
