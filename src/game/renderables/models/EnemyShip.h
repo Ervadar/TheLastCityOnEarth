@@ -27,10 +27,10 @@ private:
 	float shootingTimer;
 
 public:
-	static const int MOVING_TO_POSITION = 0;
-	static const int MOVING_AROUND_POINT = 1;
-	static const int MISSILE_LOADING = 0;
-	static const int MISSILE_READY = 1;
+	enum class MovementState{ MOVING_TO_POSITION, MOVING_AROUND_POINT };
+	MovementState movementState;
+	enum class MissileState{ LOADING, READY };
+	MissileState missileState;
 
 	GLint maxHealthPoints;
 	GLint healthPoints;
@@ -40,7 +40,6 @@ public:
 
 	glm::vec3 shootingTargetPosition;
 
-	GLuint movementState;
 	GLfloat timeBetweenShoots;
 	GLfloat shootingSpeed;
 

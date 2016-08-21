@@ -9,7 +9,7 @@ EnemyShip::EnemyShip(glm::vec3 position, std::vector<std::unique_ptr<Missile>>* 
 	this->spawnPoint = position;
 	this->speed = 1.0f;
 	this->rotationSpeed = 60.0f;
-	this->movementState = MOVING_TO_POSITION;
+	this->movementState = MovementState::MOVING_TO_POSITION;
 	this->timeBetweenShoots = 2.0f;
 	this->timePassed = 0.0f;
 	this->shootingTimer = 0.0f;
@@ -35,7 +35,7 @@ EnemyShip::~EnemyShip()
 void EnemyShip::update(float deltaTime)
 {
 	if (!inUse) return;
-	if (this->movementState == MOVING_AROUND_POINT)
+	if (this->movementState == MovementState::MOVING_AROUND_POINT)
 	{
 		translateVector = getMovementCirclePosition(timePassed);
 		timePassed += deltaTime;
@@ -46,14 +46,14 @@ void EnemyShip::update(float deltaTime)
 			shootMissile();
 		}
 	}	
-	if (this->movementState == MOVING_TO_POSITION)
+	if (this->movementState == MovementState::MOVING_TO_POSITION)
 	{
 		glm::vec3 step = movementToPositionDirection * 400.0f * speed * deltaTime;
 		translateVector += step;
 		if (glm::distance(movementStartingPosition, translateVector) <= glm::length(step))
 		{
 			translateVector = movementStartingPosition;
-			movementState = MOVING_AROUND_POINT;
+			movementState = MovementState::MOVING_AROUND_POINT;
 		}
 	}
 	rotateAngleY -= deltaTime * rotationSpeed;
@@ -111,7 +111,7 @@ void EnemyShip::destroy()
 	this->healthPoints = this->maxHealthPoints;
 	this->timePassed = 0.0f;
 	this->translateVector = spawnPoint;
-	this->movementState = EnemyShip::MOVING_TO_POSITION;
+	this->movementState = EnemyShip::MovementState::MOVING_TO_POSITION;
 }
 
 void EnemyShip::shootMissile()

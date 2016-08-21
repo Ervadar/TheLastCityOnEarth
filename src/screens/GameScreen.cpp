@@ -224,7 +224,7 @@ void GameScreen::checkGameplayInputs(GLfloat deltaTime)
 	// Cannon shooting
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 	{
-		if (world->cannon->cannonStatus == world->cannon->STATUS_READY)
+		if (world->cannon->status == Cannon::Status::READY)
 		{
 			world->shootCannonMissile();
 		}

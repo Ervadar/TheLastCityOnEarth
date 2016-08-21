@@ -314,7 +314,7 @@ void World::spawnEnemyShip()
 		if (!enemyShips[i]->inUse)
 		{
 			enemyShips[i]->calculateCircularMovement(enemyShipDestinationSpheres);
-			enemyShips[i]->movementState = EnemyShip::MOVING_TO_POSITION;
+			enemyShips[i]->movementState = EnemyShip::MovementState::MOVING_TO_POSITION;
 			enemyShips[i]->translateVector = enemyShipSpawnPoint;
 			enemyShips[i]->inUse = true;
 			return;
@@ -358,7 +358,7 @@ void World::shootCannonMissile()
 		cannonMissiles[i]->init(cannon->translateVector + cannon->bulletSpawnOffset * cannon->cannonDirectionVector, pointLight, cannon->bulletSpeed, cannon->cannonDirectionVector);
 		pointLight->lightManager = &lightManager;
 		cannonMissiles[i]->inUse = true;
-		cannon->cannonStatus = cannon->STATUS_SHOOTING;
+		cannon->status = Cannon::Status::SHOOTING;
 		SoundSystem::getInstance().playSound("data/sounds/cannonShoot.wav", cannon->translateVector);
 		// soundSystem.playSound(soundSystem.cannonShootSound,
 		// { cannon->translateVector.x, cannon->translateVector.y, cannon->translateVector.z }

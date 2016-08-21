@@ -8,9 +8,8 @@
 class Cannon : public Renderable
 {
 public:
-	const int STATUS_READY = 0;
-	const int STATUS_SHOOTING = 1;
-	const int STATUS_LOADING = 2;
+	enum class Status{ READY, SHOOTING, LOADING };
+	Status status;
 
 	std::unique_ptr<Sphere> cannonSphere;
 	std::unique_ptr<Cylinder> barrel;
@@ -26,8 +25,6 @@ public:
 	float cannonRotY, cannonRotX;
 
 	GLfloat M_PI;
-
-	int cannonStatus;
 
 	float movingAngle;
 

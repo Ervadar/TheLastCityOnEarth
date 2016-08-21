@@ -18,7 +18,7 @@ Cannon::Cannon()
 
 	shootingSpeed = 125.0f;
 	loadingSpeed = 80.0f;
-	cannonStatus = STATUS_READY;
+	status = Status::READY;
 }
 
 void Cannon::init()
@@ -85,21 +85,21 @@ void Cannon::update(float deltaTime)
 		glm::vec4(cannonInitialDirectionVector, 1.0f));
 
 	// Cannon status
-	if (cannonStatus == STATUS_SHOOTING)
+	if (status == Status::SHOOTING)
 	{
 		movingBarrelPos -= shootingSpeed * deltaTime;
 		if (movingBarrelPos < initialMovingBarrelPos - 45.0f)
 		{
-			cannonStatus = STATUS_LOADING;
+			status = Status::LOADING;
 		}
 	}
 
-	if (cannonStatus == STATUS_LOADING)
+	if (status == Status::LOADING)
 	{
 		movingBarrelPos += loadingSpeed*deltaTime;
 		if (movingBarrelPos > initialMovingBarrelPos)
 		{
-			cannonStatus = STATUS_READY;
+			status = Status::READY;
 		}
 	}
 
