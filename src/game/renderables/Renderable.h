@@ -91,7 +91,7 @@ public:
 	void init(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 scaleVector);
 	void init(glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY, glm::vec3 translateVector);
 	virtual void init(){};
-	virtual void render(ShaderProgram & shaderProgram);
+	void render(ShaderProgram & shaderProgram);
 	virtual void customRender(ShaderProgram & shaderProgram) {};
 	virtual void update(GLfloat deltaTime){};
 	virtual void destroy();
