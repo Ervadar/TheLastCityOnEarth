@@ -88,6 +88,7 @@ public:
 
 public:
 	void init(glm::vec3 position);
+	void init(glm::vec3 position, glm::vec3 scale);
 	void init(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 scaleVector);
 	void init(glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY, glm::vec3 translateVector);
 	virtual void init(){};

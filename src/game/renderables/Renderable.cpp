@@ -34,6 +34,13 @@ void Renderable::init(glm::vec3 position)
 	this->init(glm::vec3(1.0f), 0.0f, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), position);
 }
 
+void Renderable::init(glm::vec3 position, glm::vec3 scale)
+{
+	this->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	this->init(scale, 0.0f, 0.0f, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), position);
+	this->stableModelMatrix = glm::scale(glm::mat4(1.0f), scale);
+}
+
 void Renderable::init(glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY, glm::vec3 translateVector)
 {
 	this->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);

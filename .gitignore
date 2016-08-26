@@ -1,1 +1,3 @@
 build/
+res/shaders/glslangValidator.exe
+res/shaders/validate.bat

@@ -9,7 +9,7 @@
 #include "Skybox.h"
 #include "EnemyShip.h"
 #include "Missile.h"
-#include "Explosion.h"
+#include "ParticleEffect.h"
 
 #include <memory>
 #include <vector>
@@ -42,8 +42,8 @@ public:
 	static const GLuint ENEMY_SHIP_MISSILES_POOL_SIZE = 40;
 	std::vector<std::unique_ptr<Missile>> enemyShipMissiles;
 
-	static const GLuint EXPLOSION_POOL_SIZE = 45;
-	std::vector<std::unique_ptr<Explosion>> explosions;
+	static const GLuint EXPLOSION_POOL_SIZE = 10;
+	std::vector<std::unique_ptr<ParticleEffect>> explosions;
 
 	// Objects
 	std::vector<std::unique_ptr<Renderable>> staticObjects;

@@ -104,12 +104,6 @@ void World::init()
 		enemyShipDestinationSpheres.push_back(BoundingSphere(forceShieldPosition + yRotatedDirection2*(forceShieldRadius + esdsRadius), esdsRadius));
 	}
 
-	// Init explosion pool
-	for (GLuint i = 0; i < EXPLOSION_POOL_SIZE; ++i)
-	{
-		explosions.push_back(std::move(std::unique_ptr<Explosion>(new Explosion())));
-		explosions[i]->init();
-	}
 	// Init cannon missile pool
 	for (GLuint i = 0; i < CANNON_MISSILES_POOL_SIZE; ++i)
 	{
@@ -131,6 +125,13 @@ void World::init()
 	this->enemyShipSpawnTime = maxEnemyShipSpawnTime;
 
 	lightManager.init();
+
+	// Init explosion pool
+	for (GLuint i = 0; i < EXPLOSION_POOL_SIZE; ++i)
+	{
+		explosions.push_back(std::move(std::unique_ptr<ParticleEffect>(new ParticleEffect())));
+		explosions[i]->init();
+	}
 }
 
 void World::update(GLfloat deltaTime)
@@ -176,7 +177,7 @@ void World::update(GLfloat deltaTime)
 	// Spawning enemy ships
 	if (timePassedFromLastShipSpawn > enemyShipSpawnTime)
 	{
-		spawnEnemyShip();
+		//spawnEnemyShip();
 		timePassedFromLastShipSpawn = 0.0f;
 	}
 	timePassedFromLastShipSpawn += deltaTime;
@@ -330,13 +331,13 @@ void World::spawnExplosion(glm::vec3 position)
 		{
 			explosions[i]->translateVector = position;
 			explosions[i]->inUse = true;
-			explosions[i]->pointLight = lightManager.createPointLight(
-				position,
-				0.1f, 0.0014f, 0.000007f,
-				glm::vec3(1.0f, 153.0f / 255.0f, 0.0f),
-				glm::vec3(1.0f, 153.0f / 255.0f, 0.0f),
-				glm::vec3(0.3f, 0.3f, 0.0f)
-				);
+			//explosions[i]->pointLight = lightManager.createPointLight(
+			//	position,
+			//	0.1f, 0.0014f, 0.000007f,
+			//	glm::vec3(1.0f, 153.0f / 255.0f, 0.0f),
+			//	glm::vec3(1.0f, 153.0f / 255.0f, 0.0f),
+			//	glm::vec3(0.3f, 0.3f, 0.0f)
+			//	);
 			return;
 		}
 	}

@@ -12,7 +12,11 @@ bool Shader::loadShader(std::string file, int type)
 {
 	FILE * fp;
 	fopen_s(&fp, file.c_str(), "rt");
-	if(!fp) return false;
+	if (!fp)
+	{
+		printf("Cannot load shader file: %s", file.c_str());
+		return false;
+	}
 
 	std::vector<std::string> lines;
 	char line[255];

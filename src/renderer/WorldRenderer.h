@@ -30,7 +30,7 @@ private:
 
 	// Shader programs
 	ShaderProgram shaderProgram, skyboxShaderProgram, terrainShaderProgram,
-		screenShaderProgram, colorShaderProgram;
+		screenShaderProgram, colorShaderProgram, particleShaderProgram;
 
 public:
 	WorldRenderer(World* world, Camera& camera) : world(world), camera(camera) {}
@@ -50,6 +50,7 @@ public:
 	void setSkyboxShaderMatricesAndUniforms(Renderable * renderable, Camera & camera, ShaderProgram & shaderProgram);
 	void setDepthShaderMatricesAndUniforms(Renderable * renderable, Camera & camera, ShaderProgram & shaderProgram);
 	void setColorShaderMatricesAndUniforms(Renderable * renderable, Camera & camera, ShaderProgram & shaderProgram);
+	void setParticleShaderMatricesAndUniforms(Renderable * renderable, Camera & camera, ShaderProgram & shaderProgram);
 
 	void render(Renderable * object, Camera & camera, ShaderProgram & shaderProgram, matrixUniformFunction matrixUniformFunction);
 	void renderObjects(Camera & camera, ShaderProgram & shaderProgram, matrixUniformFunction matrixUniformFunction);

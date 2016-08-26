@@ -121,7 +121,7 @@ void GameContext::setWindowParameters()
 	glClearDepth(1.0);
 	// Accept fragment if it's closer to the camera than the former one
 	glDepthFunc(GL_LESS);
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	// Disable cursor
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 }

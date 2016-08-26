@@ -11,6 +11,7 @@ void WorldRenderer::init(int viewportWidth, int viewportHeight)
 	terrainShaderProgram.loadShaderProgram("terrain.vert", "terrain.frag");
 	screenShaderProgram.loadShaderProgram("framebuffer.vert", "framebuffer.frag");
 	colorShaderProgram.loadShaderProgram("color.vert", "color.frag");
+	particleShaderProgram.loadShaderProgram("particles.vert", "particles.frag");
 
 	depthCamera.setOrthographicMatrix(-1600.0f, 1600.0f, -1600.0f, 1600.0f, 0.2f, 4000.0f);
 	depthCamera.init(
@@ -38,7 +39,7 @@ void WorldRenderer::render()
 
 	glViewport(0, 0, viewportWidth, viewportHeight);
 
-	// Shadow mapa - nr tekstury powinien byc wiekszy niz najwiekszy uzywany w obiektach
+	// Shadow map - texture number should be higher than any number used by other object
 	glActiveTexture(GL_TEXTURE0 + 31);
 	glBindTexture(GL_TEXTURE_2D, shadowMapper.depthMap);
 
@@ -57,6 +58,17 @@ void WorldRenderer::render()
 	// POINT LIGHTS
 	colorShaderProgram.useProgram();
 	renderPointLights(camera, colorShaderProgram, &WorldRenderer::setColorShaderMatricesAndUniforms);
+
+	// PARTICLE EFFECTS
+	particleShaderProgram.useProgram();
+	for (GLuint i = 0; i < world->EXPLOSION_POOL_SIZE; ++i)
+	{
+		if (world->explosions[i]->inUse)
+		{
+			world->explosions[i]->updateAllParticleCameraDistances(camera);
+			render(world->explosions[i].get(), camera, particleShaderProgram, &WorldRenderer::setParticleShaderMatricesAndUniforms);
+		}
+	}
 }
 
 void WorldRenderer::update(GLfloat deltaTime)
@@ -100,13 +112,6 @@ void WorldRenderer::renderObjects(Camera & camera, ShaderProgram & shaderProgram
 		if (enemyShipMissile->inUse) render(enemyShipMissile.get(), camera, shaderProgram, matrixUniformFunction);
 	}
 	render(world->cannon.get(), camera, shaderProgram, matrixUniformFunction);
-	for (GLuint i = 0; i < world->EXPLOSION_POOL_SIZE; ++i)
-	{
-		if (world->explosions[i]->inUse)
-		{
-			render(world->explosions[i].get(), camera, shaderProgram, matrixUniformFunction);
-		}
-	}
 	render(world->forceShield.get(), camera, shaderProgram, matrixUniformFunction);
 }
 
@@ -244,6 +249,14 @@ void WorldRenderer::setColorShaderMatricesAndUniforms(Renderable * renderable, C
 	renderable->calculateMatricesAndUniforms(camera, shaderProgram);
 
 	shaderProgram.setUniform("color", renderable->color);
+}
+
+void WorldRenderer::setParticleShaderMatricesAndUniforms(Renderable * renderable, Camera & camera, ShaderProgram & shaderProgram)
+{
+	renderable->calculateMatricesAndUniforms(camera, shaderProgram);
+	shaderProgram.setUniform("VP", camera.getProjectionMatrix() * camera.getViewMatrix());
+	shaderProgram.setUniform("cameraUpWorldspace", camera.up);
+	shaderProgram.setUniform("cameraRightWorldspace", camera.right);
 }
 
 void WorldRenderer::release()
