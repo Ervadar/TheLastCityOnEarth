@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 
+extern std::mt19937 rng;
+
 ParticleEffect::ParticleEffect()
 {
 }
@@ -35,55 +37,65 @@ void ParticleEffect::init()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-	//glGenBuffers(1, &positionBuffer);	// Positions and sizes of particles
-	//glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
-	//glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glGenBuffers(1, &positionBuffer);	// Positions and sizes of particles
+	glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+	glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-	//glGenBuffers(1, &colorBuffer);
-	//glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
-	//glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
-	//glEnableVertexAttribArray(2);
-	//glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0);
+	glGenBuffers(1, &colorBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+	glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0);
 }
 
 void ParticleEffect::customRender(ShaderProgram & shaderProgram)
 {
-	//glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
-	//glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
-	//glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * 4 * sizeof(GLfloat), particlePositionAndSizeData);
+	glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
+	glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * 4 * sizeof(GLfloat), particlePositionAndSizeData);
 
-	//glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
-	//glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
-	//glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * 4 * sizeof(GLubyte), particleColorData);
+	glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
+	glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * 4 * sizeof(GLubyte), particleColorData);
 
-	/*glBindVertexArray(VAO);
+	glBindVertexArray(VAO);
 	glVertexAttribDivisor(0, 0);
 	glVertexAttribDivisor(1, 1);
 	glVertexAttribDivisor(2, 1);
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particleCount);	*/
-	printf("   Rendering explo\n");
-	glBindVertexArray(VAO);
-	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-	printf("   Stopped rendering explo\n");
+
+	glEnable(GL_BLEND);
+	glDepthMask(0);
+
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particleCount);
+	
+	glDisable(GL_BLEND);
+	glDepthMask(1);
 }
 
 void ParticleEffect::update(float deltaTime)
 {
-	static float timePassed = 0.0f;
-
-	// Setting up new particles in this frame
-	GLint newParticleCount = (GLint)(deltaTime * particlesPerSecond);
-	if (newParticleCount > (GLint)(0.016f * 10000))
+	// Setting up new particles in this frame (only if effect still active)
+	if (active)
 	{
-		newParticleCount = (GLint)(0.016f * 10000);
-	}
-	for (int i = 0; i < newParticleCount; ++i)
-	{
-		int particleIndex = findUnusedParticle();
-		Particle& p = particles[particleIndex];
-		p.life = initialParticleLife;
+		GLint newParticleCount = (GLint)(deltaTime * particlesPerSecond);
+		if (newParticleCount > (GLint)(0.016f * particlesPerSecond))
+		{
+			newParticleCount = (GLint)(0.016f * particlesPerSecond);
+		}
+		for (int i = 0; i < newParticleCount; ++i)
+		{
+			int particleIndex = findUnusedParticle();
+			Particle& p = particles[particleIndex];
+			p.life = initialParticleLife;
+			p.position = glm::vec3(0, 0, 0);
+			std::uniform_int_distribution<GLint> randomColor(0, 255);
+			p.r = randomColor(rng);
+			p.g = randomColor(rng);
+			p.b = randomColor(rng);
+			p.a = 127;
+		}
 	}
 
 	// Updating particles
@@ -106,25 +118,25 @@ void ParticleEffect::update(float deltaTime)
 				particlePositionAndSizeData[particleCount * 4 + 2] = p.position.z;
 				particlePositionAndSizeData[particleCount * 4 + 3] = p.size;
 
-				particleColorData[particleCount * 4 + 0] = 1;
-				particleColorData[particleCount * 4 + 1] = 1;
-				particleColorData[particleCount * 4 + 2] = 1;
-				particleColorData[particleCount * 4 + 3] = 255;
+				particleColorData[particleCount * 4 + 0] = p.r;
+				particleColorData[particleCount * 4 + 1] = p.g;
+				particleColorData[particleCount * 4 + 2] = p.b;
+				particleColorData[particleCount * 4 + 3] = p.a;
 
 				++particleCount;
-			}
-			else
-			{
-				
 			}
 		}
 	}
 
 	timePassed += deltaTime;
-	if (timePassed > 2.0f)
+	if (timePassed > 2.0f && active)
 	{
-		timePassed = 0.0f;
+		active = false;
+	}
+	if (particleCount == 0)
+	{
 		inUse = false;
+		timePassed = 0.0f;
 	}
 }
 
@@ -169,4 +181,9 @@ void ParticleEffect::updateAllParticleCameraDistances(Camera& camera)
 			p.distanceFromCamera = -1.0f;
 		}
 	}
+}
+
+void ParticleEffect::activate()
+{
+	active = true;
 }

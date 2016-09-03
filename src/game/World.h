@@ -42,7 +42,7 @@ public:
 	static const GLuint ENEMY_SHIP_MISSILES_POOL_SIZE = 40;
 	std::vector<std::unique_ptr<Missile>> enemyShipMissiles;
 
-	static const GLuint EXPLOSION_POOL_SIZE = 10;
+	static const GLuint EXPLOSION_POOL_SIZE = 100;
 	std::vector<std::unique_ptr<ParticleEffect>> explosions;
 
 	// Objects

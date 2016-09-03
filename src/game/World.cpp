@@ -331,6 +331,7 @@ void World::spawnExplosion(glm::vec3 position)
 		{
 			explosions[i]->translateVector = position;
 			explosions[i]->inUse = true;
+			explosions[i]->activate();
 			//explosions[i]->pointLight = lightManager.createPointLight(
 			//	position,
 			//	0.1f, 0.0014f, 0.000007f,
