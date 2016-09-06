@@ -1,25 +1,13 @@
-#include "ParticleEffect.h"
+#include "ParticleEmitter.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 
 extern std::mt19937 rng;
 
-ParticleEffect::ParticleEffect()
+void ParticleEmitter::init(ParticleEmitterData emitterData)
 {
-}
-
-ParticleEffect::~ParticleEffect()
-{
-}
-
-void ParticleEffect::init()
-{
-	printf("Initializing particle effect\n");
-	color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
-
-	inUse = false;
-	this->Renderable::init(glm::vec3(0.0f), glm::vec3(10.0f));
+	this->emitterData = emitterData;
 
 	glm::vec3 vertexData[] = {
 		glm::vec3(-0.5f, -0.5f, 0.0f),
@@ -45,20 +33,20 @@ void ParticleEffect::init()
 
 	glGenBuffers(1, &colorBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
-	glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0);
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, 0);
 }
 
-void ParticleEffect::customRender(ShaderProgram & shaderProgram)
+void ParticleEmitter::render(ShaderProgram & shaderProgram)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
 	glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * 4 * sizeof(GLfloat), particlePositionAndSizeData);
 
 	glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
-	glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLubyte), NULL, GL_STREAM_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * 4 * sizeof(GLubyte), particleColorData);
+	glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * 4 * sizeof(GLfloat), particleColorData);
 
 	glBindVertexArray(VAO);
 	glVertexAttribDivisor(0, 0);
@@ -74,27 +62,21 @@ void ParticleEffect::customRender(ShaderProgram & shaderProgram)
 	glDepthMask(1);
 }
 
-void ParticleEffect::update(float deltaTime)
+void ParticleEmitter::update(float deltaTime, Camera& camera)
 {
 	// Setting up new particles in this frame (only if effect still active)
-	if (active)
+	if (generateNewParticles)
 	{
-		GLint newParticleCount = (GLint)(deltaTime * particlesPerSecond);
-		if (newParticleCount > (GLint)(0.016f * particlesPerSecond))
+		GLint newParticleCount = (GLint)(deltaTime * emitterData.particlesPerSecond);
+		if (newParticleCount > (GLint)(0.016f * emitterData.particlesPerSecond))
 		{
-			newParticleCount = (GLint)(0.016f * particlesPerSecond);
+			newParticleCount = (GLint)(0.016f * emitterData.particlesPerSecond);
 		}
 		for (int i = 0; i < newParticleCount; ++i)
 		{
 			int particleIndex = findUnusedParticle();
 			Particle& p = particles[particleIndex];
-			p.life = initialParticleLife;
-			p.position = glm::vec3(0, 0, 0);
-			std::uniform_int_distribution<GLint> randomColor(0, 255);
-			p.r = randomColor(rng);
-			p.g = randomColor(rng);
-			p.b = randomColor(rng);
-			p.a = 127;
+			initParticle(p);
 		}
 	}
 
@@ -106,11 +88,12 @@ void ParticleEffect::update(float deltaTime)
 
 		if (p.isAlive())
 		{
-			p.life -= deltaTime * lifeDecreasingPerSecond;
+			p.life -= deltaTime;
 
 			if (p.isAlive())
 			{
-				p.position += p.speed * deltaTime;
+				p.position += p.direction * p.speed * deltaTime;
+				p.distanceFromCamera = glm::length(p.position - camera.eye);
 
 				// Updating GPU buffers
 				particlePositionAndSizeData[particleCount * 4 + 0] = p.position.x;
@@ -118,33 +101,26 @@ void ParticleEffect::update(float deltaTime)
 				particlePositionAndSizeData[particleCount * 4 + 2] = p.position.z;
 				particlePositionAndSizeData[particleCount * 4 + 3] = p.size;
 
-				particleColorData[particleCount * 4 + 0] = p.r;
-				particleColorData[particleCount * 4 + 1] = p.g;
-				particleColorData[particleCount * 4 + 2] = p.b;
-				particleColorData[particleCount * 4 + 3] = p.a;
+				particleColorData[particleCount * 4 + 0] = p.color.x;
+				particleColorData[particleCount * 4 + 1] = p.color.y;
+				particleColorData[particleCount * 4 + 2] = p.color.z;
+				particleColorData[particleCount * 4 + 3] = p.color.a;
 
 				++particleCount;
 			}
+			else
+			{
+				p.distanceFromCamera = -1.0f;
+			}
 		}
-	}
-
-	timePassed += deltaTime;
-	if (timePassed > 2.0f && active)
-	{
-		active = false;
-	}
-	if (particleCount == 0)
-	{
-		inUse = false;
-		timePassed = 0.0f;
 	}
 }
 
-void ParticleEffect::destroy()
+void ParticleEmitter::destroy()
 {
 }
 
-int ParticleEffect::findUnusedParticle()
+int ParticleEmitter::findUnusedParticle()
 {
 	for (int i = lastUsedParticle; i < maxParticles; ++i)
 	{
@@ -166,24 +142,48 @@ int ParticleEffect::findUnusedParticle()
 	return 0;
 }
 
-void ParticleEffect::updateAllParticleCameraDistances(Camera& camera)
+void ParticleEmitter::activate()
 {
-	for (int i = 0; i < maxParticles; ++i)
+	generateNewParticles = true;
+}
+
+void ParticleEmitter::deactivate()
+{
+	generateNewParticles = false;
+}
+
+GLboolean ParticleEmitter::isActive() const
+{
+	if (generateNewParticles) return true;
+	else return false;
+}
+
+GLboolean ParticleEmitter::shouldBeDeactivated(float timePassed) const
+{
+	if (timePassed > emitterData.lifeTimeInSeconds && generateNewParticles)
 	{
-		Particle& p = particles[i];
-
-		if (p.isAlive())
-		{
-			p.distanceFromCamera = glm::length(p.position - camera.eye);
-		}
-		else
-		{
-			p.distanceFromCamera = -1.0f;
-		}
+		return true;
 	}
+	else return false;
 }
 
-void ParticleEffect::activate()
+GLuint ParticleEmitter::getParticleCount() const
 {
-	active = true;
+	return particleCount;
 }
+
+void ParticleEmitter::initParticle(Particle & p)
+{
+	p.life = emitterData.initialParticleLife;
+	p.position = emitterData.initialParticlePosition;
+	p.speed = emitterData.initialParticleSpeed;
+	p.size = emitterData.initialParticleSize;
+	p.weight = emitterData.initialParticleWeight;
+	p.color = emitterData.initialParticleColor;
+	std::uniform_real_distribution<GLfloat> randomDirectionComponent(-1, 1);
+	p.direction.x = randomDirectionComponent(rng);
+	p.direction.y = randomDirectionComponent(rng);
+	p.direction.z = randomDirectionComponent(rng);
+}
+
+

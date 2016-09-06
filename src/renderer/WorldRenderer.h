@@ -16,7 +16,7 @@ The renderer of the game world
 class WorldRenderer
 {
 private:
-	World* world;
+	World& world;
 	
 	ShadowMapper shadowMapper;
 
@@ -33,7 +33,7 @@ private:
 		screenShaderProgram, colorShaderProgram, particleShaderProgram;
 
 public:
-	WorldRenderer(World* world, Camera& camera) : world(world), camera(camera) {}
+	WorldRenderer(World& world, Camera& camera) : world(world), camera(camera) {}
 	void init(int viewportWidth, int viewportHeight);
 	void render();
 	void update(GLfloat deltaTime);

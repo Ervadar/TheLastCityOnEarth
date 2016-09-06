@@ -40,9 +40,6 @@ private:
 	// Helper map for handling key-down events for GLFW
 	std::map<int, GLboolean> heldKeysMap;
 
-	// Camera
-	Camera camera;
-
 	ShaderProgram textShaderProgram;
 
 public:

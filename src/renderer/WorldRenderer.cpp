@@ -45,11 +45,11 @@ void WorldRenderer::render()
 
 	// SKYBOX
 	skyboxShaderProgram.useProgram();
-	render(&(world->skybox), camera, skyboxShaderProgram, &WorldRenderer::setSkyboxShaderMatricesAndUniforms);
+	render(&(world.skybox), camera, skyboxShaderProgram, &WorldRenderer::setSkyboxShaderMatricesAndUniforms);
 
 	// TERRAIN
 	terrainShaderProgram.useProgram();
-	render(&(world->terrain), camera, terrainShaderProgram, &WorldRenderer::setTerrainShaderMatricesAndUniforms);
+	render(&(world.terrain), camera, terrainShaderProgram, &WorldRenderer::setTerrainShaderMatricesAndUniforms);
 
 	// OBJECTS
 	shaderProgram.useProgram();
@@ -61,12 +61,11 @@ void WorldRenderer::render()
 
 	// PARTICLE EFFECTS
 	particleShaderProgram.useProgram();
-	for (GLuint i = 0; i < world->EXPLOSION_POOL_SIZE; ++i)
+	for (GLuint i = 0; i < world.EXPLOSION_POOL_SIZE; ++i)
 	{
-		if (world->explosions[i]->inUse)
+		if (world.explosions[i]->inUse)
 		{
-			world->explosions[i]->updateAllParticleCameraDistances(camera);
-			render(world->explosions[i].get(), camera, particleShaderProgram, &WorldRenderer::setParticleShaderMatricesAndUniforms);
+			render(world.explosions[i].get(), camera, particleShaderProgram, &WorldRenderer::setParticleShaderMatricesAndUniforms);
 		}
 	}
 }
@@ -78,46 +77,46 @@ void WorldRenderer::update(GLfloat deltaTime)
 
 void WorldRenderer::renderObjectsCastingShadows(Camera & camera, ShaderProgram & shaderProgram, matrixUniformFunction matrixUniformFunction)
 {
-	for (auto& object : world->staticObjects)
+	for (auto& object : world.staticObjects)
 	{
 		if (object->castingShadow) render(object.get(), camera, shaderProgram, matrixUniformFunction);
 	}
-	for (auto& enemyShip : world->enemyShips)
+	for (auto& enemyShip : world.enemyShips)
 	{
 		if (enemyShip->inUse && enemyShip->castingShadow) render(enemyShip.get(), camera, shaderProgram, matrixUniformFunction);
 	}
-	if (world->cannon->castingShadow) render(world->cannon.get(), camera, shaderProgram, matrixUniformFunction);
-	if (world->forceShield->castingShadow) render(world->forceShield.get(), camera, shaderProgram, matrixUniformFunction);
+	if (world.cannon->castingShadow) render(world.cannon.get(), camera, shaderProgram, matrixUniformFunction);
+	if (world.forceShield->castingShadow) render(world.forceShield.get(), camera, shaderProgram, matrixUniformFunction);
 }
 
 void WorldRenderer::renderObjects(Camera & camera, ShaderProgram & shaderProgram, matrixUniformFunction matrixUniformFunction)
 {
-	for (auto& object : world->staticObjects)
+	for (auto& object : world.staticObjects)
 	{
 		render(object.get(), camera, shaderProgram, matrixUniformFunction);
 	}
-	for (auto& enemyShip : world->enemyShips)
+	for (auto& enemyShip : world.enemyShips)
 	{
 		if (enemyShip->inUse)
 		{
 			render(enemyShip.get(), camera, shaderProgram, matrixUniformFunction);
 		}
 	}
-	for (auto& cannonMissile : world->cannonMissiles)
+	for (auto& cannonMissile : world.cannonMissiles)
 	{
 		if (cannonMissile->inUse) render(cannonMissile.get(), camera, shaderProgram, matrixUniformFunction);
 	}
-	for (auto& enemyShipMissile : world->enemyShipMissiles)
+	for (auto& enemyShipMissile : world.enemyShipMissiles)
 	{
 		if (enemyShipMissile->inUse) render(enemyShipMissile.get(), camera, shaderProgram, matrixUniformFunction);
 	}
-	render(world->cannon.get(), camera, shaderProgram, matrixUniformFunction);
-	render(world->forceShield.get(), camera, shaderProgram, matrixUniformFunction);
+	render(world.cannon.get(), camera, shaderProgram, matrixUniformFunction);
+	render(world.forceShield.get(), camera, shaderProgram, matrixUniformFunction);
 }
 
 void WorldRenderer::renderPointLights(Camera & camera, ShaderProgram & shaderProgram, matrixUniformFunction matrixUniformFunction)
 {
-	for (auto& pointLight : world->lightManager.pointLights)
+	for (auto& pointLight : world.lightManager.pointLights)
 	{
 		if (pointLight->inUse) render(pointLight.get(), camera, shaderProgram, matrixUniformFunction);
 	}
@@ -135,8 +134,8 @@ void WorldRenderer::render(Renderable * object, Camera & camera, ShaderProgram &
 
 void WorldRenderer::updateDepthCamera(GLfloat deltaTime)
 {
-	depthCamera.eye = world->sunDirection * 2.0f * (float)shadowMapper.shadowWidth;
-	depthCamera.direction = world->sunDirection;
+	depthCamera.eye = world.sunDirection * 2.0f * (float)shadowMapper.shadowWidth;
+	depthCamera.direction = world.sunDirection;
 	depthCamera.setViewMatrix(depthCamera.eye, glm::vec3(0.0f), glm::vec3(1.0f));
 }
 
@@ -146,9 +145,9 @@ void WorldRenderer::setMainShaderMatricesAndUniforms(Renderable * renderable, Ca
 	shaderProgram.setUniform("shadowMap", 31);
 	shaderProgram.setUniform("color", renderable->color);
 	shaderProgram.setUniform("material.texture_diffuse1", 0);
-	shaderProgram.setUniform("sunLight.color", world->sunLightColor);
-	shaderProgram.setUniform("sunLight.directionCameraspace", glm::vec3(camera.getViewMatrix() * glm::vec4(world->sunDirection, 0.0f)));
-	shaderProgram.setUniform("sunLight.ambientIntensity", world->sunLightAmbientIntensity);
+	shaderProgram.setUniform("sunLight.color", world.sunLightColor);
+	shaderProgram.setUniform("sunLight.directionCameraspace", glm::vec3(camera.getViewMatrix() * glm::vec4(world.sunDirection, 0.0f)));
+	shaderProgram.setUniform("sunLight.ambientIntensity", world.sunLightAmbientIntensity);
 	shaderProgram.setUniform("normalMatrix", glm::transpose(glm::inverse(camera.getViewMatrix() * renderable->modelMatrix)));
 
 	// Shadows
@@ -157,16 +156,16 @@ void WorldRenderer::setMainShaderMatricesAndUniforms(Renderable * renderable, Ca
 
 	// Point Lights
 	int pointLightsNumber = 0;
-	for (GLuint i = 0; i < world->lightManager.POINT_LIGHT_POOL_SIZE; ++i)
+	for (GLuint i = 0; i < world.lightManager.POINT_LIGHT_POOL_SIZE; ++i)
 	{
-		if (!world->lightManager.pointLights[i]->inUse) continue;
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].position", glm::vec3(camera.getViewMatrix() * glm::vec4(world->lightManager.pointLights[i]->translateVector, 1.0f)));
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].constant", world->lightManager.pointLights[i]->constant);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].linear", world->lightManager.pointLights[i]->linear);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].quadratic", world->lightManager.pointLights[i]->quadratic);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].ambient", world->lightManager.pointLights[i]->ambient);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].diffuse", world->lightManager.pointLights[i]->diffuse);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].specular", world->lightManager.pointLights[i]->specular);
+		if (!world.lightManager.pointLights[i]->inUse) continue;
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].position", glm::vec3(camera.getViewMatrix() * glm::vec4(world.lightManager.pointLights[i]->translateVector, 1.0f)));
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].constant", world.lightManager.pointLights[i]->constant);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].linear", world.lightManager.pointLights[i]->linear);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].quadratic", world.lightManager.pointLights[i]->quadratic);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].ambient", world.lightManager.pointLights[i]->ambient);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].diffuse", world.lightManager.pointLights[i]->diffuse);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].specular", world.lightManager.pointLights[i]->specular);
 		++pointLightsNumber;
 	}
 	shaderProgram.setUniform("pointLightsNumber", pointLightsNumber);
@@ -212,9 +211,9 @@ void WorldRenderer::setTerrainShaderMatricesAndUniforms(Renderable * renderable,
 		shaderProgram.setUniform(samplerName, i);
 	}
 	shaderProgram.setUniform("shadowMap", 31);
-	shaderProgram.setUniform("sunLight.ambientIntensity", world->sunLightAmbientIntensity);
-	shaderProgram.setUniform("sunLight.directionCameraspace", glm::vec3(camera.getViewMatrix() * glm::vec4(world->sunDirection, 0.0f)));
-	shaderProgram.setUniform("sunLight.color", world->sunLightColor);
+	shaderProgram.setUniform("sunLight.ambientIntensity", world.sunLightAmbientIntensity);
+	shaderProgram.setUniform("sunLight.directionCameraspace", glm::vec3(camera.getViewMatrix() * glm::vec4(world.sunDirection, 0.0f)));
+	shaderProgram.setUniform("sunLight.color", world.sunLightColor);
 
 	shaderProgram.setUniform("renderHeight", terrain->renderScale.y);
 	shaderProgram.setUniform("maxTextureU", float(terrain->cols)*0.1f);
@@ -229,16 +228,16 @@ void WorldRenderer::setTerrainShaderMatricesAndUniforms(Renderable * renderable,
 
 	// Point Lights
 	int pointLightsNumber = 0;
-	for (GLuint i = 0; i < world->lightManager.POINT_LIGHT_POOL_SIZE; ++i)
+	for (GLuint i = 0; i < world.lightManager.POINT_LIGHT_POOL_SIZE; ++i)
 	{
-		if (!world->lightManager.pointLights[i]->inUse) continue;
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].position", glm::vec3(camera.getViewMatrix() * glm::vec4(world->lightManager.pointLights[i]->translateVector, 1.0f)));
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].constant", world->lightManager.pointLights[i]->constant);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].linear", world->lightManager.pointLights[i]->linear);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].quadratic", world->lightManager.pointLights[i]->quadratic);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].ambient", world->lightManager.pointLights[i]->ambient);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].diffuse", world->lightManager.pointLights[i]->diffuse);
-		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].specular", world->lightManager.pointLights[i]->specular);
+		if (!world.lightManager.pointLights[i]->inUse) continue;
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].position", glm::vec3(camera.getViewMatrix() * glm::vec4(world.lightManager.pointLights[i]->translateVector, 1.0f)));
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].constant", world.lightManager.pointLights[i]->constant);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].linear", world.lightManager.pointLights[i]->linear);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].quadratic", world.lightManager.pointLights[i]->quadratic);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].ambient", world.lightManager.pointLights[i]->ambient);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].diffuse", world.lightManager.pointLights[i]->diffuse);
+		shaderProgram.setUniform("pointLights[" + std::to_string(pointLightsNumber) + "].specular", world.lightManager.pointLights[i]->specular);
 		++pointLightsNumber;
 	}
 	shaderProgram.setUniform("pointLightsNumber", pointLightsNumber);

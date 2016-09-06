@@ -20,28 +20,17 @@ void GameScreen::init()
 	heldKeysMap[GLFW_KEY_F1] = false;
 	heldKeysMap[GLFW_KEY_F3] = false;
 
-	// Creating camera
-	glfwGetWindowSize(window, &windowWidth, &windowHeight);
-	camera.setPerspectiveMatrix(45.0f, (float)windowWidth / (float)windowHeight, 0.2f, 4000.0f);
-	camera.init(
-		window,
-		glm::vec3(0, 27, 50),	// Camera position
-		3.14f,	// Horizontal angle
-		0.0f,	// Vertical angle
-		300.0f,	// Camera speed
-		0.01f	// Mouse speed
-		);
-	
 	// Creating world
 	world = std::move(std::unique_ptr<World>(new World()));
 	world->init();
-	renderer = std::move(std::unique_ptr<WorldRenderer>(new WorldRenderer(world.get(), camera)));
+	world->initCamera(window, windowWidth, windowHeight);
+	Camera & camera = world->getCamera();
+	renderer = std::move(std::unique_ptr<WorldRenderer>(new WorldRenderer(*world, camera)));
 	renderer->init(windowWidth, windowHeight);
 
 	text.init();
 	gameFinishedText.init();
 	forceShieldHPtext.init();
-
 	crosshairs.init("crosshairs.tga");
 
 	textShaderProgram.loadShaderProgram("text.vert", "text.frag");
@@ -93,6 +82,7 @@ void GameScreen::update(GLfloat deltaTime)
 
 	// HUD
 	std::string debugInfo;
+	Camera & camera = world->getCamera();
 	if (showingDebugInfo)
 	{
 		debugInfo += "X: " + std::to_string(camera.eye.x) + "/";
@@ -145,6 +135,8 @@ void GameScreen::updateCamera(GLfloat deltaTime)
 	glfwGetWindowSize(window, &width, &height);
 
 	glfwSetCursorPos(window, width / 2, height / 2);
+
+	Camera & camera = world->getCamera();
 
 	// Compute new orientation
 	camera.horizontalAngle += camera.mouseSpeed * float(width / 2 - xPos);

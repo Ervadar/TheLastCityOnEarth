@@ -53,10 +53,13 @@ public:
 	Skybox skybox;
 	Terrain terrain;
 
+	// Camera
+	Camera camera;
+
 	// Class managing point lights
 	LightManager lightManager;
 
-	// Directional light - needs to be taken to Lighting class
+	// Directional light
 	glm::vec3 sunDirection;
 	glm::vec3 sunLightColor;
 	GLfloat sunLightAmbientIntensity;
@@ -79,6 +82,9 @@ public:
 	void init();
 	void update(GLfloat deltaTime);
 	void release();
+
+	void initCamera(GLFWwindow* window, int viewportWidth, int viewportHeight);
+	Camera& getCamera() { return camera; };
 
 	// Collisions
 	void checkCollisions();

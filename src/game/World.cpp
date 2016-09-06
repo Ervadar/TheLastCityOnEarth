@@ -130,7 +130,7 @@ void World::init()
 	for (GLuint i = 0; i < EXPLOSION_POOL_SIZE; ++i)
 	{
 		explosions.push_back(std::move(std::unique_ptr<ParticleEffect>(new ParticleEffect())));
-		explosions[i]->init();
+		explosions[i]->init("data/particles/explosion.txt");
 	}
 }
 
@@ -171,7 +171,7 @@ void World::update(GLfloat deltaTime)
 	// Updating explosions
 	for (GLuint i = 0; i < EXPLOSION_POOL_SIZE; ++i)
 	{
-		if (explosions[i]->inUse) explosions[i]->update(deltaTime);
+		if (explosions[i]->inUse) explosions[i]->update(deltaTime, camera);
 	}
 
 	// Spawning enemy ships
@@ -198,6 +198,19 @@ void World::update(GLfloat deltaTime)
 void World::release()
 {
 	staticObjects.clear();
+}
+
+void World::initCamera(GLFWwindow* window, int viewportWidth, int viewportHeight)
+{
+	camera.setPerspectiveMatrix(45.0f, (float)viewportWidth / (float)viewportHeight, 0.2f, 4000.0f);
+	camera.init(
+		window,
+		glm::vec3(0, 27, 50),	// Camera position
+		3.14f,	// Horizontal angle
+		0.0f,	// Vertical angle
+		300.0f,	// Camera speed
+		0.01f	// Mouse speed
+		);
 }
 
 // COLLISIONS
