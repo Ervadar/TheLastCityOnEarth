@@ -130,7 +130,7 @@ void World::init()
 	for (GLuint i = 0; i < EXPLOSION_POOL_SIZE; ++i)
 	{
 		explosions.push_back(std::move(std::unique_ptr<ParticleEffect>(new ParticleEffect())));
-		explosions[i]->init("data/particles/explosion.txt");
+		explosions[i]->init("data/particles/explosion.json");
 	}
 }
 

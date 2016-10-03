@@ -78,29 +78,33 @@ GLboolean ParticleEffect::isAnyEmitterActive()
 
 void ParticleEffect::loadEffectFromFile(std::string effectFilePath)
 {
-	std::ifstream effectFile(effectFilePath, std::ifstream::binary);
+	std::ifstream effectFile(effectFilePath);
+	nlohmann::json json(effectFile);
 
-	// For each line in the file create an emitter
-	while (!effectFile.eof())
+	auto& jsonEmitters = json["particleEmitters"];
+
+	for (unsigned int i = 0; i < jsonEmitters.size(); ++i)
 	{
-		ParticleEmitterData data;
-		effectFile >> data.lifeTimeInSeconds;
-		effectFile >> data.particlesPerSecond;
-		effectFile >> data.initialParticleLife;
-		effectFile >> data.initialParticlePosition.x;
-		effectFile >> data.initialParticlePosition.y;
-		effectFile >> data.initialParticlePosition.z;
-		effectFile >> data.initialParticleSize;
-		effectFile >> data.initialParticleSpeed;
-		effectFile >> data.initialParticleWeight;
-		effectFile >> data.initialParticleColor.x;
-		effectFile >> data.initialParticleColor.y;
-		effectFile >> data.initialParticleColor.z;
-		effectFile >> data.initialParticleColor.a;
-
 		ParticleEmitter emitter;
+		ParticleEmitterData data;
+		auto& jsonEmitter = jsonEmitters[i];
+		data.lifeTimeInSeconds = data.getVarFromJson<GLfloat>(jsonEmitter["lifeTimeInSeconds"]);
+		data.particlesPerSecond = data.getVarFromJson<GLuint>(jsonEmitter["particlesPerSecond"]);
+		data.initialParticleLife = data.getVarFromJson<GLfloat>(jsonEmitter["particleLife"]);
+		data.initialParticlePosition = data.getVec3FromJson(jsonEmitter["particlePosition"]);
+
+		data.initialParticleSize = data.getVarFromJson<GLfloat>(jsonEmitter["particleSize"]);
+		data.particleSizeTimeline = std::move(data.loadVarTimelineFromJson<GLfloat>(jsonEmitter["particleSize"]));
+
+		data.initialParticleSpeed = data.getVarFromJson<GLfloat>(jsonEmitter["particleSpeed"]);
+		data.initialParticleWeight = data.getVarFromJson<GLfloat>(jsonEmitter["particleWeight"]);
+
+		data.initialParticleColor = data.getVec4FromJson(jsonEmitter["particleColor"]);
+		data.particleColorTimeline = std::move(data.loadVec4TimelineFromJson(jsonEmitter["particleColor"]));
+
 		emitter.init(data);
 		emitters.push_back(emitter);
 	}
+
 	effectFile.close();
 }

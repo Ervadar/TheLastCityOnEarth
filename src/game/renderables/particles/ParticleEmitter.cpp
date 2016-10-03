@@ -92,8 +92,20 @@ void ParticleEmitter::update(float deltaTime, Camera& camera)
 
 			if (p.isAlive())
 			{
+				GLfloat particleLifetime = emitterData.initialParticleLife - p.life;
+
 				p.position += p.direction * p.speed * deltaTime;
 				p.distanceFromCamera = glm::length(p.position - camera.eye);
+
+				// Update particle variables from timelines
+				if (!emitterData.particleSizeTimeline.empty())
+				{
+					updateParticleVariable<GLfloat>(p.size, emitterData.initialParticleSize, emitterData.particleSizeTimeline, particleLifetime);
+				}
+				if (!emitterData.particleColorTimeline.empty())
+				{
+					updateParticleVariable<glm::vec4>(p.color, emitterData.initialParticleColor, emitterData.particleColorTimeline, particleLifetime);
+				}
 
 				// Updating GPU buffers
 				particlePositionAndSizeData[particleCount * 4 + 0] = p.position.x;
@@ -185,5 +197,3 @@ void ParticleEmitter::initParticle(Particle & p)
 	p.direction.y = randomDirectionComponent(rng);
 	p.direction.z = randomDirectionComponent(rng);
 }
-
-

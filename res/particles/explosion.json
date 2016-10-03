@@ -1,0 +1,43 @@
+{
+  "particleEmitters": [
+    {
+      "lifeTimeInSeconds": {
+        "initial": 100,
+        "timeline": [ ]
+      },
+      "particlesPerSecond": {
+        "initial": 100,
+        "timeline": [ ]
+      },
+      "particleLife": {
+        "initial": 10,
+        "timeline": [ ]
+      },
+      "particlePosition": {
+        "initial": [ 0, 0, 0 ],
+        "timeline": [ ]
+      },
+      "particleSize": {
+        "initial": 5,
+        "timeline": [ ]
+      },
+      "particleSpeed": {
+        "initial": 50,
+        "timeline": [ ]
+      },
+      "particleWeight": {
+        "initial": 0,
+        "timeline": [ ]
+      },
+      "particleColor": {
+        "initial": [ 1, 0, 0, 0.5 ],
+        "timeline": [
+          {
+            "t": 5,
+            "v": [ 0, 1, 0, 0.5 ]
+          }
+        ]
+      }
+    }
+  ]
+}
