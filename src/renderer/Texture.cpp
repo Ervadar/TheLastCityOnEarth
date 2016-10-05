@@ -9,6 +9,7 @@ Texture::Texture()
 
 bool Texture::loadTexture2D(std::string path, bool generateMipMaps)
 {
+	std::cout << "LOADING: " << path << std::endl;
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	FIBITMAP * dib(0);
 
@@ -17,7 +18,7 @@ bool Texture::loadTexture2D(std::string path, bool generateMipMaps)
 	if(fif == FIF_UNKNOWN) // If still unknown, try to guess from the file extension
 		fif = FreeImage_GetFIFFromFilename(path.c_str());
 
-	if(fif == FIF_UNKNOWN) // If still unknown, returns failur
+	if(fif == FIF_UNKNOWN) // If still unknown, returns failure
 		return false;
 
 	if(FreeImage_FIFSupportsReading(fif))	// Check if the plugin has reading capabilities and load the file
@@ -45,7 +46,7 @@ bool Texture::loadTexture2D(std::string path, bool generateMipMaps)
 	int internalFormat = BPP == 32 ? GL_RGBA : BPP == 24 ? GL_RGB : GL_DEPTH_COMPONENT;
 	
 	// Printing loaded texture
-	//std::cout << path << " " << BPP << " " << format << " " << internalFormat << " " << tp << std::endl;
+	std::cout << path << " " << BPP << " " << format << " " << internalFormat << " " << tp << std::endl;
 
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, dataPointer);
 

@@ -3,6 +3,7 @@
 layout(location = 0) in vec3 vertexPosition;
 layout(location = 1) in vec4 xyzs;	// single particle position and size
 layout(location = 2) in vec4 color;
+layout(location = 3) in vec2 vertexUV;
 
 uniform mat4 M;
 uniform mat4 VP;
@@ -10,6 +11,7 @@ uniform vec3 cameraUpWorldspace;
 uniform vec3 cameraRightWorldspace;
 
 out vec4 particleColor;
+out vec2 UV;
 
 void main()
 {
@@ -21,4 +23,5 @@ void main()
 						+ vertexPosition.x * cameraRightWorldspace * particleSize;
 	gl_Position = VP * vec4(vertexPositionWorldspace, 1.0);
 	particleColor = color;
+	UV = vertexUV;
 }

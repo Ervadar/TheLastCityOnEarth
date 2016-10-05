@@ -6,23 +6,70 @@
 #include <random>
 #include "json.hpp"
 
+template<typename Typename>
+class ParticleVariable
+{
+public:
+	Typename initialValue;
+	std::vector<std::pair<GLfloat, Typename>> timeline;
+
+	void update(Typename& particleVariable, GLfloat particleLife)
+	{
+		if (timeline.empty()) return;
+		GLfloat startTime = 0.0f;
+		Typename startValue = initialValue;
+		GLfloat endTime = 0.0f;
+		Typename endValue = initialValue;
+		for (unsigned int timePointIdx = 0; timePointIdx < timeline.size(); ++timePointIdx)
+		{
+			if (particleLife > timeline[timePointIdx].first)
+			{
+				startTime = timeline[timePointIdx].first;
+				startValue = timeline[timePointIdx].second;
+				endTime = timeline[timePointIdx].first;
+				endValue = timeline[timePointIdx].second;
+			}
+			else
+			{
+				endTime = timeline[timePointIdx].first;
+				endValue = timeline[timePointIdx].second;
+				break;
+			}
+		}
+		GLfloat timeDelta = endTime - startTime;
+		if (timeDelta > 0.0f)
+		{
+			Typename valueDelta = endValue - startValue;
+			GLfloat timePassedFromLastPoint = particleLife - startTime;
+			particleVariable = startValue + (timePassedFromLastPoint / timeDelta) * valueDelta;
+		}
+	}
+};
+
 class ParticleEmitterData
 {
 public:
+	std::string particleTextureName;
 	GLfloat lifeTimeInSeconds;
 	GLuint particlesPerSecond;
 	GLfloat initialParticleLife;
 	glm::vec3 initialParticlePosition;
 
-	GLfloat initialParticleSize;
-	std::vector<std::pair<GLfloat, GLfloat>> particleSizeTimeline;
+	ParticleVariable<GLfloat> size;
+	ParticleVariable<GLfloat> speed;
+	ParticleVariable<GLfloat> weight;
+	ParticleVariable<glm::vec4> color;
+	//GLfloat initialParticleSize;
+	//std::vector<std::pair<GLfloat, GLfloat>> particleSizeTimeline;
 
 
-	GLfloat initialParticleSpeed;
-	GLfloat initialParticleWeight;
+	//GLfloat initialParticleSpeed;
+	//GLfloat initialParticleWeight;
 
-	glm::vec4 initialParticleColor;
-	std::vector<std::pair<GLfloat, glm::vec4>> particleColorTimeline;
+	//
+
+	//glm::vec4 initialParticleColor;
+	//std::vector<std::pair<GLfloat, glm::vec4>> particleColorTimeline;
 
 public:
 	ParticleEmitterData() {};
@@ -80,12 +127,16 @@ private:
 	GLfloat particleColorData[maxParticles * 4];
 
 	ParticleEmitterData emitterData;
+	Texture particleTexture;
 
+	GLuint uvBuffer;
 	GLuint positionBuffer;
 	GLuint colorBuffer;
 
 	GLuint VAO;
 	GLuint vertexVBO;
+
+	GLdouble generationTimeAccumulator = 0.0f;
 
 public:
 	ParticleEmitter() {};
@@ -105,38 +156,6 @@ public:
 	GLuint getParticleCount() const;
 
 	void initParticle(Particle& p);
-
-	template<typename Typename>
-	void updateParticleVariable(Typename& particleVariable, Typename initialVarValue, std::vector<std::pair<GLfloat, Typename>>& timeline, GLfloat particleLifetime)
-	{
-		GLfloat startTime = 0.0f;
-		Typename startValue = initialVarValue;
-		GLfloat endTime = 0.0f;
-		Typename endValue = initialVarValue;
-		for (unsigned int timePointIdx = 0; timePointIdx < timeline.size(); ++timePointIdx)
-		{
-			if (particleLifetime > timeline[timePointIdx].first)
-			{
-				startTime = timeline[timePointIdx].first;
-				startValue = timeline[timePointIdx].second;
-				endTime = timeline[timePointIdx].first;
-				endValue = timeline[timePointIdx].second;
-			}
-			else
-			{
-				endTime = timeline[timePointIdx].first;
-				endValue = timeline[timePointIdx].second;
-				break;
-			}
-		}
-		GLfloat timeDelta = endTime - startTime;
-		if (timeDelta > 0.0f)
-		{
-			Typename valueDelta = endValue - startValue;
-			GLfloat timePassedFromLastPoint = particleLifetime - startTime;
-			particleVariable = startValue + (timePassedFromLastPoint / timeDelta) * valueDelta;
-		}
-	}
 };
 
 #endif

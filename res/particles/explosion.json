@@ -1,24 +1,13 @@
 {
   "particleEmitters": [
     {
-      "lifeTimeInSeconds": {
-        "initial": 100,
-        "timeline": [ ]
-      },
-      "particlesPerSecond": {
-        "initial": 100,
-        "timeline": [ ]
-      },
-      "particleLife": {
-        "initial": 10,
-        "timeline": [ ]
-      },
-      "particlePosition": {
-        "initial": [ 0, 0, 0 ],
-        "timeline": [ ]
-      },
+      "particleTextureName":  "explosion.tga",
+      "lifeTimeInSeconds": 0.3,
+      "particlesPerSecond": 100,
+      "particleLife": 2,
+      "particlePosition": [ 0, 0, 0 ],
       "particleSize": {
-        "initial": 5,
+        "initial": 50,
         "timeline": [ ]
       },
       "particleSpeed": {
@@ -30,13 +19,8 @@
         "timeline": [ ]
       },
       "particleColor": {
-        "initial": [ 1, 0, 0, 0.5 ],
-        "timeline": [
-          {
-            "t": 5,
-            "v": [ 0, 1, 0, 0.5 ]
-          }
-        ]
+        "initial": [ 1.0, 1.0, 1.0, 1.0 ],
+        "timeline": [ ]
       }
     }
   ]

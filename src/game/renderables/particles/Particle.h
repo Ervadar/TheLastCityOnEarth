@@ -14,11 +14,20 @@ struct Particle
 	GLfloat size;
 	GLfloat angle, weight;
 	GLfloat life = -1.0f;
+	GLfloat initialLife;
 	GLfloat distanceFromCamera = -1.0f;
 
 	GLboolean isAlive() const
 	{
 		return (life > 0.0f) ? true : false;
+	}
+};
+
+class ParticlePool
+{
+	Particle& findUnusedParticle()
+	{
+
 	}
 };
 

@@ -1,10 +1,12 @@
 #version 330
 
 in vec4 particleColor;
-
+in vec2 UV;
+uniform sampler2D particleTexture;
 out vec4 outputColor;
 
 void main()
 {
-	outputColor = particleColor;
+	vec4 textureColor = texture(particleTexture, UV).rgba;
+	outputColor = textureColor;
 }

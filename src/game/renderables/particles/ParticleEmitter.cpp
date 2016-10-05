@@ -10,10 +10,17 @@ void ParticleEmitter::init(ParticleEmitterData emitterData)
 	this->emitterData = emitterData;
 
 	glm::vec3 vertexData[] = {
-		glm::vec3(-0.5f, -0.5f, 0.0f),
-		glm::vec3(0.5f, -0.5f, 0.0f),
-		glm::vec3(-0.5f, 0.5f, 0.0f),
-		glm::vec3(0.5f, 0.5f, 0.0f)
+		glm::vec3(-1.0f, -1.0f, 0.0f),
+		glm::vec3(1.0f, -1.0f, 0.0f),
+		glm::vec3(-1.0f, 1.0f, 0.0f),
+		glm::vec3(1.0f, 1.0f, 0.0f)
+	};
+
+	glm::vec2 uvData[] = {
+		glm::vec2(0.0f, 0.0f),
+		glm::vec2(1.0f, 0.0f),
+		glm::vec2(0.0f, 1.0f),
+		glm::vec2(1.0f, 1.0f)
 	};
 
 	glGenVertexArrays(1, &VAO);
@@ -36,6 +43,16 @@ void ParticleEmitter::init(ParticleEmitterData emitterData)
 	glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glGenBuffers(1, &uvBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(uvData), uvData, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+	particleTexture.loadTexture2D("data/particles/" + emitterData.particleTextureName, true);
+	particleTexture.setFiltering(TEXTURE_FILTER_MAG_BILINEAR, TEXTURE_FILTER_MIN_BILINEAR_MIPMAP);
+	particleTexture.setSamplerParameter(GL_TEXTURE_MAX_ANISOTROPY_EXT, 4);
 }
 
 void ParticleEmitter::render(ShaderProgram & shaderProgram)
@@ -48,10 +65,14 @@ void ParticleEmitter::render(ShaderProgram & shaderProgram)
 	glBufferData(GL_ARRAY_BUFFER, maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * 4 * sizeof(GLfloat), particleColorData);
 
+	particleTexture.bindTexture();
+	shaderProgram.setUniform("particleTexture", 0);
+
 	glBindVertexArray(VAO);
 	glVertexAttribDivisor(0, 0);
 	glVertexAttribDivisor(1, 1);
 	glVertexAttribDivisor(2, 1);
+	glVertexAttribDivisor(3, 0);
 
 	glEnable(GL_BLEND);
 	glDepthMask(0);
@@ -67,16 +88,14 @@ void ParticleEmitter::update(float deltaTime, Camera& camera)
 	// Setting up new particles in this frame (only if effect still active)
 	if (generateNewParticles)
 	{
-		GLint newParticleCount = (GLint)(deltaTime * emitterData.particlesPerSecond);
-		if (newParticleCount > (GLint)(0.016f * emitterData.particlesPerSecond))
-		{
-			newParticleCount = (GLint)(0.016f * emitterData.particlesPerSecond);
-		}
-		for (int i = 0; i < newParticleCount; ++i)
+		generationTimeAccumulator += deltaTime;
+		std::cout << "Emitter time accumulator: " << generationTimeAccumulator << std::endl;
+		while (generationTimeAccumulator > 1.0 / emitterData.particlesPerSecond)
 		{
 			int particleIndex = findUnusedParticle();
 			Particle& p = particles[particleIndex];
 			initParticle(p);
+			generationTimeAccumulator -= 1.0 / emitterData.particlesPerSecond;
 		}
 	}
 
@@ -92,20 +111,14 @@ void ParticleEmitter::update(float deltaTime, Camera& camera)
 
 			if (p.isAlive())
 			{
-				GLfloat particleLifetime = emitterData.initialParticleLife - p.life;
+				GLfloat particleLifetime = p.initialLife - p.life;
 
 				p.position += p.direction * p.speed * deltaTime;
 				p.distanceFromCamera = glm::length(p.position - camera.eye);
 
 				// Update particle variables from timelines
-				if (!emitterData.particleSizeTimeline.empty())
-				{
-					updateParticleVariable<GLfloat>(p.size, emitterData.initialParticleSize, emitterData.particleSizeTimeline, particleLifetime);
-				}
-				if (!emitterData.particleColorTimeline.empty())
-				{
-					updateParticleVariable<glm::vec4>(p.color, emitterData.initialParticleColor, emitterData.particleColorTimeline, particleLifetime);
-				}
+				emitterData.size.update(p.size, particleLifetime);
+				emitterData.color.update(p.color, particleLifetime);
 
 				// Updating GPU buffers
 				particlePositionAndSizeData[particleCount * 4 + 0] = p.position.x;
@@ -187,11 +200,12 @@ GLuint ParticleEmitter::getParticleCount() const
 void ParticleEmitter::initParticle(Particle & p)
 {
 	p.life = emitterData.initialParticleLife;
+	p.initialLife = emitterData.initialParticleLife;
 	p.position = emitterData.initialParticlePosition;
-	p.speed = emitterData.initialParticleSpeed;
-	p.size = emitterData.initialParticleSize;
-	p.weight = emitterData.initialParticleWeight;
-	p.color = emitterData.initialParticleColor;
+	p.speed = emitterData.speed.initialValue;
+	p.size = emitterData.size.initialValue;
+	p.weight = emitterData.weight.initialValue;
+	p.color = emitterData.color.initialValue;
 	std::uniform_real_distribution<GLfloat> randomDirectionComponent(-1, 1);
 	p.direction.x = randomDirectionComponent(rng);
 	p.direction.y = randomDirectionComponent(rng);

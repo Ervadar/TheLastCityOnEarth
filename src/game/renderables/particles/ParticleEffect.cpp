@@ -88,19 +88,20 @@ void ParticleEffect::loadEffectFromFile(std::string effectFilePath)
 		ParticleEmitter emitter;
 		ParticleEmitterData data;
 		auto& jsonEmitter = jsonEmitters[i];
-		data.lifeTimeInSeconds = data.getVarFromJson<GLfloat>(jsonEmitter["lifeTimeInSeconds"]);
-		data.particlesPerSecond = data.getVarFromJson<GLuint>(jsonEmitter["particlesPerSecond"]);
-		data.initialParticleLife = data.getVarFromJson<GLfloat>(jsonEmitter["particleLife"]);
-		data.initialParticlePosition = data.getVec3FromJson(jsonEmitter["particlePosition"]);
+		data.particleTextureName = jsonEmitter["particleTextureName"].get<std::string>();
+		data.lifeTimeInSeconds = jsonEmitter["lifeTimeInSeconds"];
+		data.particlesPerSecond = jsonEmitter["particlesPerSecond"];
+		data.initialParticleLife = jsonEmitter["particleLife"];
+		data.initialParticlePosition = glm::vec3(jsonEmitter["particlePosition"][0], jsonEmitter["particlePosition"][1], jsonEmitter["particlePosition"][2]);
 
-		data.initialParticleSize = data.getVarFromJson<GLfloat>(jsonEmitter["particleSize"]);
-		data.particleSizeTimeline = std::move(data.loadVarTimelineFromJson<GLfloat>(jsonEmitter["particleSize"]));
+		data.size.initialValue = data.getVarFromJson<GLfloat>(jsonEmitter["particleSize"]);
+		data.size.timeline = std::move(data.loadVarTimelineFromJson<GLfloat>(jsonEmitter["particleSize"]));
 
-		data.initialParticleSpeed = data.getVarFromJson<GLfloat>(jsonEmitter["particleSpeed"]);
-		data.initialParticleWeight = data.getVarFromJson<GLfloat>(jsonEmitter["particleWeight"]);
+		data.speed.initialValue = data.getVarFromJson<GLfloat>(jsonEmitter["particleSpeed"]);
+		data.weight.initialValue = data.getVarFromJson<GLfloat>(jsonEmitter["particleWeight"]);
 
-		data.initialParticleColor = data.getVec4FromJson(jsonEmitter["particleColor"]);
-		data.particleColorTimeline = std::move(data.loadVec4TimelineFromJson(jsonEmitter["particleColor"]));
+		data.color.initialValue = data.getVec4FromJson(jsonEmitter["particleColor"]);
+		data.color.timeline = std::move(data.loadVec4TimelineFromJson(jsonEmitter["particleColor"]));
 
 		emitter.init(data);
 		emitters.push_back(emitter);
