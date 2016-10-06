@@ -12,7 +12,8 @@ struct Particle
 	glm::vec3 direction;
 	glm::vec4 color;
 	GLfloat size;
-	GLfloat angle, weight;
+	GLfloat angle = 0.0f;
+	GLfloat weight;
 	GLfloat life = -1.0f;
 	GLfloat initialLife;
 	GLfloat distanceFromCamera = -1.0f;
@@ -22,13 +23,4 @@ struct Particle
 		return (life > 0.0f) ? true : false;
 	}
 };
-
-class ParticlePool
-{
-	Particle& findUnusedParticle()
-	{
-
-	}
-};
-
 #endif

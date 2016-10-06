@@ -8,5 +8,5 @@ out vec4 outputColor;
 void main()
 {
 	vec4 textureColor = texture(particleTexture, UV).rgba;
-	outputColor = textureColor;
+	outputColor = particleColor * textureColor;
 }

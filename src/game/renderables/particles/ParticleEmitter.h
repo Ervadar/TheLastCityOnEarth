@@ -59,17 +59,6 @@ public:
 	ParticleVariable<GLfloat> speed;
 	ParticleVariable<GLfloat> weight;
 	ParticleVariable<glm::vec4> color;
-	//GLfloat initialParticleSize;
-	//std::vector<std::pair<GLfloat, GLfloat>> particleSizeTimeline;
-
-
-	//GLfloat initialParticleSpeed;
-	//GLfloat initialParticleWeight;
-
-	//
-
-	//glm::vec4 initialParticleColor;
-	//std::vector<std::pair<GLfloat, glm::vec4>> particleColorTimeline;
 
 public:
 	ParticleEmitterData() {};
@@ -118,20 +107,25 @@ public:
 class ParticleEmitter
 {
 private:
-	static const int maxParticles = 1000;
+	static const int MAX_PARTICLES = 1000;
+	static const glm::vec3 GRAVITY;
+
 	GLuint particleCount = 0;
 	GLboolean generateNewParticles = true;
 	int lastUsedParticle = 0;
-	Particle particles[maxParticles];
-	GLfloat particlePositionAndSizeData[maxParticles * 4];
-	GLfloat particleColorData[maxParticles * 4];
+	Particle particles[MAX_PARTICLES];
+	glm::vec3 particleRotationData[MAX_PARTICLES * 3];
+	GLfloat particlePositionAndSizeData[MAX_PARTICLES * 4];
+	GLfloat particleColorData[MAX_PARTICLES * 4];
 
 	ParticleEmitterData emitterData;
 	Texture particleTexture;
+	std::vector<glm::vec3> vertexData;
 
 	GLuint uvBuffer;
 	GLuint positionBuffer;
 	GLuint colorBuffer;
+	GLuint rotationBuffer;
 
 	GLuint VAO;
 	GLuint vertexVBO;
