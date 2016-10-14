@@ -13,6 +13,10 @@ struct Particle
 	glm::vec4 color;
 	GLfloat size;
 	GLfloat angle = 0.0f;
+	GLfloat angleX = 0.0f;
+	GLfloat angleY = 0.0f;
+	GLfloat angleZ = 0.0f;
+	glm::vec3 rotationAxisX = glm::vec3(1, 0, 0);
 	GLfloat weight;
 	GLfloat life = -1.0f;
 	GLfloat initialLife;

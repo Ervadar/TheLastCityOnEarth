@@ -49,11 +49,16 @@ public:
 class ParticleEmitterData
 {
 public:
+	static const GLint ROTATION_DEFAULT = 1;
+	static const GLint ROTATION_RANDOM_FACING_CAMERA = 2;
+	static const GLint ROTATION_INTO_DIRECTION = 3;
+
 	std::string particleTextureName;
 	GLfloat lifeTimeInSeconds;
 	GLuint particlesPerSecond;
 	GLfloat initialParticleLife;
 	glm::vec3 initialParticlePosition;
+	GLint rotationType;
 
 	ParticleVariable<GLfloat> size;
 	ParticleVariable<GLfloat> speed;
@@ -114,7 +119,7 @@ private:
 	GLboolean generateNewParticles = true;
 	int lastUsedParticle = 0;
 	Particle particles[MAX_PARTICLES];
-	glm::vec3 particleRotationData[MAX_PARTICLES * 3];
+	glm::vec4 particleRotationData[MAX_PARTICLES * 4];
 	GLfloat particlePositionAndSizeData[MAX_PARTICLES * 4];
 	GLfloat particleColorData[MAX_PARTICLES * 4];
 

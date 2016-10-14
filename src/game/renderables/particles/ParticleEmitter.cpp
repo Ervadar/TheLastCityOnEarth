@@ -56,11 +56,13 @@ void ParticleEmitter::init(ParticleEmitterData emitterData)
 	glBindBuffer(GL_ARRAY_BUFFER, rotationBuffer);
 	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * sizeof(glm::mat3), NULL, GL_STREAM_DRAW);
 	glEnableVertexAttribArray(4);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(glm::mat3), (void*)(sizeof(GLfloat) * 0));
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(GLfloat) * 0));
 	glEnableVertexAttribArray(5);
-	glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(glm::mat3), (void*)(sizeof(GLfloat) * 3));
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(GLfloat) * 4));
 	glEnableVertexAttribArray(6);
-	glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, sizeof(glm::mat3), (void*)(sizeof(GLfloat) * 6));
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(GLfloat) * 8));
+	glEnableVertexAttribArray(6);
+	glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(GLfloat) * 12));
 
 	particleTexture.loadTexture2D("data/particles/" + emitterData.particleTextureName, true);
 	particleTexture.setFiltering(TEXTURE_FILTER_MAG_BILINEAR, TEXTURE_FILTER_MIN_BILINEAR_MIPMAP);
@@ -78,11 +80,12 @@ void ParticleEmitter::render(ShaderProgram & shaderProgram)
 	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * 4 * sizeof(GLfloat), particleColorData);
 
 	glBindBuffer(GL_ARRAY_BUFFER, rotationBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * sizeof(glm::mat3), NULL, GL_STREAM_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * sizeof(glm::mat3), particleRotationData);
+	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * sizeof(glm::mat4), NULL, GL_STREAM_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * sizeof(glm::mat4), particleRotationData);
 
 	particleTexture.bindTexture();
 	shaderProgram.setUniform("particleTexture", 0);
+	shaderProgram.setUniform("rotationType", emitterData.rotationType);
 
 	glBindVertexArray(VAO);
 	glVertexAttribDivisor(0, 0);
@@ -92,6 +95,7 @@ void ParticleEmitter::render(ShaderProgram & shaderProgram)
 	glVertexAttribDivisor(4, 1);
 	glVertexAttribDivisor(5, 1);
 	glVertexAttribDivisor(6, 1);
+	glVertexAttribDivisor(7, 1);
 
 	glEnable(GL_BLEND);
 	glDepthMask(0);
@@ -108,7 +112,6 @@ void ParticleEmitter::update(float deltaTime, Camera& camera)
 	if (generateNewParticles)
 	{
 		generationTimeAccumulator += deltaTime;
-		std::cout << "Emitter time accumulator: " << generationTimeAccumulator << std::endl;
 		while (generationTimeAccumulator > 1.0 / emitterData.particlesPerSecond)
 		{
 			int particleIndex = findUnusedParticle();
@@ -154,10 +157,18 @@ void ParticleEmitter::update(float deltaTime, Camera& camera)
 				particleColorData[particleCount * 4 + 3] = p.color.a;
 
 				// UPDATE ROTATION GPU BUFFER
-				// get mat3 rotation from particle
-				particleRotationData[particleCount * 3 + 0] = glm::vec3(cos(p.angle), -sin(p.angle), 0.0f);
-				particleRotationData[particleCount * 3 + 1] = glm::vec3(sin(p.angle), cos(p.angle), 0.0f);
-				particleRotationData[particleCount * 3 + 2] = glm::vec3(0.0f, 0.0f, 1.0f);
+				glm::mat4 rotationMatrix =  glm::rotate(glm::mat4(1.0f), p.angleX + 45.0f, p.rotationAxisX) *
+					glm::rotate(glm::mat4(1.0f), p.angleY + 90.0f, glm::vec3(0, 1, 0));
+
+				//printf("Angle_X: %f Y: %f Z: %f\nMatrix:\n%f %f %f\n %f %f %f\n %f %f %f\n\n",
+				//	p.angleX, p.angleY, p.angleZ, rotationMatrix[0][0], rotationMatrix[0][1], rotationMatrix[0][2],
+				//	rotationMatrix[1][0], rotationMatrix[1][1], rotationMatrix[1][2],
+				//	rotationMatrix[2][0], rotationMatrix[2][1], rotationMatrix[2][2]);
+
+				particleRotationData[particleCount * 4 + 0] = rotationMatrix[0];
+				particleRotationData[particleCount * 4 + 1] = rotationMatrix[1];
+				particleRotationData[particleCount * 4 + 2] = rotationMatrix[2];
+				particleRotationData[particleCount * 4 + 3] = rotationMatrix[3];
 
 				++particleCount;
 			}
@@ -234,11 +245,30 @@ void ParticleEmitter::initParticle(Particle & p)
 	p.size = emitterData.size.initialValue;
 	p.weight = emitterData.weight.initialValue;
 	p.color = emitterData.color.initialValue;
-	std::uniform_real_distribution<GLfloat> randomDirectionComponent(-1, 1);
-	p.direction.x = randomDirectionComponent(rng);
-	p.direction.y = randomDirectionComponent(rng);
-	p.direction.z = randomDirectionComponent(rng);
-	p.direction = glm::normalize(p.direction);
-	std::uniform_real_distribution<GLfloat> randomAngleInRadians(0.0f, 6.28f);
-	p.angle = randomAngleInRadians(rng);
+
+	if (emitterData.rotationType == ParticleEmitterData::ROTATION_RANDOM_FACING_CAMERA)
+	{
+		std::uniform_real_distribution<GLfloat> randomDirectionComponent(-1, 1);
+		p.direction.x = randomDirectionComponent(rng);
+		p.direction.y = randomDirectionComponent(rng);
+		p.direction.z = randomDirectionComponent(rng);
+		p.direction = glm::normalize(p.direction);
+		std::uniform_real_distribution<GLfloat> randomAngleInRadians(0.0f, 360.0f);
+		p.angleZ = randomAngleInRadians(rng);
+	}
+	else if (emitterData.rotationType == ParticleEmitterData::ROTATION_INTO_DIRECTION)
+	{
+		p.angleX = -45.0f;
+		p.angleY = 45.0f;
+		p.rotationAxisX = glm::vec3(glm::rotate(glm::mat4(1.0f), p.angleY, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+		p.direction = glm::vec3(
+			glm::rotate(glm::mat4(1.0f), p.angleX, p.rotationAxisX) *
+			glm::rotate(glm::mat4(1.0f), p.angleY, glm::vec3(0.0f, 1.0f, 0.0f)) *
+			glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+		printf("DIR!!!: %f %f %f\n", p.direction.x, p.direction.y, p.direction.z);
+	}
+	else
+	{
+
+	}
 }

@@ -93,6 +93,18 @@ void ParticleEffect::loadEffectFromFile(std::string effectFilePath)
 		data.particlesPerSecond = jsonEmitter["particlesPerSecond"];
 		data.initialParticleLife = jsonEmitter["particleLife"];
 		data.initialParticlePosition = glm::vec3(jsonEmitter["particlePosition"][0], jsonEmitter["particlePosition"][1], jsonEmitter["particlePosition"][2]);
+		if (jsonEmitter["rotationType"] == "random_facing_camera")
+		{
+			data.rotationType = ParticleEmitterData::ROTATION_RANDOM_FACING_CAMERA;
+		}
+		else if (jsonEmitter["rotationType"] == "into_direction")
+		{
+			data.rotationType = ParticleEmitterData::ROTATION_INTO_DIRECTION;
+		}
+		else
+		{
+			data.rotationType = ParticleEmitterData::ROTATION_DEFAULT;
+		}
 
 		data.size.initialValue = data.getVarFromJson<GLfloat>(jsonEmitter["particleSize"]);
 		data.size.timeline = std::move(data.loadVarTimelineFromJson<GLfloat>(jsonEmitter["particleSize"]));

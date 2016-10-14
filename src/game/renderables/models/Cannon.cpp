@@ -83,7 +83,7 @@ void Cannon::update(float deltaTime)
 		glm::rotate(glm::mat4(1.0f), rotateAngleX, rotateAxisX) *
 		glm::rotate(glm::mat4(1.0f), rotateAngleY, glm::vec3(0.0f, 1.0f, 0.0f)) *
 		glm::vec4(cannonInitialDirectionVector, 1.0f));
-
+	
 	// Cannon status
 	if (status == Status::SHOOTING)
 	{
