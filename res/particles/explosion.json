@@ -2,11 +2,11 @@
   "particleEmitters": [
     {
       "particleTextureName": "fire.tga",
-      "lifeTimeInSeconds": 20,
-      "particlesPerSecond": 2,
-      "particleLife": 20,
+      "lifeTimeInSeconds": 0.5,
+      "particlesPerSecond": 100,
+      "particleLife": 1.5,
       "particlePosition": [ 0, 0, 0 ],
-      "rotationType": "into_direction",
+      "rotationType": "random_facing_camera",
       "particleSize": {
         "initial": 10,
         "timeline": [
@@ -21,12 +21,21 @@
         "timeline": [ ]
       },
       "particleWeight": {
-        "initial": 0,
+        "initial": -2,
         "timeline": [ ]
       },
       "particleColor": {
-        "initial": [ 0, 0, 0, 1 ],
-        "timeline": [ ]
+        "initial": [ 1, 1, 0.7, 0.5 ],
+        "timeline": [
+          {
+            "t": 0.1,
+            "v": [ 1, 0.6, 0, 0.5 ]
+          },
+          {
+            "t": 0.5,
+            "v": [ 0, 0, 0, 0.0 ]
+          }
+        ]
       }
     }
   ]

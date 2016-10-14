@@ -15,14 +15,30 @@ void ParticleEmitter::init(ParticleEmitterData emitterData)
 		glm::vec3(-1.0f, -1.0f, 0.0f),
 		glm::vec3(1.0f, -1.0f, 0.0f),
 		glm::vec3(-1.0f, 1.0f, 0.0f),
-		glm::vec3(1.0f, 1.0f, 0.0f)
+		glm::vec3(-1.0f, 1.0f, 0.0f),
+		glm::vec3(1.0f, -1.0f, 0.0f),
+		glm::vec3(1.0f, 1.0f, 0.0f),
+		glm::vec3(1.0f, 1.0f, 0.0f),
+		glm::vec3(1.0f, -1.0f, 0.0f),
+		glm::vec3(-1.0f, 1.0f, 0.0f),
+		glm::vec3(-1.0f, 1.0f, 0.0f),
+		glm::vec3(1.0f, -1.0f, 0.0f),
+		glm::vec3(-1.0f, -1.0f, 0.0f)
 	};
 
 	glm::vec2 uvData[] = {
 		glm::vec2(0.0f, 0.0f),
 		glm::vec2(1.0f, 0.0f),
 		glm::vec2(0.0f, 1.0f),
-		glm::vec2(1.0f, 1.0f)
+		glm::vec2(0.0f, 1.0f),
+		glm::vec2(1.0f, 0.0f),
+		glm::vec2(1.0f, 1.0f),
+		glm::vec2(1.0f, 1.0f),
+		glm::vec2(1.0f, 0.0f),
+		glm::vec2(0.0f, 1.0f),
+		glm::vec2(0.0f, 1.0f),
+		glm::vec2(1.0f, 0.0f),
+		glm::vec2(0.0f, 0.0f)
 	};
 
 	glGenVertexArrays(1, &VAO);
@@ -100,7 +116,7 @@ void ParticleEmitter::render(ShaderProgram & shaderProgram)
 	glEnable(GL_BLEND);
 	glDepthMask(0);
 
-	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particleCount);
+	glDrawArraysInstanced(GL_TRIANGLES, 0, 12, particleCount);
 	
 	glDisable(GL_BLEND);
 	glDepthMask(1);
@@ -156,9 +172,18 @@ void ParticleEmitter::update(float deltaTime, Camera& camera)
 				particleColorData[particleCount * 4 + 2] = p.color.z;
 				particleColorData[particleCount * 4 + 3] = p.color.a;
 
+
 				// UPDATE ROTATION GPU BUFFER
-				glm::mat4 rotationMatrix =  glm::rotate(glm::mat4(1.0f), p.angleX + 45.0f, p.rotationAxisX) *
-					glm::rotate(glm::mat4(1.0f), p.angleY + 90.0f, glm::vec3(0, 1, 0));
+				glm::mat4 rotationMatrix;
+				if (emitterData.rotationType == ParticleEmitterData::ROTATION_INTO_DIRECTION)
+				{
+					rotationMatrix = glm::rotate(glm::mat4(1.0f), p.angleX + 45.0f, p.rotationAxisX) *
+						glm::rotate(glm::mat4(1.0f), p.angleY + 90.0f, glm::vec3(0, 1, 0));
+				}
+				else if (emitterData.rotationType == ParticleEmitterData::ROTATION_RANDOM_FACING_CAMERA)
+				{
+					rotationMatrix = glm::rotate(glm::mat4(1.0f), p.angleZ, glm::vec3(0, 0, 1));
+				}
 
 				//printf("Angle_X: %f Y: %f Z: %f\nMatrix:\n%f %f %f\n %f %f %f\n %f %f %f\n\n",
 				//	p.angleX, p.angleY, p.angleZ, rotationMatrix[0][0], rotationMatrix[0][1], rotationMatrix[0][2],
@@ -253,19 +278,22 @@ void ParticleEmitter::initParticle(Particle & p)
 		p.direction.y = randomDirectionComponent(rng);
 		p.direction.z = randomDirectionComponent(rng);
 		p.direction = glm::normalize(p.direction);
-		std::uniform_real_distribution<GLfloat> randomAngleInRadians(0.0f, 360.0f);
-		p.angleZ = randomAngleInRadians(rng);
+		std::uniform_real_distribution<GLfloat> randomAngleInDegrees(0.0f, 360.0f);
+		p.angleX = 0.0f;
+		p.angleY = 0.0f;
+		p.angleZ = randomAngleInDegrees(rng);
 	}
 	else if (emitterData.rotationType == ParticleEmitterData::ROTATION_INTO_DIRECTION)
 	{
-		p.angleX = -45.0f;
-		p.angleY = 45.0f;
+		std::uniform_real_distribution<GLfloat> randomAngleInDegrees(0.0f, 360.0f);
+		p.angleX = randomAngleInDegrees(rng);
+		p.angleY = randomAngleInDegrees(rng);
+		p.angleZ = 0.0f;
 		p.rotationAxisX = glm::vec3(glm::rotate(glm::mat4(1.0f), p.angleY, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
 		p.direction = glm::vec3(
 			glm::rotate(glm::mat4(1.0f), p.angleX, p.rotationAxisX) *
 			glm::rotate(glm::mat4(1.0f), p.angleY, glm::vec3(0.0f, 1.0f, 0.0f)) *
 			glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
-		printf("DIR!!!: %f %f %f\n", p.direction.x, p.direction.y, p.direction.z);
 	}
 	else
 	{
