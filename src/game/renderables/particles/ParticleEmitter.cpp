@@ -184,6 +184,12 @@ void ParticleEmitter::update(float deltaTime, Camera& camera)
 				{
 					rotationMatrix = glm::rotate(glm::mat4(1.0f), p.angleZ, glm::vec3(0, 0, 1));
 				}
+				else if (emitterData.rotationType == ParticleEmitterData::ROTATION_FACING_UP)
+				{
+					rotationMatrix = glm::rotate(glm::mat4(1.0f), 90.0f, glm::vec3(1, 0, 0));
+				}
+
+				printf("ROT: %d", emitterData.rotationType);
 
 				//printf("Angle_X: %f Y: %f Z: %f\nMatrix:\n%f %f %f\n %f %f %f\n %f %f %f\n\n",
 				//	p.angleX, p.angleY, p.angleZ, rotationMatrix[0][0], rotationMatrix[0][1], rotationMatrix[0][2],
@@ -294,6 +300,11 @@ void ParticleEmitter::initParticle(Particle & p)
 			glm::rotate(glm::mat4(1.0f), p.angleX, p.rotationAxisX) *
 			glm::rotate(glm::mat4(1.0f), p.angleY, glm::vec3(0.0f, 1.0f, 0.0f)) *
 			glm::vec4(0.0f, 0.0f, 1.0f, 1.0f));
+		p.position += p.direction * 15.0f;	// Starting offset from the middle
+	}
+	else if (emitterData.rotationType == ParticleEmitterData::ROTATION_FACING_UP)
+	{
+		p.direction = glm::vec3(0.0f, 0.0f, 0.0f);
 	}
 	else
 	{

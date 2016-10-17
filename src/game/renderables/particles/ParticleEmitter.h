@@ -52,6 +52,7 @@ public:
 	static const GLint ROTATION_DEFAULT = 1;
 	static const GLint ROTATION_RANDOM_FACING_CAMERA = 2;
 	static const GLint ROTATION_INTO_DIRECTION = 3;
+	static const GLint ROTATION_FACING_UP = 4;
 
 	std::string particleTextureName;
 	GLfloat lifeTimeInSeconds;

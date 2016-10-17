@@ -21,6 +21,7 @@ out vec2 UV;
 const int ROTATION_DEFAULT = 1;
 const int ROTATION_RANDOM_FACING_CAMERA = 2;
 const int ROTATION_INTO_DIRECTION = 3;
+const int ROTATION_FACING_UP = 4;
 
 void main()
 {
@@ -38,7 +39,8 @@ void main()
 							+ xyzs.xyz
 							+ vertexRelativePosToParticle;
 	}
-	else if(rotationType == ROTATION_INTO_DIRECTION)
+	else if(rotationType == ROTATION_INTO_DIRECTION ||
+		rotationType == ROTATION_FACING_UP)
 	{
 		vertexPositionWorldspace = particleEffectPositionWorldspace 
 							+ xyzs.xyz

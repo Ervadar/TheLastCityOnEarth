@@ -1,41 +1,32 @@
 {
   "particleEmitters": [
     {
-      "particleTextureName": "fire.tga",
-      "lifeTimeInSeconds": 0.5,
-      "particlesPerSecond": 100,
-      "particleLife": 1.5,
+      "particleTextureName": "shockwave.tga",
+      "lifeTimeInSeconds": 0.1,
+      "particlesPerSecond": 10,
+      "particleLife": 0.5,
       "particlePosition": [ 0, 0, 0 ],
-      "rotationType": "random_facing_camera",
+      "rotationType": "facing_up",
       "particleSize": {
         "initial": 10,
         "timeline": [
           {
-            "t": 0.25,
+            "t": 0.5,
             "v": 40
           }
         ]
       },
       "particleSpeed": {
-        "initial": 30,
+        "initial": 0,
         "timeline": [ ]
       },
       "particleWeight": {
-        "initial": -2,
+        "initial": 0,
         "timeline": [ ]
       },
       "particleColor": {
         "initial": [ 1, 1, 0.7, 0.5 ],
-        "timeline": [
-          {
-            "t": 0.1,
-            "v": [ 1, 0.6, 0, 0.5 ]
-          },
-          {
-            "t": 0.5,
-            "v": [ 0, 0, 0, 0.0 ]
-          }
-        ]
+        "timeline": [ ]
       }
     }
   ]

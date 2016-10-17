@@ -101,6 +101,10 @@ void ParticleEffect::loadEffectFromFile(std::string effectFilePath)
 		{
 			data.rotationType = ParticleEmitterData::ROTATION_INTO_DIRECTION;
 		}
+		else if (jsonEmitter["rotationType"] == "facing_up")
+		{
+			data.rotationType = ParticleEmitterData::ROTATION_FACING_UP;
+		}
 		else
 		{
 			data.rotationType = ParticleEmitterData::ROTATION_DEFAULT;
