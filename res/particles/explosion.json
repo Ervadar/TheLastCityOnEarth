@@ -1,6 +1,166 @@
 {
   "particleEmitters": [
     {
+	  "maxParticles": 50,
+      "particleTextureName": "fire.tga",
+      "lifeTimeInSeconds": 0.5,
+      "particlesPerSecond": 50,
+      "particleLife": 1.5,
+      "particlePosition": [ 0, 0, 0 ],
+      "rotationType": "random_facing_camera",
+      "particleSize": {
+        "initial": 10,
+        "timeline": [
+          {
+            "t": 0.25,
+            "v": 40
+          }
+        ]
+      },
+      "particleSpeed": {
+        "initial": 30,
+        "timeline": [ ]
+      },
+      "particleWeight": {
+        "initial": -2,
+        "timeline": [ ]
+      },
+      "particleColor": {
+        "initial": [ 1, 1, 0.7, 0.5 ],
+        "timeline": [
+          {
+            "t": 0.1,
+            "v": [ 1, 0.6, 0, 0.5 ]
+          },
+          {
+            "t": 0.5,
+            "v": [ 0, 0, 0, 0.0 ]
+          }
+        ]
+      }
+    },
+    {
+	  "maxParticles": 25,
+      "particleTextureName": "flash.tga",
+      "lifeTimeInSeconds": 0.2,
+      "particlesPerSecond": 40,
+      "particleLife": 0.2,
+      "particlePosition": [ 0, 0, 0 ],
+      "rotationType": "random_facing_camera",
+      "particleSize": {
+        "initial": 1,
+        "timeline": [
+          {
+            "t": 0.2,
+            "v": 40
+          }
+        ]
+      },
+      "particleSpeed": {
+        "initial": 10,
+        "timeline": [ ]
+      },
+      "particleWeight": {
+        "initial": 0,
+        "timeline": [ ]
+      },
+      "particleColor": {
+        "initial": [ 1, 1, 0.7, 0.5 ],
+        "timeline": [ ]
+      }
+    },
+	{
+	  "maxParticles": 50,
+      "particleTextureName": "spark.tga",
+      "lifeTimeInSeconds": 0.15,
+      "particlesPerSecond": 100,
+      "particleLife": 0.8,
+      "particlePosition": [ 0, 0, 0 ],
+      "rotationType": "into_direction",
+      "particleSize": {
+        "initial": 10,
+        "timeline": [ ]
+      },
+      "particleSpeed": {
+        "initial": 80,
+        "timeline": [ ]
+      },
+      "particleWeight": {
+        "initial": 0,
+        "timeline": [ ]
+      },
+      "particleColor": {
+        "initial": [ 1, 1, 0.9, 0.5 ],
+        "timeline": [ ]
+      }
+    },
+	{
+	  "maxParticles": 50,
+      "particleTextureName": "smoke_trail.tga",
+      "lifeTimeInSeconds": 0.25,
+      "particlesPerSecond": 100,
+      "particleLife": 0.4,
+      "particlePosition": [ 0, 0, 0 ],
+      "rotationType": "into_direction",
+      "particleSize": {
+        "initial": 10,
+        "timeline": [
+          {
+            "t": 0.4,
+            "v": 30
+          }
+        ]
+      },
+      "particleSpeed": {
+        "initial": 70,
+        "timeline": [ ]
+      },
+      "particleWeight": {
+        "initial": 0,
+        "timeline": [ ]
+      },
+      "particleColor": {
+        "initial": [ 0.9, 0.7, 0.3, 0.8 ],
+        "timeline": [ { "t": 0.4, "v": [ 0.9, 0.7, 0.3, 0.1 ]} ]
+      }
+    },
+	{
+	  "maxParticles": 50,
+      "particleTextureName": "round_sparks.tga",
+      "lifeTimeInSeconds": 0.5,
+      "particlesPerSecond": 50,
+      "particleLife": 0.5,
+      "particlePosition": [ 0, 0, 0 ],
+      "rotationType": "random_facing_camera",
+      "particleSize": {
+        "initial": 10,
+        "timeline": [
+          {
+            "t": 0.5,
+            "v": 30
+          }
+        ]
+      },
+      "particleSpeed": {
+        "initial": 100,
+        "timeline": [
+          {
+            "t": 0.1,
+            "v": 0
+          }
+        ]
+      },
+      "particleWeight": {
+        "initial": -2,
+        "timeline": [ ]
+      },
+      "particleColor": {
+        "initial": [ 1, 0.1, 0.2, 0.8 ],
+        "timeline": [ ]
+      }
+    },
+	{
+      "maxParticles": 1,
       "particleTextureName": "shockwave.tga",
       "lifeTimeInSeconds": 0.1,
       "particlesPerSecond": 10,
@@ -12,7 +172,7 @@
         "timeline": [
           {
             "t": 0.5,
-            "v": 40
+            "v": 80
           }
         ]
       },

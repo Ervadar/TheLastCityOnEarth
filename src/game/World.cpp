@@ -177,7 +177,7 @@ void World::update(GLfloat deltaTime)
 	// Spawning enemy ships
 	if (timePassedFromLastShipSpawn > enemyShipSpawnTime)
 	{
-		//spawnEnemyShip();
+		spawnEnemyShip();
 		timePassedFromLastShipSpawn = 0.0f;
 	}
 	timePassedFromLastShipSpawn += deltaTime;
@@ -198,6 +198,8 @@ void World::update(GLfloat deltaTime)
 void World::release()
 {
 	staticObjects.clear();
+	enemyShipMissiles.clear();
+	cannonMissiles.clear();
 }
 
 void World::initCamera(GLFWwindow* window, int viewportWidth, int viewportHeight)
@@ -282,8 +284,7 @@ void World::checkMissileTerrainCollisions(std::vector<std::unique_ptr<Missile>>&
 		if (missile->translateVector.y < terrain.getTerrainHeight(missile->translateVector.x, missile->translateVector.z))
 		{
 			spawnExplosion(missile->translateVector);
-			// soundSystem.playSound(soundSystem.enemyShipHit,
-			// 	{ missile->translateVector.x, missile->translateVector.y, missile->translateVector.z });
+			SoundSystem::getInstance().playSound("data/sounds/enemyShipHit.wav", missile->translateVector);
 			missile->destroy();
 		}
 	}

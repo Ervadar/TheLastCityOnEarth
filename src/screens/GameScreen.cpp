@@ -264,6 +264,10 @@ void GameScreen::checkMenuInputs()
 			world->reset();
 		}
 	}
+	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+	{
+
+	}
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, GL_TRUE);

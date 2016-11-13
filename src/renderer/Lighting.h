@@ -18,7 +18,7 @@ public:
 	std::vector<std::unique_ptr<PointLight>> pointLights;	// Point light pool
 
 	LightManager() {};
-	~LightManager() {};
+	~LightManager();
 
 	void init();
 

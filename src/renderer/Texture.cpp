@@ -7,25 +7,34 @@ Texture::Texture()
 	mipMapsGenerated = false;
 }
 
+
+Texture::~Texture()
+{
+	printf("DELETING TEXTURE\n");
+	releaseTexture();
+}
+
 bool Texture::loadTexture2D(std::string path, bool generateMipMaps)
 {
-	std::cout << "LOADING: " << path << std::endl;
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
-	FIBITMAP * dib(0);
+	FIBITMAP * dib;
 
 	fif = FreeImage_GetFileType(path.c_str(), 0);	// Check the file signature and deduce its format
 
-	if(fif == FIF_UNKNOWN) // If still unknown, try to guess from the file extension
+	if (fif == FIF_UNKNOWN) // If still unknown, try to guess from the file extension
 		fif = FreeImage_GetFIFFromFilename(path.c_str());
 
-	if(fif == FIF_UNKNOWN) // If still unknown, returns failure
+	if (fif == FIF_UNKNOWN) // If still unknown, returns failure
 		return false;
 
-	if(FreeImage_FIFSupportsReading(fif))	// Check if the plugin has reading capabilities and load the file
+	if (FreeImage_FIFSupportsReading(fif))	// Check if the plugin has reading capabilities and load the file
 		dib = FreeImage_Load(fif, path.c_str());
-	if(!dib)
+	if (!dib)
+	{
+		FreeImage_Unload(dib);
 		return false;
-
+	}
+	
 	BYTE * dataPointer = FreeImage_GetBits(dib); // Retrieve the image data
 
 	width = FreeImage_GetWidth(dib);
@@ -35,8 +44,11 @@ bool Texture::loadTexture2D(std::string path, bool generateMipMaps)
 	unsigned int tp = FreeImage_GetTransparencyCount(dib);
 
 	// If somehow it failed, return failure
-	if(dataPointer == nullptr || width == 0 || height == 0)
+	if (dataPointer == nullptr || width == 0 || height == 0)
+	{
+		FreeImage_Unload(dib);
 		return false;
+	}
 
 	// Generate an OpenGL texture ID for this texture
 	glGenTextures(1, &texture);
@@ -46,19 +58,19 @@ bool Texture::loadTexture2D(std::string path, bool generateMipMaps)
 	int internalFormat = BPP == 32 ? GL_RGBA : BPP == 24 ? GL_RGB : GL_DEPTH_COMPONENT;
 	
 	// Printing loaded texture
-	std::cout << path << " " << BPP << " " << format << " " << internalFormat << " " << tp << std::endl;
+	//std::cout << path << " " << BPP << " " << format << " " << internalFormat << " " << tp << std::endl;
 
 	glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, format, GL_UNSIGNED_BYTE, dataPointer);
 
 	if(generateMipMaps)
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-	FreeImage_Unload(dib);
-
 	glGenSamplers(1, &sampler);
 
 	this->path = path;
 	mipMapsGenerated = generateMipMaps;
+
+	FreeImage_Unload(dib);
 
 	return true;
 }

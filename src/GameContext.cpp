@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "GameScreen.h"
+#include "MainMenuScreen.h"
 
 #define INITIAL_WIDTH 800
 #define INITIAL_HEIGHT 600
@@ -83,6 +84,15 @@ int GameContext::run()
 			}
 
 			lastTime = currentTime;
+
+			if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+			{
+				setScreen(new MainMenuScreen(window));
+			}
+			if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
+			{
+				setScreen(new GameScreen(window));
+			}
 
 			glfwSwapBuffers(window);
 			glfwPollEvents();

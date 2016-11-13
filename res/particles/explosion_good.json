@@ -1,6 +1,7 @@
 {
   "particleEmitters": [
     {
+	  "maxParticles": 50,
       "particleTextureName": "fire.tga",
       "lifeTimeInSeconds": 0.5,
       "particlesPerSecond": 100,
@@ -39,6 +40,7 @@
       }
     },
     {
+	  "maxParticles": 25,
       "particleTextureName": "flash.tga",
       "lifeTimeInSeconds": 0.2,
       "particlesPerSecond": 40,
@@ -68,6 +70,7 @@
       }
     },
 	{
+	  "maxParticles": 50,
       "particleTextureName": "spark.tga",
       "lifeTimeInSeconds": 0.25,
       "particlesPerSecond": 100,
@@ -92,6 +95,7 @@
       }
     },
 	{
+	  "maxParticles": 50,
       "particleTextureName": "smoke_trail.tga",
       "lifeTimeInSeconds": 0.25,
       "particlesPerSecond": 100,
@@ -121,6 +125,7 @@
       }
     },
 	{
+	  "maxParticles": 50,
       "particleTextureName": "round_sparks.tga",
       "lifeTimeInSeconds": 0.5,
       "particlesPerSecond": 50,
@@ -151,6 +156,36 @@
       },
       "particleColor": {
         "initial": [ 1, 0.1, 0.2, 0.8 ],
+        "timeline": [ ]
+      }
+    },
+	{
+      "maxParticles": 1,
+      "particleTextureName": "shockwave.tga",
+      "lifeTimeInSeconds": 0.1,
+      "particlesPerSecond": 10,
+      "particleLife": 0.5,
+      "particlePosition": [ 0, 0, 0 ],
+      "rotationType": "facing_up",
+      "particleSize": {
+        "initial": 10,
+        "timeline": [
+          {
+            "t": 0.5,
+            "v": 40
+          }
+        ]
+      },
+      "particleSpeed": {
+        "initial": 0,
+        "timeline": [ ]
+      },
+      "particleWeight": {
+        "initial": 0,
+        "timeline": [ ]
+      },
+      "particleColor": {
+        "initial": [ 1, 1, 0.7, 0.5 ],
         "timeline": [ ]
       }
     }

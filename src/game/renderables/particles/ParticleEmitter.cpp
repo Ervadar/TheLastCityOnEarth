@@ -7,9 +7,22 @@ extern std::mt19937 rng;
 
 const glm::vec3 ParticleEmitter::GRAVITY = glm::vec3(0.0f, -10.0f, 0.0f);
 
+ParticleEmitter::~ParticleEmitter()
+{
+
+}
+
 void ParticleEmitter::init(ParticleEmitterData emitterData)
 {
 	this->emitterData = emitterData;
+
+	for (unsigned int i = 0; i < emitterData.maxParticles; ++i)
+	{
+		particles.push_back(Particle());
+	}
+	particleRotationData.resize(emitterData.maxParticles * 4);
+	particlePositionAndSizeData.resize(emitterData.maxParticles * 4);
+	particleColorData.resize(emitterData.maxParticles * 4);
 
 	glm::vec3 vertexData[] = {
 		glm::vec3(-1.0f, -1.0f, 0.0f),
@@ -52,13 +65,13 @@ void ParticleEmitter::init(ParticleEmitterData emitterData)
 
 	glGenBuffers(1, &positionBuffer);	// Positions and sizes of particles
 	glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, emitterData.maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
 	glGenBuffers(1, &colorBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, emitterData.maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
@@ -70,7 +83,7 @@ void ParticleEmitter::init(ParticleEmitterData emitterData)
 
 	glGenBuffers(1, &rotationBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, rotationBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * sizeof(glm::mat3), NULL, GL_STREAM_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, emitterData.maxParticles * sizeof(glm::mat3), NULL, GL_STREAM_DRAW);
 	glEnableVertexAttribArray(4);
 	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(GLfloat) * 0));
 	glEnableVertexAttribArray(5);
@@ -88,16 +101,16 @@ void ParticleEmitter::init(ParticleEmitterData emitterData)
 void ParticleEmitter::render(ShaderProgram & shaderProgram)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, positionBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * 4 * sizeof(GLfloat), particlePositionAndSizeData);
+	glBufferData(GL_ARRAY_BUFFER, emitterData.maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * 4 * sizeof(GLfloat), &particlePositionAndSizeData[0]);
 
 	glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * 4 * sizeof(GLfloat), particleColorData);
+	glBufferData(GL_ARRAY_BUFFER, emitterData.maxParticles * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * 4 * sizeof(GLfloat), &particleColorData[0]);
 
 	glBindBuffer(GL_ARRAY_BUFFER, rotationBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * sizeof(glm::mat4), NULL, GL_STREAM_DRAW);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * sizeof(glm::mat4), particleRotationData);
+	glBufferData(GL_ARRAY_BUFFER, emitterData.maxParticles * sizeof(glm::mat4), NULL, GL_STREAM_DRAW);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * sizeof(glm::mat4), &particleRotationData[0]);
 
 	particleTexture.bindTexture();
 	shaderProgram.setUniform("particleTexture", 0);
@@ -131,6 +144,7 @@ void ParticleEmitter::update(float deltaTime, Camera& camera)
 		while (generationTimeAccumulator > 1.0 / emitterData.particlesPerSecond)
 		{
 			int particleIndex = findUnusedParticle();
+			if (particleIndex == -1) break;
 			Particle& p = particles[particleIndex];
 			initParticle(p);
 			generationTimeAccumulator -= 1.0 / emitterData.particlesPerSecond;
@@ -139,7 +153,8 @@ void ParticleEmitter::update(float deltaTime, Camera& camera)
 
 	// Updating particles
 	particleCount = 0;
-	for (int i = 0; i < MAX_PARTICLES; ++i)
+
+	for (int i = 0; i < emitterData.maxParticles; ++i)
 	{
 		Particle& p = particles[i];
 
@@ -189,8 +204,6 @@ void ParticleEmitter::update(float deltaTime, Camera& camera)
 					rotationMatrix = glm::rotate(glm::mat4(1.0f), 90.0f, glm::vec3(1, 0, 0));
 				}
 
-				printf("ROT: %d", emitterData.rotationType);
-
 				//printf("Angle_X: %f Y: %f Z: %f\nMatrix:\n%f %f %f\n %f %f %f\n %f %f %f\n\n",
 				//	p.angleX, p.angleY, p.angleZ, rotationMatrix[0][0], rotationMatrix[0][1], rotationMatrix[0][2],
 				//	rotationMatrix[1][0], rotationMatrix[1][1], rotationMatrix[1][2],
@@ -217,7 +230,7 @@ void ParticleEmitter::destroy()
 
 int ParticleEmitter::findUnusedParticle()
 {
-	for (int i = lastUsedParticle; i < MAX_PARTICLES; ++i)
+	for (int i = lastUsedParticle; i < emitterData.maxParticles; ++i)
 	{
 		if (particles[i].life < 0)
 		{
@@ -234,7 +247,7 @@ int ParticleEmitter::findUnusedParticle()
 		}
 	}
 
-	return 0;
+	return -1;
 }
 
 void ParticleEmitter::activate()

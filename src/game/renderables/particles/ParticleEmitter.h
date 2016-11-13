@@ -54,6 +54,7 @@ public:
 	static const GLint ROTATION_INTO_DIRECTION = 3;
 	static const GLint ROTATION_FACING_UP = 4;
 
+	GLuint maxParticles;
 	std::string particleTextureName;
 	GLfloat lifeTimeInSeconds;
 	GLuint particlesPerSecond;
@@ -113,16 +114,17 @@ public:
 class ParticleEmitter
 {
 private:
-	static const int MAX_PARTICLES = 1000;
+	//static const int MAX_PARTICLES = 1000;
 	static const glm::vec3 GRAVITY;
 
 	GLuint particleCount = 0;
 	GLboolean generateNewParticles = true;
 	int lastUsedParticle = 0;
-	Particle particles[MAX_PARTICLES];
-	glm::vec4 particleRotationData[MAX_PARTICLES * 4];
-	GLfloat particlePositionAndSizeData[MAX_PARTICLES * 4];
-	GLfloat particleColorData[MAX_PARTICLES * 4];
+
+	std::vector<Particle> particles;
+	std::vector<glm::vec4> particleRotationData;
+	std::vector<GLfloat> particlePositionAndSizeData;
+	std::vector<GLfloat> particleColorData;
 
 	ParticleEmitterData emitterData;
 	Texture particleTexture;
@@ -140,7 +142,7 @@ private:
 
 public:
 	ParticleEmitter() {};
-	virtual ~ParticleEmitter() {};
+	~ParticleEmitter();
 
 	void init(ParticleEmitterData emitterData);
 	virtual void render(ShaderProgram & shaderProgram);

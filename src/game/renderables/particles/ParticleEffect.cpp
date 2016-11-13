@@ -88,6 +88,7 @@ void ParticleEffect::loadEffectFromFile(std::string effectFilePath)
 		ParticleEmitter emitter;
 		ParticleEmitterData data;
 		auto& jsonEmitter = jsonEmitters[i];
+		data.maxParticles = jsonEmitter["maxParticles"];
 		data.particleTextureName = jsonEmitter["particleTextureName"].get<std::string>();
 		data.lifeTimeInSeconds = jsonEmitter["lifeTimeInSeconds"];
 		data.particlesPerSecond = jsonEmitter["particlesPerSecond"];

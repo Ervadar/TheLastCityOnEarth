@@ -36,6 +36,7 @@ public:
 	GLuint texture;	// texture ID
 
 	Texture();
+	~Texture();
 
 	bool loadTexture2D(std::string path, bool generateMipMaps = false);
 	void bindTexture(int textureUnit = 0);

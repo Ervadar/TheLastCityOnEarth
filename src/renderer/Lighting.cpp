@@ -2,6 +2,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+LightManager::~LightManager()
+{
+	pointLights.clear();
+}
+
 void LightManager::init()
 {
 	for (GLuint i = 0; i < POINT_LIGHT_POOL_SIZE; ++i)

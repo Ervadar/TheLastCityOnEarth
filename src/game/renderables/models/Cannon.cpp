@@ -16,7 +16,7 @@ Cannon::Cannon()
 
 	bulletSpawnOffset = 175.0f;
 
-	shootingSpeed = 125.0f;
+	shootingSpeed = 200.0f;
 	loadingSpeed = 80.0f;
 	status = Status::READY;
 }

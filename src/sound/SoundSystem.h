@@ -13,9 +13,9 @@ private:
 	ISoundEngine* engine;
 	Camera* camera;
 
-public:
 	SoundSystem();
-	~SoundSystem() {};
+
+public:
 
 	static SoundSystem& getInstance()
 	{

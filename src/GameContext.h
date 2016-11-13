@@ -20,18 +20,18 @@ private:
 	int FPSCount;
 	bool isFullScreen;
 
-public:
 	bool pause;
 
-	GameContext(): window(nullptr), screen(nullptr), windowTitle("The last city on Earth"), FPSCount(0), isFullScreen(false) { }
-
 	static void reshapeCallback(GLFWwindow* window, int width, int height);
+	void setWindowParameters();
+
+public:
+	GameContext() : window(nullptr), screen(nullptr), windowTitle("The last city on Earth"), FPSCount(0), isFullScreen(false) { }
 
 	int init();
 	int run();
-	void setScreen(Screen * screen);
 
-	void setWindowParameters();
+	void setScreen(Screen * screen);
 };
 
 #endif

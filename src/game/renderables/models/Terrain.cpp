@@ -112,22 +112,15 @@ bool Terrain::loadHeightMapFromImage(std::string imagePath)
 	rows = FreeImage_GetHeight(dib);
 	cols = FreeImage_GetWidth(dib);
 
-
-
 	terrainHeightValues.resize(rows);
 	for (int i = 0; i < rows; ++i) terrainHeightValues[i].resize(cols);
 
-	// We also require our image to be either 24-bit (classic RGB) or 8-bit (luminance)
 	if(bDataPointer == nullptr || rows == 0 || cols == 0 || (FreeImage_GetBPP(dib) != 24 && FreeImage_GetBPP(dib) != 16 && FreeImage_GetBPP(dib) != 8))
 		return false;
 
-	// How much to increase data pointer to get to next pixel data
 	unsigned int ptr_inc = FreeImage_GetBPP(dib) == 24 ? 3 : FreeImage_GetBPP(dib) == 16 ? 2 : 1;
-	// Length of one row in data
 	unsigned int row_step = ptr_inc*cols;
 
-	heightmapDataVBO.createVBO();
-	// All vertex data are here (there are rows*cols vertices in this heightmap), we will get to normals later
 	std::vector< std::vector< glm::vec3> > vertexData(rows, std::vector<glm::vec3>(cols));
 	std::vector< std::vector< glm::vec2> > coordsData(rows, std::vector<glm::vec2>(cols));
 
@@ -210,9 +203,6 @@ bool Terrain::loadHeightMapFromImage(std::string imagePath)
 	for(int i = 0; i < rows; ++i)
 	for(int j = 0; j < cols; ++j)
 	{
-		// Now we wanna calculate final normal for [i][j] vertex. We will have a look at all triangles this vertex is part of, and then we will make average vector
-		// of all adjacent triangles' normals
-
 		glm::vec3 finalNormal = glm::vec3(0.0f, 0.0f, 0.0f);
 
 		// Look for upper-left triangles
@@ -230,7 +220,7 @@ bool Terrain::loadHeightMapFromImage(std::string imagePath)
 		finalNormal.x += 0.00001f;
 		finalNormal = glm::normalize(finalNormal);
 
-		finalNormals[i][j] = finalNormal; // Store final normal of j-th vertex in i-th row
+		finalNormals[i][j] = finalNormal;
 	}
 
 	// First, create a VBO with only vertex data
@@ -239,11 +229,12 @@ bool Terrain::loadHeightMapFromImage(std::string imagePath)
 	{
 		for(int j = 0; j < cols; ++j)
 		{
-			heightmapDataVBO.addData(&vertexData[i][j], sizeof(glm::vec3)); // Add vertex
-			heightmapDataVBO.addData(&coordsData[i][j], sizeof(glm::vec2)); // Add tex. coord
-			heightmapDataVBO.addData(&finalNormals[i][j], sizeof(glm::vec3)); // Add normal
+			heightmapDataVBO.addData(&vertexData[i][j], sizeof(glm::vec3));
+			heightmapDataVBO.addData(&coordsData[i][j], sizeof(glm::vec2)); 
+			heightmapDataVBO.addData(&finalNormals[i][j], sizeof(glm::vec3));
 		}
 	}
+
 	// Now create a VBO with heightmap indices
 	heightmapIndicesVBO.createVBO();
 	int primitiveRestartIndex = rows*cols;
@@ -262,24 +253,23 @@ bool Terrain::loadHeightMapFromImage(std::string imagePath)
 
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
-	// Attach vertex data to this VAO
+
 	heightmapDataVBO.bindVBO();
 	heightmapDataVBO.uploadDataToGPU(GL_STATIC_DRAW);
 
-	// Vertex positions
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 2*sizeof(glm::vec3)+sizeof(glm::vec2), 0);
-	// Texture coordinates
+
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2*sizeof(glm::vec3)+sizeof(glm::vec2), (void*)sizeof(glm::vec3));
-	// Normal vectors
+
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 2*sizeof(glm::vec3)+sizeof(glm::vec2), (void*)(sizeof(glm::vec3)+sizeof(glm::vec2)));
 
-	// And now attach index data to this VAO
-	// Here don't forget to bind another type of VBO - the element array buffer, or simplier indices to vertices
 	heightmapIndicesVBO.bindVBO(GL_ELEMENT_ARRAY_BUFFER);
 	heightmapIndicesVBO.uploadDataToGPU(GL_STATIC_DRAW);
+
+	FreeImage_Unload(dib);
 
 	loaded = true; // If get here, we succeeded with generating heightmap
 	return true;
