@@ -200,6 +200,8 @@ void World::release()
 	staticObjects.clear();
 	enemyShipMissiles.clear();
 	cannonMissiles.clear();
+	for (auto texture : Texture::loadedTextures) texture.releaseTexture();
+	Texture::loadedTextures.erase(Texture::loadedTextures.begin(), Texture::loadedTextures.end());
 }
 
 void World::initCamera(GLFWwindow* window, int viewportWidth, int viewportHeight)

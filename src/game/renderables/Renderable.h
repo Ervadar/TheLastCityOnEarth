@@ -51,8 +51,7 @@ protected:
 	int indicesSize;
 
 private:
-	std::vector<Mesh> meshes;
-	static std::vector<Texture> loadedTextures;
+	std::vector<std::unique_ptr<Mesh>> meshes;
 	std::string directory;
 
 public:
@@ -84,7 +83,7 @@ public:
 	Renderable(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY);
 	Renderable(glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY, glm::vec3 translateVector);
 	Renderable() {};
-	virtual ~Renderable() {};
+	virtual ~Renderable();
 
 public:
 	void init(glm::vec3 position);
@@ -107,7 +106,7 @@ public:
 private:
 	void loadModel(std::string modelPath);
 	void processNode(aiNode* node, const aiScene* scene);
-	Mesh processMesh(aiMesh* mesh, const aiScene* scene);
+	std::unique_ptr<Mesh> processMesh(aiMesh* mesh, const aiScene* scene);
 	std::vector<Texture> loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName);
 };
 

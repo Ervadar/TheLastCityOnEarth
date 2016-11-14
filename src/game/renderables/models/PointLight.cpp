@@ -22,6 +22,11 @@ PointLight::PointLight(glm::vec3 position, float constant, float linear, float q
 	this->inUse = false;
 }
 
+PointLight::~PointLight()
+{
+	destroy();
+}
+
 void PointLight::init()
 {
 	GLfloat M_PI = glm::pi<GLfloat>();

@@ -1,6 +1,9 @@
 #include "Texture.h"
 #include <FreeImage.h>
 #include <iostream>
+#include <vector>
+
+std::vector<Texture> Texture::loadedTextures;
 
 Texture::Texture()
 {
@@ -10,12 +13,19 @@ Texture::Texture()
 
 Texture::~Texture()
 {
-	printf("DELETING TEXTURE\n");
-	releaseTexture();
 }
 
 bool Texture::loadTexture2D(std::string path, bool generateMipMaps)
 {
+	for (GLuint i = 0; i < loadedTextures.size(); ++i)
+	{
+		if (loadedTextures[i].path == path)
+		{
+			*this = loadedTextures[i];
+			return true;
+		}
+	}
+
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	FIBITMAP * dib;
 
@@ -71,6 +81,8 @@ bool Texture::loadTexture2D(std::string path, bool generateMipMaps)
 	mipMapsGenerated = generateMipMaps;
 
 	FreeImage_Unload(dib);
+
+	loadedTextures.push_back(*this);
 
 	return true;
 }

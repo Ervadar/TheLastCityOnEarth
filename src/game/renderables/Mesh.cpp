@@ -56,4 +56,9 @@ void Mesh::render(ShaderProgram shaderProgram)
 
 Mesh::~Mesh()
 {
+	glBindVertexArray(this->VAO);
+	glDeleteBuffers(1, &EBO);
+	glDeleteBuffers(1, &VBO);
+	glDeleteVertexArrays(1, &VAO);
+	glBindVertexArray(0);
 }

@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <string>
+#include <vector>
 
 enum textureFiltering
 {
@@ -31,6 +32,8 @@ private:
 	int minification, magnification;
 
 public:
+	static std::vector<Texture> loadedTextures;
+
 	std::string path;
 	std::string type;
 	GLuint texture;	// texture ID

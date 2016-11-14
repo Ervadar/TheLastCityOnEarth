@@ -5,8 +5,6 @@
 #include <FreeImage.h>
 #include "Sphere.h"
 
-std::vector<Texture> Renderable::loadedTextures;
-
 Renderable::Renderable(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 scaleVector, GLfloat rotateAngleX, GLfloat rotateAngleY, glm::vec3 rotateAxisX, glm::vec3 rotateAxisY)
 {
 	this->loadModel(modelPath);
@@ -19,6 +17,11 @@ Renderable::Renderable(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 s
 	this->loadModel(modelPath);
 	this->init(scaleVector, rotateAngleX, rotateAngleY, glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), translateVector);
 	this->stableModelMatrix = glm::scale(stableModelMatrix, scaleVector);
+}
+
+Renderable::~Renderable()
+{
+	destroy();
 }
 
 void Renderable::init(GLchar* modelPath, glm::vec3 translateVector, glm::vec3 scaleVector)
@@ -100,7 +103,7 @@ void Renderable::processNode(aiNode* node, const aiScene* scene)
 		this->processNode(node->mChildren[i], scene);
 	}
 }
-Mesh Renderable::processMesh(aiMesh* mesh, const aiScene* scene)
+std::unique_ptr<Mesh> Renderable::processMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<GLuint> indices;
@@ -154,7 +157,7 @@ Mesh Renderable::processMesh(aiMesh* mesh, const aiScene* scene)
 		textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	}
 
-	return Mesh(vertices, indices, textures);
+	return std::unique_ptr<Mesh>(new Mesh(vertices, indices, textures));
 }
 
 std::vector<Texture> Renderable::loadMaterialTextures(aiMaterial* material, aiTextureType type, std::string typeName)
@@ -165,25 +168,11 @@ std::vector<Texture> Renderable::loadMaterialTextures(aiMaterial* material, aiTe
 		aiString str;
 		material->GetTexture(type, i, &str);
 		std::string texturePath = "data/models/" + std::string(str.C_Str());
-		GLboolean textureAlreadyLoaded = false;
-		for (GLuint i = 0; i < loadedTextures.size(); ++i)
-		{
-			if (loadedTextures[i].path == texturePath)
-			{
-				textures.push_back(loadedTextures[i]);
-				textureAlreadyLoaded = true;
-				break;
-			}
-		}
-		if (!textureAlreadyLoaded)
-		{
-			Texture texture;
-			texture.loadTexture2D(texturePath, true);
-			texture.type = typeName;
-			texture.path = texturePath;
-			textures.push_back(texture);
-			loadedTextures.push_back(texture);
-		}
+		Texture texture;
+		texture.loadTexture2D(texturePath, true);
+		texture.type = typeName;
+		texture.path = texturePath;
+		textures.push_back(texture);
 	}
 	return textures;
 }
@@ -206,7 +195,7 @@ void Renderable::render(ShaderProgram & shaderProgram)
 	// Option1: rendering meshes
 	for (GLuint i = 0; i < this->meshes.size(); ++i)
 	{
-		this->meshes[i].render(shaderProgram);
+		this->meshes[i]->render(shaderProgram);
 	}
 	// Option2: custom rendering (customRender must be overriden)
 	customRender(shaderProgram);
@@ -220,10 +209,20 @@ void Renderable::render(ShaderProgram & shaderProgram)
 
 void Renderable::destroy()
 {
-	for (Renderable * subObject : subObjects)
-	{
-		subObject->destroy();
-	}
+	printf("deleting czunto light");
+
+	//glBindVertexArray(this->VAO);
+	//glDeleteBuffers(1, &vertexVBO);
+	//glDeleteBuffers(1, &uvVBO);
+	//glDeleteBuffers(1, &normalVBO);
+	//glDeleteBuffers(1, &elementVBO);
+	//glDeleteVertexArrays(1, &VAO);
+	//glBindVertexArray(0);
+
+	//for (Renderable * subObject : subObjects)
+	//{
+	//	subObject->destroy();
+	//}
 }
 
 BoundingSphere Renderable::getBoundingSphere()
