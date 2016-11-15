@@ -141,7 +141,7 @@ private:
 	GLdouble generationTimeAccumulator = 0.0f;
 
 public:
-	ParticleEmitter() {};
+	ParticleEmitter(ParticleEmitterData data);
 	~ParticleEmitter();
 
 	void init(ParticleEmitterData emitterData);

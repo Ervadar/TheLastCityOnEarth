@@ -55,6 +55,7 @@ private:
 	std::string directory;
 
 public:
+	GLuint id;
 	std::vector<AABB> boundingBoxes;
 	bool inUse;
 	bool castingShadow;
@@ -73,7 +74,7 @@ public:
 	glm::vec3 rotateAxisX;
 	glm::vec3 rotateAxisY;
 
-	std::vector<Renderable*> subObjects;
+	std::vector<std::shared_ptr<Renderable>> subObjects;
 
 	Texture texture;
 	std::string texName;

@@ -18,20 +18,20 @@ void ParticleEffect::init(std::string effectFilePath)
 
 void ParticleEffect::customRender(ShaderProgram & shaderProgram)
 {
-	for (ParticleEmitter& emitter : emitters)
+	for (auto& emitter : emitters)
 	{
-		emitter.render(shaderProgram);
+		emitter->render(shaderProgram);
 	}
 }
 
 void ParticleEffect::update(float deltaTime, Camera& camera)
 {
-	for (ParticleEmitter& emitter : emitters)
+	for (auto& emitter : emitters)
 	{
-		emitter.update(deltaTime, camera);
-		if (emitter.shouldBeDeactivated(timePassed))
+		emitter->update(deltaTime, camera);
+		if (emitter->shouldBeDeactivated(timePassed))
 		{
-			emitter.deactivate();
+			emitter->deactivate();
 		}
 	}
 	timePassed += deltaTime;
@@ -48,27 +48,27 @@ void ParticleEffect::destroy()
 
 void ParticleEffect::activate()
 {
-	for (ParticleEmitter& emitter : emitters)
+	for (auto& emitter : emitters)
 	{
-		emitter.activate();
+		emitter->activate();
 	}
 }
 
 GLuint ParticleEffect::getTotalParticleCount()
 {
 	GLuint totalParticleCount = 0;
-	for (ParticleEmitter& emitter : emitters)
+	for (auto& emitter : emitters)
 	{
-		totalParticleCount += emitter.getParticleCount();
+		totalParticleCount += emitter->getParticleCount();
 	}
 	return totalParticleCount;
 }
 
 GLboolean ParticleEffect::isAnyEmitterActive()
 {
-	for (ParticleEmitter& emitter : emitters)
+	for (auto& emitter : emitters)
 	{
-		if (emitter.isActive())
+		if (emitter->isActive())
 		{
 			return true;
 		}
@@ -85,7 +85,6 @@ void ParticleEffect::loadEffectFromFile(std::string effectFilePath)
 
 	for (unsigned int i = 0; i < jsonEmitters.size(); ++i)
 	{
-		ParticleEmitter emitter;
 		ParticleEmitterData data;
 		auto& jsonEmitter = jsonEmitters[i];
 		data.maxParticles = jsonEmitter["maxParticles"];
@@ -120,8 +119,7 @@ void ParticleEffect::loadEffectFromFile(std::string effectFilePath)
 		data.color.initialValue = data.getVec4FromJson(jsonEmitter["particleColor"]);
 		data.color.timeline = std::move(data.loadVec4TimelineFromJson(jsonEmitter["particleColor"]));
 
-		emitter.init(data);
-		emitters.push_back(emitter);
+		emitters.push_back(std::move(std::make_unique<ParticleEmitter>(data)));
 	}
 
 	effectFile.close();

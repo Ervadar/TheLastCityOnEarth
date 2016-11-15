@@ -107,11 +107,19 @@ void Sphere::init()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementVBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLushort), &indices[0], GL_STATIC_DRAW);
 
+
 	// Load textures
 	texture.loadTexture2D("data/textures/" + texName, true);
 	texture.setFiltering(TEXTURE_FILTER_MAG_BILINEAR, TEXTURE_FILTER_MIN_BILINEAR_MIPMAP);
 	texture.setSamplerParameter(GL_TEXTURE_MAX_ANISOTROPY_EXT, 4);
 	stableModelMatrix = glm::scale(glm::mat4(1.0f), scaleVector);
+
+	glBindVertexArray(0);
+
+	std::vector<GLfloat>().swap(vertices);
+	std::vector<GLfloat>().swap(textureCoords);
+	std::vector<GLfloat>().swap(normals);
+	std::vector<GLushort>().swap(indices);
 }
 
 void Sphere::customRender(ShaderProgram & shaderProgram)
@@ -125,7 +133,6 @@ void Sphere::customRender(ShaderProgram & shaderProgram)
 	texture.bindTexture();
 
 	glBindVertexArray(VAO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementVBO);
 
 	glDrawElements(GL_TRIANGLES, indicesSize, GL_UNSIGNED_SHORT, 0);
 

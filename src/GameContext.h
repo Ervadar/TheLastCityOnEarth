@@ -22,6 +22,8 @@ private:
 
 	bool pause;
 
+	int state = 0;
+
 	static void reshapeCallback(GLFWwindow* window, int width, int height);
 	void setWindowParameters();
 

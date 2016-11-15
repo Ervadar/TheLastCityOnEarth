@@ -1,5 +1,10 @@
 #include "ShadowMapper.h"
 
+ShadowMapper::~ShadowMapper()
+{
+	destroy();
+}
+
 void ShadowMapper::init(GLsizei shadowWidth, GLsizei shadowHeight)
 {
 	this->shadowWidth = shadowWidth;
@@ -32,4 +37,14 @@ void ShadowMapper::init(GLsizei shadowWidth, GLsizei shadowHeight)
 	depthShaderProgram.addShaderToProgram(&depthFragmentShader);
 	depthShaderProgram.linkProgram();
 
+}
+
+void ShadowMapper::destroy()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
+	depthShaderProgram.deleteProgram();
+	depthVertexShader.deleteShader();
+	depthFragmentShader.deleteShader();
+	glDeleteTextures(1, &depthMap);
+	glDeleteFramebuffers(1, &shadowMapFBO);
 }

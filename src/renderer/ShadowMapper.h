@@ -29,9 +29,10 @@ public:
 
 public:
 	ShadowMapper() {};
-	~ShadowMapper() {};
+	~ShadowMapper();
 
 	void init(GLsizei shadowWidth, GLsizei shadowHeight);
+	void destroy();
 };
 
 #endif

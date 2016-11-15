@@ -177,6 +177,7 @@ void ForceShield::update(float deltaTime)
 
 void ForceShield::destroy()
 {
+	glDeleteBuffers(1, &innerElementVBO);
 }
 
 void ForceShield::reduceHealthPoints(GLint reducedHealthPoints)

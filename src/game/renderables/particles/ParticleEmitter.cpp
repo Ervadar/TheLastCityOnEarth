@@ -7,9 +7,14 @@ extern std::mt19937 rng;
 
 const glm::vec3 ParticleEmitter::GRAVITY = glm::vec3(0.0f, -10.0f, 0.0f);
 
+ParticleEmitter::ParticleEmitter(ParticleEmitterData data)
+{
+	init(data);
+}
+
 ParticleEmitter::~ParticleEmitter()
 {
-
+	destroy();
 }
 
 void ParticleEmitter::init(ParticleEmitterData emitterData)
@@ -226,6 +231,14 @@ void ParticleEmitter::update(float deltaTime, Camera& camera)
 
 void ParticleEmitter::destroy()
 {
+	glBindVertexArray(VAO);
+	glDeleteBuffers(1, &vertexVBO);
+	glDeleteBuffers(1, &uvBuffer);
+	glDeleteBuffers(1, &positionBuffer);
+	glDeleteBuffers(1, &colorBuffer);
+	glDeleteBuffers(1, &rotationBuffer);
+	glDeleteVertexArrays(1, &VAO);
+	glBindVertexArray(0);
 }
 
 int ParticleEmitter::findUnusedParticle()

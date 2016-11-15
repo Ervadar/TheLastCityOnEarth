@@ -209,20 +209,13 @@ void Renderable::render(ShaderProgram & shaderProgram)
 
 void Renderable::destroy()
 {
-	printf("deleting czunto light");
-
-	//glBindVertexArray(this->VAO);
-	//glDeleteBuffers(1, &vertexVBO);
-	//glDeleteBuffers(1, &uvVBO);
-	//glDeleteBuffers(1, &normalVBO);
-	//glDeleteBuffers(1, &elementVBO);
-	//glDeleteVertexArrays(1, &VAO);
-	//glBindVertexArray(0);
-
-	//for (Renderable * subObject : subObjects)
-	//{
-	//	subObject->destroy();
-	//}
+	glBindVertexArray(this->VAO);
+	glDeleteBuffers(1, &vertexVBO);
+	glDeleteBuffers(1, &uvVBO);
+	glDeleteBuffers(1, &normalVBO);
+	glDeleteBuffers(1, &elementVBO);
+	glDeleteVertexArrays(1, &VAO);
+	glBindVertexArray(0);
 }
 
 BoundingSphere Renderable::getBoundingSphere()

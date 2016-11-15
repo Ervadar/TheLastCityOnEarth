@@ -126,7 +126,7 @@ void WorldRenderer::render(Renderable * object, Camera & camera, ShaderProgram &
 {
 	if (object->hasSubObjects())
 	{
-		for (Renderable * subObject : object->subObjects) render(subObject, camera, shaderProgram, matrixUniformFunction);
+		for (auto subObject : object->subObjects) render(subObject.get(), camera, shaderProgram, matrixUniformFunction);
 	}
 	(this->*matrixUniformFunction)(object, camera, shaderProgram);
 	object->render(shaderProgram);
@@ -261,5 +261,9 @@ void WorldRenderer::setParticleShaderMatricesAndUniforms(Renderable * renderable
 void WorldRenderer::release()
 {
 	shaderProgram.deleteProgram();
+	skyboxShaderProgram.deleteProgram();
 	terrainShaderProgram.deleteProgram();
+	screenShaderProgram.deleteProgram(); 
+	colorShaderProgram.deleteProgram(); 
+	particleShaderProgram.deleteProgram();
 }

@@ -6,6 +6,7 @@
 
 void GameScreen::init()
 {
+	printf("INITING GS\n");
 	glfwGetWindowSize(window, &windowWidth, &windowHeight);
 
 	showingInstructions = false;
@@ -41,6 +42,7 @@ void GameScreen::init()
 
 void GameScreen::release()
 {
+	textShaderProgram.deleteProgram();
 	world->release();
 	renderer->release();
 }
@@ -263,10 +265,6 @@ void GameScreen::checkMenuInputs()
 		{
 			world->reset();
 		}
-	}
-	if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
-	{
-
 	}
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{

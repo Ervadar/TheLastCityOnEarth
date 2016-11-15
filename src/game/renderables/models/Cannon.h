@@ -11,9 +11,9 @@ public:
 	enum class Status{ READY, SHOOTING, LOADING };
 	Status status;
 
-	std::unique_ptr<Sphere> cannonSphere;
-	std::unique_ptr<Cylinder> barrel;
-	std::unique_ptr<Cylinder> movingBarrel;
+	std::shared_ptr<Sphere> cannonSphere;
+	std::shared_ptr<Cylinder> barrel;
+	std::shared_ptr<Cylinder> movingBarrel;
 
 	glm::vec3 cannonInitialDirectionVector;
 	glm::vec3 cannonDirectionVector;
@@ -39,7 +39,7 @@ public:
 	float loadingSpeed;
 
 	Cannon();
-	virtual ~Cannon() {};
+	virtual ~Cannon();
 
 	void init();
 	void update(float deltaTime);

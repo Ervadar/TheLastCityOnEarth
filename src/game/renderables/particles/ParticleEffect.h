@@ -8,7 +8,7 @@
 class ParticleEffect : public Renderable
 {
 private:
-	std::vector<ParticleEmitter> emitters;
+	std::vector<std::unique_ptr<ParticleEmitter>> emitters;
 	float timePassed = 0.0f;
 
 public:

@@ -102,6 +102,7 @@ void Text::update(float deltaTime)
 
 void Text::destroy()
 {
+	texture.releaseTexture();
 }
 
 void Text::calculateTextSize()

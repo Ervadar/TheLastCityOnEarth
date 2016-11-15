@@ -85,12 +85,14 @@ int GameContext::run()
 
 			lastTime = currentTime;
 
-			if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+			if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS && state != 1)
 			{
+				state = 1;
 				setScreen(new MainMenuScreen(window));
 			}
-			if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS)
+			if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS && state != 2)
 			{
+				state = 2;
 				setScreen(new GameScreen(window));
 			}
 
@@ -114,6 +116,7 @@ void GameContext::setScreen(Screen * screen)
 		delete this->screen;
 	}
 	this->screen = screen;
+	printf("EEE init?\n");
 	this->screen->init();
 }
 
