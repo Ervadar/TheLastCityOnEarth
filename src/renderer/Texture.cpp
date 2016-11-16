@@ -21,16 +21,8 @@ bool Texture::loadTexture2D(std::string path, bool generateMipMaps)
 	{
 		if (loadedTextures[i].path == path)
 		{
-			printf("%d %s - %s\n", loadedTextures.size(), loadedTextures[i].path.c_str(), path.c_str());
 			*this = loadedTextures[i];
 			return true;
-		}
-		else
-		{
-			if (this->path == "data/models/enemyship.png")
-			{
-				printf("wrong");
-			}
 		}
 	}
 
@@ -49,7 +41,6 @@ bool Texture::loadTexture2D(std::string path, bool generateMipMaps)
 		dib = FreeImage_Load(fif, path.c_str());
 	if (!dib)
 	{
-		FreeImage_Unload(dib);
 		return false;
 	}
 	
@@ -90,12 +81,6 @@ bool Texture::loadTexture2D(std::string path, bool generateMipMaps)
 
 	FreeImage_Unload(dib);
 
-	if (this->path == "data/models/enemyship.png")
-	{
-		printf("this ");
-	}
-
-	printf("pushing: %s\n", this->path.c_str());
 	loadedTextures.push_back(*this);
 
 	return true;

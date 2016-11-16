@@ -6,7 +6,6 @@
 
 void GameScreen::init()
 {
-	printf("INITING GS\n");
 	glfwGetWindowSize(window, &windowWidth, &windowHeight);
 
 	showingInstructions = false;

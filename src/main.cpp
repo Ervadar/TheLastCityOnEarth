@@ -1,3 +1,4 @@
+#include <vld.h> 
 #include "GameContext.h"
 #include <random>
 #include <time.h>

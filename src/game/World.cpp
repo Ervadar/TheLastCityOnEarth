@@ -202,6 +202,7 @@ void World::release()
 	cannonMissiles.clear();
 	for (auto texture : Texture::loadedTextures) texture.releaseTexture();
 	Texture::loadedTextures.erase(Texture::loadedTextures.begin(), Texture::loadedTextures.end());
+	std::vector<Texture>().swap(Texture::loadedTextures);
 }
 
 void World::initCamera(GLFWwindow* window, int viewportWidth, int viewportHeight)

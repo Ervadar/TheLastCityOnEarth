@@ -42,9 +42,9 @@ void ShadowMapper::init(GLsizei shadowWidth, GLsizei shadowHeight)
 void ShadowMapper::destroy()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowMapFBO);
-	depthShaderProgram.deleteProgram();
 	depthVertexShader.deleteShader();
 	depthFragmentShader.deleteShader();
+	depthShaderProgram.deleteProgram();
 	glDeleteTextures(1, &depthMap);
 	glDeleteFramebuffers(1, &shadowMapFBO);
 }

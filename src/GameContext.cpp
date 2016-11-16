@@ -1,5 +1,6 @@
 #include "GameContext.h"
 
+#include <vld.h> 
 #include <iostream>
 #include "GameScreen.h"
 #include "MainMenuScreen.h"
@@ -70,6 +71,22 @@ int GameContext::run()
 			// Clear the screen
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+			if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+			{
+				glfwSetWindowShouldClose(window, GL_TRUE);
+			}
+			if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS && state != 1)
+			{
+				state = 1;
+				setScreen(new MainMenuScreen(window));
+				VLDReportLeaks();
+			}
+			if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS && state != 2)
+			{
+				state = 2;
+				setScreen(new GameScreen(window));
+			}
+
 			screen->update(deltaTime);
 
 			screen->render();
@@ -84,17 +101,6 @@ int GameContext::run()
 			}
 
 			lastTime = currentTime;
-
-			if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS && state != 1)
-			{
-				state = 1;
-				setScreen(new MainMenuScreen(window));
-			}
-			if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS && state != 2)
-			{
-				state = 2;
-				setScreen(new GameScreen(window));
-			}
 
 			glfwSwapBuffers(window);
 			glfwPollEvents();
@@ -116,7 +122,6 @@ void GameContext::setScreen(Screen * screen)
 		delete this->screen;
 	}
 	this->screen = screen;
-	printf("EEE init?\n");
 	this->screen->init();
 }
 
