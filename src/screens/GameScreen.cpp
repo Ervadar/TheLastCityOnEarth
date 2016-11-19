@@ -63,7 +63,7 @@ void GameScreen::render()
 	{
 		std::string text = "The shield has been breached./";
 		text += "Humanity is hopeless now.//";
-		text += "You lasted for " + std::to_string(world->timePassed) + " seconds./";
+		text += "You lasted for " + std::to_string(static_cast<int>(world->timePassed)) + " seconds./";
 		text += "Press R to restart.";
 		gameFinishedText.setTextValue(text);
 		gameFinishedText.render((int)(windowWidth / 2 - (gameFinishedText.textWidthInChars*0.5f) * 32),

@@ -1,6 +1,5 @@
 #include "GameContext.h"
 
-#include <vld.h> 
 #include <iostream>
 #include "GameScreen.h"
 #include "MainMenuScreen.h"
@@ -31,6 +30,7 @@ int GameContext::init()
 	GLFWmonitor * monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode * desktop = glfwGetVideoMode(monitor);
 
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 	window = glfwCreateWindow(desktop->width, desktop->height, windowTitle, nullptr, nullptr);
 
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
@@ -74,17 +74,6 @@ int GameContext::run()
 			if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 			{
 				glfwSetWindowShouldClose(window, GL_TRUE);
-			}
-			if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS && state != 1)
-			{
-				state = 1;
-				setScreen(new MainMenuScreen(window));
-				VLDReportLeaks();
-			}
-			if (glfwGetKey(window, GLFW_KEY_Y) == GLFW_PRESS && state != 2)
-			{
-				state = 2;
-				setScreen(new GameScreen(window));
 			}
 
 			screen->update(deltaTime);
