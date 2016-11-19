@@ -6,14 +6,26 @@
 
 #include <fstream>
 
-void ParticleEffect::init(std::string effectFilePath)
+std::map<std::string, std::vector<ParticleEmitterData>> ParticleEffect::loadedEmitters;
+
+ParticleEffect::ParticleEffect(std::string effectName, float scale)
+{
+	init(effectName, scale);
+}
+
+void ParticleEffect::init(std::string effectName, float scale)
 {
 	color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
 
 	inUse = false;
-	this->Renderable::init(glm::vec3(0.0f), glm::vec3(10.0f));
+	this->Renderable::init(glm::vec3(0.0f), glm::vec3(scale));
+	
+	auto& effectEmittersData = ParticleEffect::loadedEmitters[effectName];
 
-	loadEffectFromFile(effectFilePath);
+	for (auto& emitterData : effectEmittersData)
+	{
+		emitters.push_back(std::move(std::make_unique<ParticleEmitter>(emitterData)));
+	}
 }
 
 void ParticleEffect::customRender(ShaderProgram & shaderProgram)
@@ -76,9 +88,9 @@ GLboolean ParticleEffect::isAnyEmitterActive()
 	return false;
 }
 
-void ParticleEffect::loadEffectFromFile(std::string effectFilePath)
+void ParticleEffect::loadEffectFromFile(std::string effectName)
 {
-	std::ifstream effectFile(effectFilePath);
+	std::ifstream effectFile("data/particles/" + effectName + ".json");
 	nlohmann::json json(effectFile);
 
 	auto& jsonEmitters = json["particleEmitters"];
@@ -119,7 +131,8 @@ void ParticleEffect::loadEffectFromFile(std::string effectFilePath)
 		data.color.initialValue = data.getVec4FromJson(jsonEmitter["particleColor"]);
 		data.color.timeline = std::move(data.loadVec4TimelineFromJson(jsonEmitter["particleColor"]));
 
-		emitters.push_back(std::move(std::make_unique<ParticleEmitter>(data)));
+		loadedEmitters[effectName].push_back(data);
+		//emitters.push_back(std::move(std::make_unique<ParticleEmitter>(data)));
 	}
 
 	effectFile.close();

@@ -13,10 +13,10 @@ private:
 	float timePassed = 0.0f;
 
 public:
-	ParticleEffect() {};
+	ParticleEffect(std::string effectName, float scale);
 	virtual ~ParticleEffect() {};
 
-	void init(std::string effectFilePath);
+	void init(std::string effectName, float scale);
 	virtual void customRender(ShaderProgram & shaderProgram);
 	void update(float deltaTime, Camera& camera);
 	void destroy();
@@ -25,7 +25,7 @@ public:
 
 	GLuint getTotalParticleCount();
 	GLboolean isAnyEmitterActive();
-	void loadEffectFromFile(std::string effectFilePath);
+	static void loadEffectFromFile(std::string effectName);
 };
 
 #endif

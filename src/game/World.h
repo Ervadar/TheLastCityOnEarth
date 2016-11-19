@@ -42,8 +42,8 @@ public:
 	static const GLuint ENEMY_SHIP_MISSILES_POOL_SIZE = 40;
 	std::vector<std::unique_ptr<Missile>> enemyShipMissiles;
 
-	static const GLuint EXPLOSION_POOL_SIZE = 10;
-	std::vector<std::unique_ptr<ParticleEffect>> explosions;
+	static const GLuint SINGLE_EFFECT_TYPE_POOL_SIZE = 40;
+	std::map<std::string, std::vector<std::unique_ptr<ParticleEffect>>> particleEffects;
 
 	// Objects
 	std::vector<std::unique_ptr<Renderable>> staticObjects;
@@ -98,8 +98,7 @@ public:
 
 	// Game functions
 	void spawnEnemyShip();
-	void spawnExplosion(glm::vec3 position);
-	void spawnMissile(Missile * missile);
+	void spawnParticleEffect(std::string effectName, glm::vec3 position);
 	void shootCannonMissile();
 
 	void reset();

@@ -126,11 +126,12 @@ void World::init()
 
 	lightManager.init();
 
+	ParticleEffect::loadEffectFromFile("explosion");
+
 	// Init explosion pool
-	for (GLuint i = 0; i < EXPLOSION_POOL_SIZE; ++i)
+	for (GLuint i = 0; i < SINGLE_EFFECT_TYPE_POOL_SIZE; ++i)
 	{
-		explosions.push_back(std::move(std::unique_ptr<ParticleEffect>(new ParticleEffect())));
-		explosions[i]->init("data/particles/explosion.json");
+		particleEffects["ship_hit"].push_back(std::move(std::make_unique<ParticleEffect>("explosion", 10.0f)));
 	}
 }
 
@@ -168,10 +169,14 @@ void World::update(GLfloat deltaTime)
 
 	checkCollisions();
 
-	// Updating explosions
-	for (GLuint i = 0; i < EXPLOSION_POOL_SIZE; ++i)
+	// Updating particle effects
+	for (auto& mapPair : particleEffects)
 	{
-		if (explosions[i]->inUse) explosions[i]->update(deltaTime, camera);
+		auto& singleEffectPool = mapPair.second;
+		for (GLuint i = 0; i < singleEffectPool.size(); ++i)
+		{
+			if (singleEffectPool[i]->inUse) singleEffectPool[i]->update(deltaTime, camera);
+		}
 	}
 
 	// Spawning enemy ships
@@ -235,7 +240,7 @@ void World::checkMissileBoundaryCollisions(std::vector<std::unique_ptr<Missile>>
 		if (!missile->inUse) continue;
 		if (glm::abs(missile->translateVector.x) > 2000.0f || glm::abs(missile->translateVector.y) > 2000.0f || glm::abs(missile->translateVector.z) > 2000.0f)
 		{
-			spawnExplosion(missile->translateVector);
+			spawnParticleEffect("ship_hit", missile->translateVector);
 			missile->destroy();
 		}
 	}
@@ -257,7 +262,7 @@ void World::checkMissileEnemyShipCollisions(std::vector<std::unique_ptr<Missile>
 				{
 					enemyShip->destroy();
 				}
-				spawnExplosion(missile->translateVector);
+				spawnParticleEffect("ship_hit", missile->translateVector);
 				SoundSystem::getInstance().playSound("data/sounds/enemyShipHit.wav", missile->translateVector);
 				missile->destroy();
 				break;
@@ -272,7 +277,7 @@ void World::checkMissileForceShieldCollisions(std::vector<std::unique_ptr<Missil
 		if (!missile->inUse) continue;
 		if (missileCollidesWithObject(missile.get(), forceShield.get()))
 		{
-			spawnExplosion(missile->translateVector);
+			spawnParticleEffect("ship_hit", missile->translateVector);
 			forceShield->reduceHealthPoints(missile->strength);
 			SoundSystem::getInstance().playSound("data/sounds/shieldHit.wav", missile->translateVector);
 			missile->destroy();
@@ -286,7 +291,7 @@ void World::checkMissileTerrainCollisions(std::vector<std::unique_ptr<Missile>>&
 		if (!missile->inUse) continue;
 		if (missile->translateVector.y < terrain.getTerrainHeight(missile->translateVector.x, missile->translateVector.z))
 		{
-			spawnExplosion(missile->translateVector);
+			spawnParticleEffect("ship_hit", missile->translateVector);
 			SoundSystem::getInstance().playSound("data/sounds/enemyShipHit.wav", missile->translateVector);
 			missile->destroy();
 		}
@@ -340,22 +345,16 @@ void World::spawnEnemyShip()
 	}
 }
 
-void World::spawnExplosion(glm::vec3 position)
+void World::spawnParticleEffect(std::string effectName, glm::vec3 position)
 {
-	for (GLuint i = 0; i < EXPLOSION_POOL_SIZE; ++i)
+	auto& singleEffectPool = particleEffects[effectName];
+	for (GLuint i = 0; i < singleEffectPool.size(); ++i)
 	{
-		if (!explosions[i]->inUse)
+		if (!singleEffectPool[i]->inUse)
 		{
-			explosions[i]->translateVector = position;
-			explosions[i]->inUse = true;
-			explosions[i]->activate();
-			//explosions[i]->pointLight = lightManager.createPointLight(
-			//	position,
-			//	0.1f, 0.0014f, 0.000007f,
-			//	glm::vec3(1.0f, 153.0f / 255.0f, 0.0f),
-			//	glm::vec3(1.0f, 153.0f / 255.0f, 0.0f),
-			//	glm::vec3(0.3f, 0.3f, 0.0f)
-			//	);
+			singleEffectPool[i]->translateVector = position;
+			singleEffectPool[i]->inUse = true;
+			singleEffectPool[i]->activate();
 			return;
 		}
 	}
@@ -393,7 +392,14 @@ void World::reset()
 	for (auto& enemyShip : enemyShips) enemyShip->destroy();
 	for (auto& cannonMissile : cannonMissiles) cannonMissile->inUse = false;
 	for (auto& enemyShipMissile : enemyShipMissiles) enemyShipMissile->inUse = false;
-	for (GLuint i = 0; i < explosions.size(); ++i) explosions[i]->inUse = false;
+	for (auto& mapPair : particleEffects)
+	{
+		auto& singleEffectPool = mapPair.second;
+		for (GLuint i = 0; i < singleEffectPool.size(); ++i)
+		{
+			if (singleEffectPool[i]->inUse) singleEffectPool[i]->inUse = false;
+		}
+	}
 	for (GLuint i = 0; i < lightManager.pointLights.size(); ++i) lightManager.pointLights[i]->inUse = false;
 	timePassed = 0.0f;
 	enemyShipSpawnTime = maxEnemyShipSpawnTime;

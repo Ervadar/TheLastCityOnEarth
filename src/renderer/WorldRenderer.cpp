@@ -61,11 +61,15 @@ void WorldRenderer::render()
 
 	// PARTICLE EFFECTS
 	particleShaderProgram.useProgram();
-	for (GLuint i = 0; i < world.EXPLOSION_POOL_SIZE; ++i)
+	for (auto& mapPair : world.particleEffects)
 	{
-		if (world.explosions[i]->inUse)
+		auto& singleEffectPool = mapPair.second;
+		for (GLuint i = 0; i < singleEffectPool.size(); ++i)
 		{
-			render(world.explosions[i].get(), camera, particleShaderProgram, &WorldRenderer::setParticleShaderMatricesAndUniforms);
+			if (singleEffectPool[i]->inUse)
+			{
+				render(singleEffectPool[i].get(), camera, particleShaderProgram, &WorldRenderer::setParticleShaderMatricesAndUniforms);
+			}
 		}
 	}
 }
