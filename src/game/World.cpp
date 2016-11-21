@@ -126,12 +126,17 @@ void World::init()
 
 	lightManager.init();
 
-	ParticleEffect::loadEffectFromFile("explosion");
+	ParticleEffect::loadEffectFromFile("missile_explosion");
+	ParticleEffect::loadEffectFromFile("ship_explosion");
 
 	// Init explosion pool
 	for (GLuint i = 0; i < SINGLE_EFFECT_TYPE_POOL_SIZE; ++i)
 	{
-		particleEffects["ship_hit"].push_back(std::move(std::make_unique<ParticleEffect>("explosion", 10.0f)));
+		particleEffects["missile_explosion"].push_back(std::move(std::make_unique<ParticleEffect>("missile_explosion")));
+	}
+	for (GLuint i = 0; i < SINGLE_EFFECT_TYPE_POOL_SIZE; ++i)
+	{
+		particleEffects["ship_explosion"].push_back(std::move(std::make_unique<ParticleEffect>("ship_explosion")));
 	}
 }
 
@@ -240,7 +245,7 @@ void World::checkMissileBoundaryCollisions(std::vector<std::unique_ptr<Missile>>
 		if (!missile->inUse) continue;
 		if (glm::abs(missile->translateVector.x) > 2000.0f || glm::abs(missile->translateVector.y) > 2000.0f || glm::abs(missile->translateVector.z) > 2000.0f)
 		{
-			spawnParticleEffect("ship_hit", missile->translateVector);
+			spawnParticleEffect("missile_explosion", missile->translateVector);
 			missile->destroy();
 		}
 	}
@@ -260,9 +265,10 @@ void World::checkMissileEnemyShipCollisions(std::vector<std::unique_ptr<Missile>
 				enemyShip->reduceHealthPoints(missileStrength);
 				if (enemyShip->healthPoints == 0)
 				{
+					spawnParticleEffect("ship_explosion", enemyShip->translateVector);
 					enemyShip->destroy();
 				}
-				spawnParticleEffect("ship_hit", missile->translateVector);
+				spawnParticleEffect("missile_explosion", missile->translateVector);
 				SoundSystem::getInstance().playSound("data/sounds/enemyShipHit.wav", missile->translateVector);
 				missile->destroy();
 				break;
@@ -277,7 +283,7 @@ void World::checkMissileForceShieldCollisions(std::vector<std::unique_ptr<Missil
 		if (!missile->inUse) continue;
 		if (missileCollidesWithObject(missile.get(), forceShield.get()))
 		{
-			spawnParticleEffect("ship_hit", missile->translateVector);
+			spawnParticleEffect("missile_explosion", missile->translateVector);
 			forceShield->reduceHealthPoints(missile->strength);
 			SoundSystem::getInstance().playSound("data/sounds/shieldHit.wav", missile->translateVector);
 			missile->destroy();
@@ -291,7 +297,7 @@ void World::checkMissileTerrainCollisions(std::vector<std::unique_ptr<Missile>>&
 		if (!missile->inUse) continue;
 		if (missile->translateVector.y < terrain.getTerrainHeight(missile->translateVector.x, missile->translateVector.z))
 		{
-			spawnParticleEffect("ship_hit", missile->translateVector);
+			spawnParticleEffect("missile_explosion", missile->translateVector);
 			SoundSystem::getInstance().playSound("data/sounds/enemyShipHit.wav", missile->translateVector);
 			missile->destroy();
 		}

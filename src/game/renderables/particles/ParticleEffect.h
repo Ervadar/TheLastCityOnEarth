@@ -13,10 +13,10 @@ private:
 	float timePassed = 0.0f;
 
 public:
-	ParticleEffect(std::string effectName, float scale);
+	ParticleEffect(std::string effectName);
 	virtual ~ParticleEffect() {};
 
-	void init(std::string effectName, float scale);
+	void init(std::string effectName);
 	virtual void customRender(ShaderProgram & shaderProgram);
 	void update(float deltaTime, Camera& camera);
 	void destroy();

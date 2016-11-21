@@ -8,17 +8,17 @@
 
 std::map<std::string, std::vector<ParticleEmitterData>> ParticleEffect::loadedEmitters;
 
-ParticleEffect::ParticleEffect(std::string effectName, float scale)
+ParticleEffect::ParticleEffect(std::string effectName)
 {
-	init(effectName, scale);
+	init(effectName);
 }
 
-void ParticleEffect::init(std::string effectName, float scale)
+void ParticleEffect::init(std::string effectName)
 {
 	color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
 
 	inUse = false;
-	this->Renderable::init(glm::vec3(0.0f), glm::vec3(scale));
+	this->Renderable::init(glm::vec3(0.0f), glm::vec3(1.0f));
 	
 	auto& effectEmittersData = ParticleEffect::loadedEmitters[effectName];
 
