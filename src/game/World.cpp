@@ -128,6 +128,7 @@ void World::init()
 
 	ParticleEffect::loadEffectFromFile("missile_explosion");
 	ParticleEffect::loadEffectFromFile("ship_explosion");
+	ParticleEffect::loadEffectFromFile("shield_hit");
 
 	// Init explosion pool
 	for (GLuint i = 0; i < SINGLE_EFFECT_TYPE_POOL_SIZE; ++i)
@@ -138,12 +139,17 @@ void World::init()
 	{
 		particleEffects["ship_explosion"].push_back(std::move(std::make_unique<ParticleEffect>("ship_explosion")));
 	}
+	for (GLuint i = 0; i < SINGLE_EFFECT_TYPE_POOL_SIZE; ++i)
+	{
+		particleEffects["shield_hit"].push_back(std::move(std::make_unique<ParticleEffect>("shield_hit")));
+	}
 }
 
 void World::update(GLfloat deltaTime)
 {
 	// Update sun
 	sunRotateAxisX = glm::vec3(glm::rotate(glm::mat4(1.0f), sunRotateAngleY, glm::vec3(0.0f, 1.0f, 0.0f)) * glm::vec4(1.0f, 0.0f, 0.0f, 1.0f));
+	sunRotateAngleY = std::fmod(sunRotateAngleY + deltaTime*5.0f, 360.0f);
 	sunDirection = glm::vec3(
 		glm::rotate(glm::mat4(1.0f), sunRotateAngleX, sunRotateAxisX) *
 		glm::rotate(glm::mat4(1.0f), sunRotateAngleY, glm::vec3(0.0f, 1.0f, 0.0f)) *
@@ -283,7 +289,7 @@ void World::checkMissileForceShieldCollisions(std::vector<std::unique_ptr<Missil
 		if (!missile->inUse) continue;
 		if (missileCollidesWithObject(missile.get(), forceShield.get()))
 		{
-			spawnParticleEffect("missile_explosion", missile->translateVector);
+			spawnParticleEffect("shield_hit", missile->translateVector);
 			forceShield->reduceHealthPoints(missile->strength);
 			SoundSystem::getInstance().playSound("data/sounds/shieldHit.wav", missile->translateVector);
 			missile->destroy();

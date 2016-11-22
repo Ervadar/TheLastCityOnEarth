@@ -156,7 +156,7 @@
       },
       "particleColor": {
         "initial": [ 1, 0.1, 0.2, 0.8 ],
-        "timeline": [ ]
+        "timeline": [ {"t": 0.3, "v": [ 1, 0.1, 0.2, 0.1 ] } ]
       }
     },
 	{
