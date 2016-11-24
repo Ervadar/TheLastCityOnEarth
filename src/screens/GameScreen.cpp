@@ -48,6 +48,7 @@ void GameScreen::release()
 
 void GameScreen::render()
 {
+	// RENDERING WORLD
 	renderer->render();
 
 	// TEXT

@@ -18,7 +18,7 @@ int GameContext::init()
 	if (!glfwInit())
 	{
 		std::cout << "Failed to initialize GLFW\n";
-		return -1;
+		return 0;
 	}
 
 	glfwWindowHint(GLFW_SAMPLES, 4);
@@ -33,13 +33,13 @@ int GameContext::init()
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
 	window = glfwCreateWindow(desktop->width, desktop->height, windowTitle, nullptr, nullptr);
 
-	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
-
 	if (!window)
 	{
 		glfwTerminate();
-		return -1;
+		return 0;
 	}
+
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, 1);
 
 	glfwMakeContextCurrent(window);
 
@@ -48,7 +48,7 @@ int GameContext::init()
 	if (glewInit() != GLEW_OK)
 	{
 		std::cout << "Failed to initialize GLEW\n";
-		return -1;
+		return 0;
 	}
 
 	setWindowParameters();

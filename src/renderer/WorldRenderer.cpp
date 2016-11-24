@@ -90,7 +90,6 @@ void WorldRenderer::renderObjectsCastingShadows(Camera & camera, ShaderProgram &
 		if (enemyShip->inUse && enemyShip->castingShadow) render(enemyShip.get(), camera, shaderProgram, matrixUniformFunction);
 	}
 	if (world.cannon->castingShadow) render(world.cannon.get(), camera, shaderProgram, matrixUniformFunction);
-	if (world.forceShield->castingShadow) render(world.forceShield.get(), camera, shaderProgram, matrixUniformFunction);
 }
 
 void WorldRenderer::renderObjects(Camera & camera, ShaderProgram & shaderProgram, matrixUniformFunction matrixUniformFunction)

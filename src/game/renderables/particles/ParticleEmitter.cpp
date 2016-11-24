@@ -159,7 +159,7 @@ void ParticleEmitter::update(float deltaTime, Camera& camera)
 	// Updating particles
 	particleCount = 0;
 
-	for (int i = 0; i < emitterData.maxParticles; ++i)
+	for (unsigned int i = 0; i < emitterData.maxParticles; ++i)
 	{
 		Particle& p = particles[i];
 
@@ -243,7 +243,7 @@ void ParticleEmitter::destroy()
 
 int ParticleEmitter::findUnusedParticle()
 {
-	for (int i = lastUsedParticle; i < emitterData.maxParticles; ++i)
+	for (unsigned int i = lastUsedParticle; i < emitterData.maxParticles; ++i)
 	{
 		if (particles[i].life < 0)
 		{

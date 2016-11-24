@@ -125,22 +125,16 @@ endif()
 add_executable(${TARGET_NAME} ${ALL_SRCS} ${SHADER_FILES})
 target_link_libraries(${TARGET_NAME} ${LIBS})
 
-### Copying DLL target
-file(GLOB DLLS ${CMAKE_SOURCE_DIR}/dll/*.dll)
-add_custom_target(CopyDlls)
-foreach(DLL ${DLLS})	
-  add_custom_command(TARGET CopyDlls POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${DLL} ${CMAKE_BINARY_DIR}/Release/)
-  add_custom_command(TARGET CopyDlls POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${DLL} ${CMAKE_BINARY_DIR}/Debug/)
-endforeach()
-add_dependencies(${TARGET_NAME} CopyDlls)
+if(MSVC)
+	### Copying DLL target
+	file(GLOB DLLS ${CMAKE_SOURCE_DIR}/dll/*.dll)
+	add_custom_target(CopyDlls ALL DEPENDS ${CMAKE_BINARY_DIR}/unexisting_file.h)
+	foreach(DLL ${DLLS})	
+	  add_custom_command(TARGET CopyDlls POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${DLL} ${CMAKE_BINARY_DIR}/$<CONFIGURATION>/)
+	endforeach()
 
-### Copying resources target
-add_custom_target(CopyResources ALL DEPENDS ${CMAKE_BINARY_DIR}/unexisting_file.h)
-add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/Debug/data)
-add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/data)
-add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/Release/data)
-
-### Copying shaders target
-add_custom_target(CopyShaders ALL DEPENDS ${SHADER_FILES})
-add_custom_command(TARGET CopyShaders COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/res/shaders" "${CMAKE_BINARY_DIR}/Release/data/shaders")
-add_custom_command(TARGET CopyShaders COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_SOURCE_DIR}/res/shaders" "${CMAKE_BINARY_DIR}/data/shaders")
+	### Copying resources target
+	add_custom_target(CopyResources ALL DEPENDS ${CMAKE_BINARY_DIR}/unexisting_file.h)
+	add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/$<CONFIGURATION>/data)
+	add_custom_command(TARGET CopyResources POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/res ${CMAKE_BINARY_DIR}/data)
+endif()
