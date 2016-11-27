@@ -69,7 +69,7 @@ void EnemyShip::update(float deltaTime)
 
 void EnemyShip::calculateCircularMovement(std::vector<BoundingSphere>& enemyShipDestinationSpheres)
 {
-	std::uniform_int_distribution<GLuint> randomShipDestinationSphere(0, enemyShipDestinationSpheres.size()-1);
+	std::uniform_int_distribution<GLuint> randomShipDestinationSphere(0, static_cast<GLuint>(enemyShipDestinationSpheres.size()) - 1);
 	BoundingSphere targetSphere = enemyShipDestinationSpheres[randomShipDestinationSphere(rng)];
 	std::uniform_real_distribution<GLfloat> randomCircularMovementRadius(0.0f, targetSphere.radius);
 	movementCircleRadius = randomCircularMovementRadius(rng);

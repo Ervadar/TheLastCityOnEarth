@@ -25,7 +25,7 @@ void Text::setTextValue(std::string textValue)
 
 void Text::render(int posX, int posY, int size)
 {
-	unsigned int textLength = textValue.length();
+	unsigned int textLength = static_cast<unsigned int>(textValue.length());
 
 	std::vector<glm::vec2> vertices;
 	std::vector<glm::vec2> UVs;
@@ -92,7 +92,7 @@ void Text::render(int posX, int posY, int size)
 	glBindVertexArray(VAO);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+	glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertices.size()));
 	glDisable(GL_BLEND);
 }
 
@@ -107,7 +107,7 @@ void Text::destroy()
 
 void Text::calculateTextSize()
 {
-	unsigned int textLength = textValue.length();
+	unsigned int textLength = static_cast<unsigned int>(textValue.length());
 	unsigned int lineCharacterNo = 0;
 	int lineNo = 1;
 	for (unsigned int i = 0; i < textLength; ++i)

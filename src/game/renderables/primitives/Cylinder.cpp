@@ -127,7 +127,7 @@ void Cylinder::init()
 	}
 
 	// Store number of indices
-	indicesSize = indices.size();
+	indicesSize = static_cast<int>(indices.size());
 	color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 	glGenVertexArrays(1, &VAO);

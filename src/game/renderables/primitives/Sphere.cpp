@@ -79,7 +79,7 @@ void Sphere::init()
 	}
 
 	// Store number of indices
-	indicesSize = indices.size();
+	indicesSize = static_cast<int>(indices.size());
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &vertexVBO);

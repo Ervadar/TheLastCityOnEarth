@@ -64,7 +64,7 @@ void Rectangle::render(float posX, float posY, float width, float height)
 	glBindVertexArray(VAO);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDrawArrays(GL_TRIANGLES, 0, vertices.size());
+	glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertices.size()));
 	glDisable(GL_BLEND);
 }
 void Rectangle::update(float deltaTime)

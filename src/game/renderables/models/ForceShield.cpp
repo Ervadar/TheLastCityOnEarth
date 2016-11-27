@@ -101,7 +101,7 @@ void ForceShield::init()
 	}
 
 	// Store number of indices (indicesOut.size() == indicesIn.size())
-	indicesSize = indicesIn.size();
+	indicesSize = static_cast<int>(indicesIn.size());
 
 	rotateAngle = 0.001f;
 	color = glm::vec4(0.5f, 0.82f, 0.9f, 0.4f);
