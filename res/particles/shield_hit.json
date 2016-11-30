@@ -3,8 +3,8 @@
     {
 	  "maxParticles": 50,
       "particleTextureName": "fire.tga",
-      "lifeTimeInSeconds": 0.5,
-      "particlesPerSecond": 50,
+      "lifeTimeInSeconds": 0.25,
+      "particlesPerSecond": 20,
       "particleLife": 1.5,
       "particlePosition": [ 0, 0, 0 ],
       "rotationType": "random_facing_camera",
@@ -26,13 +26,82 @@
         "timeline": [ ]
       },
       "particleColor": {
-        "initial": [ 0.5, 0.5, 1, 0.5 ],
+        "initial": [ 0.38, 0.78, 1, 0.3 ],
+        "timeline": [
+          {
+            "t": 0.1,
+            "v": [ 0.38, 0.78, 1, 0.1 ]
+          },
+          {
+            "t": 0.5,
+            "v": [ 0.38, 0.78, 1, 0 ]
+          }
+        ]
+      }
+    },
+    {
+      "maxParticles": 50,
+      "particleTextureName": "spark.tga",
+      "lifeTimeInSeconds": 0.15,
+      "particlesPerSecond": 300,
+      "particleLife": 0.6,
+      "particlePosition": [ 0, 0, 0 ],
+      "rotationType": "into_direction",
+      "particleSize": {
+        "initial": 10,
+        "timeline": [ ]
+      },
+      "particleSpeed": {
+        "initial": 80,
+        "timeline": [ ]
+      },
+      "particleWeight": {
+        "initial": 0,
+        "timeline": [ ]
+      },
+      "particleColor": {
+        "initial": [ 0.38, 0.78, 1, 1 ],
+        "timeline": [
+          {
+            "t": 0.6,
+            "v": [ 0.38, 0.78, 1, 0.5 ]
+          }
+        ]
+      }
+    },
+    {
+      "maxParticles": 50,
+      "particleTextureName": "round_sparks.tga",
+      "lifeTimeInSeconds": 0.5,
+      "particlesPerSecond": 50,
+      "particleLife": 0.5,
+      "particlePosition": [ 0, 0, 0 ],
+      "rotationType": "random_facing_camera",
+      "particleSize": {
+        "initial": 10,
         "timeline": [
           {
             "t": 0.5,
-            "v": [ 0.1, 0.1, 1, 0.1]
+            "v": 30
           }
         ]
+      },
+      "particleSpeed": {
+        "initial": 100,
+        "timeline": [
+          {
+            "t": 0.1,
+            "v": 0
+          }
+        ]
+      },
+      "particleWeight": {
+        "initial": -2,
+        "timeline": [ ]
+      },
+      "particleColor": {
+        "initial": [ 0.38, 0.78, 1, 1 ],
+        "timeline": [ ]
       }
     }
   ]

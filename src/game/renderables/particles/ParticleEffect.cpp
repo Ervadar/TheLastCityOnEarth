@@ -132,7 +132,6 @@ void ParticleEffect::loadEffectFromFile(std::string effectName)
 		data.color.timeline = std::move(data.loadVec4TimelineFromJson(jsonEmitter["particleColor"]));
 
 		loadedEmitters[effectName].push_back(data);
-		//emitters.push_back(std::move(std::make_unique<ParticleEmitter>(data)));
 	}
 
 	effectFile.close();
