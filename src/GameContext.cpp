@@ -31,7 +31,7 @@ int GameContext::init()
 	const GLFWvidmode * desktop = glfwGetVideoMode(monitor);
 
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
-	window = glfwCreateWindow(desktop->width, desktop->height, windowTitle, nullptr, nullptr);
+	window = glfwCreateWindow(desktop->width, desktop->height, windowTitle, monitor, nullptr);
 
 	if (!window)
 	{

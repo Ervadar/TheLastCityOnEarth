@@ -209,11 +209,6 @@ void ParticleEmitter::update(float deltaTime, Camera& camera)
 					rotationMatrix = glm::rotate(glm::mat4(1.0f), 90.0f, glm::vec3(1, 0, 0));
 				}
 
-				//printf("Angle_X: %f Y: %f Z: %f\nMatrix:\n%f %f %f\n %f %f %f\n %f %f %f\n\n",
-				//	p.angleX, p.angleY, p.angleZ, rotationMatrix[0][0], rotationMatrix[0][1], rotationMatrix[0][2],
-				//	rotationMatrix[1][0], rotationMatrix[1][1], rotationMatrix[1][2],
-				//	rotationMatrix[2][0], rotationMatrix[2][1], rotationMatrix[2][2]);
-
 				particleRotationData[particleCount * 4 + 0] = rotationMatrix[0];
 				particleRotationData[particleCount * 4 + 1] = rotationMatrix[1];
 				particleRotationData[particleCount * 4 + 2] = rotationMatrix[2];
