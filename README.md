@@ -20,4 +20,4 @@ Either download zipped release and run the program or download the source code a
 * Microsoft Visual Studio 2015
 * Cmake 3.6+ for building VS project
 * OpenGL 3.3+
-* Other libraries, which are provided in lib folder of the repository
+* Other libraries, which are provided in lib directory of the repository
