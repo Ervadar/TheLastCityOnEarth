@@ -5,6 +5,9 @@ The purpose of the game is to defend the city from incoming so-called UFOs. Unfo
 The only thing you can do is to keep the shield alive for as long as possible. Difficulty also increases over time, so if you manage to survive more
 than 3 minutes you can consider yourself good.
 
+# How to run?
+Either download zipped release and run the program or download the source code and build a project for MSVC, then compile it.
+
 # Controls
 * Mouse - move cannon
 * LMB - shoot cannon
