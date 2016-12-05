@@ -6,7 +6,7 @@ The only thing you can do is to keep the shield alive for as long as possible. D
 than 3 minutes you can consider yourself good.
 
 # How to run?
-Either download zipped release and run the program or download the source code and build a project for MSVC, then compile it.
+Either download zipped release and run the program (Visual C++ Redistributable for VS2015) or download the source code and build a project for MSVC, then compile it.
 
 # Controls
 * Mouse - move cannon
