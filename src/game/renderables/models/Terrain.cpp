@@ -313,5 +313,6 @@ GLfloat Terrain::getTerrainHeight(GLfloat xCoordWorldspace, GLfloat zCoordWorlds
 	GLfloat zS = zCoordWorldspace / renderScale.z;
 	int i = (int)((xS + 0.5f) * (rows - 1));
 	int j = (int)((zS + 0.5f) * (cols - 1));
+	if (i < 0 || i > cols - 1 || j < 0 || j > rows - 1) return 0.0f;
 	return terrainHeightValues[i][j] * renderScale.y;
 }

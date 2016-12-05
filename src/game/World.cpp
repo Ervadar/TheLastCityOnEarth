@@ -1,5 +1,7 @@
 #include "World.h"
 
+extern std::mt19937 rng;
+
 void World::init()
 {
 	gamePaused = false;
@@ -119,8 +121,8 @@ void World::init()
 	this->timePassed = 0.0f;
 	this->timePassedFromLastShipSpawn = 0.0f;
 
-	this->maxEnemyShipSpawnTime = 8.0f;
-	this->minEnemyShipSpawnTime = 2.0f;
+	this->maxEnemyShipSpawnTime = 6.0f;
+	this->minEnemyShipSpawnTime = 1.5f;
 
 	this->enemyShipSpawnTime = maxEnemyShipSpawnTime;
 
@@ -249,7 +251,7 @@ void World::checkMissileBoundaryCollisions(std::vector<std::unique_ptr<Missile>>
 	for (auto& missile : missiles)
 	{
 		if (!missile->inUse) continue;
-		if (glm::abs(missile->translateVector.x) > 2000.0f || glm::abs(missile->translateVector.y) > 2000.0f || glm::abs(missile->translateVector.z) > 2000.0f)
+		if (glm::abs(missile->translateVector.x) > 4000.0f || glm::abs(missile->translateVector.y) > 4000.0f || glm::abs(missile->translateVector.z) > 4000.0f)
 		{
 			spawnParticleEffect("missile_explosion", missile->translateVector);
 			missile->destroy();
@@ -348,9 +350,12 @@ void World::spawnEnemyShip()
 	{
 		if (!enemyShips[i]->inUse)
 		{
+			enemyShips[i]->translateVector = enemyShipSpawnPoint;
+			std::uniform_real_distribution<GLfloat> enemyShipPositionOffset(-1100.0f, 1100.0f);
+			enemyShips[i]->translateVector.x += enemyShipPositionOffset(rng);
+			enemyShips[i]->translateVector.z += enemyShipPositionOffset(rng);
 			enemyShips[i]->calculateCircularMovement(enemyShipDestinationSpheres);
 			enemyShips[i]->movementState = EnemyShip::MovementState::MOVING_TO_POSITION;
-			enemyShips[i]->translateVector = enemyShipSpawnPoint;
 			enemyShips[i]->inUse = true;
 			return;
 		}

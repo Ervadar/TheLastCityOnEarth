@@ -50,6 +50,7 @@ void EnemyShip::update(float deltaTime)
 	{
 		glm::vec3 step = movementToPositionDirection * 400.0f * speed * deltaTime;
 		translateVector += step;
+		printf("%f\n", glm::distance(movementStartingPosition, translateVector));
 		if (glm::distance(movementStartingPosition, translateVector) <= glm::length(step))
 		{
 			translateVector = movementStartingPosition;
@@ -57,14 +58,6 @@ void EnemyShip::update(float deltaTime)
 		}
 	}
 	rotateAngleY -= deltaTime * rotationSpeed;
-
-	// UPDATING DEBUG SPHERE AND BOXES
-	//debugSphere->translateVector = translateVector;
-	//
-	//for (Cube * debugBoundingBox : debugBoundingBoxes)
-	//{
-	//	debugBoundingBox->translateVector = translateVector + debugBoundingBox->positionOffset;
-	//}
 }
 
 void EnemyShip::calculateCircularMovement(std::vector<BoundingSphere>& enemyShipDestinationSpheres)
