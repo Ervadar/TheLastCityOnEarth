@@ -16,5 +16,5 @@ than 3 minutes you can consider yourself good.
 # Requirements
 * Microsoft Visual Studio 2015
 * Cmake 3.6+ for building VS project
-* Opengl 3.3+
+* OpenGL 3.3+
 * Other libraries, which are provided in lib folder of the repository
