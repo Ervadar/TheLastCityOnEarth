@@ -16,8 +16,8 @@ Cannon::Cannon()
 
 	bulletSpawnOffset = 175.0f;
 
-	shootingSpeed = 200.0f;
-	loadingSpeed = 80.0f;
+	shootingSpeed = 2000.0f;
+	loadingSpeed = 800.0f;
 	status = Status::READY;
 }
 
@@ -94,6 +94,7 @@ void Cannon::update(float deltaTime)
 		movingBarrelPos -= shootingSpeed * deltaTime;
 		if (movingBarrelPos < initialMovingBarrelPos - 45.0f)
 		{
+			movingBarrelPos = initialMovingBarrelPos - 45.0f;
 			status = Status::LOADING;
 		}
 	}
@@ -103,6 +104,7 @@ void Cannon::update(float deltaTime)
 		movingBarrelPos += loadingSpeed*deltaTime;
 		if (movingBarrelPos > initialMovingBarrelPos)
 		{
+			movingBarrelPos = initialMovingBarrelPos;
 			status = Status::READY;
 		}
 	}

@@ -50,7 +50,6 @@ void EnemyShip::update(float deltaTime)
 	{
 		glm::vec3 step = movementToPositionDirection * 400.0f * speed * deltaTime;
 		translateVector += step;
-		printf("%f\n", glm::distance(movementStartingPosition, translateVector));
 		if (glm::distance(movementStartingPosition, translateVector) <= glm::length(step))
 		{
 			translateVector = movementStartingPosition;
